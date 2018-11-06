@@ -4,34 +4,38 @@
     tools:showIn="navigation_view">
 
     <group android:checkableBehavior="single">
+        <item android:title="@string/side_menu_group1">
+        <menu>
         <item
-            android:id="@+id/nav_camera"
+            android:id="@+id/nav_armaker"
             android:icon="@drawable/ic_menu_camera"
-            android:title="Import" />
+            android:title="@string/side_menu_armaker" />
         <item
-            android:id="@+id/nav_gallery"
+            android:id="@+id/nav_arcontents"
             android:icon="@drawable/ic_menu_gallery"
-            android:title="Gallery" />
+            android:title="@string/side_menu_contents" />
         <item
-            android:id="@+id/nav_slideshow"
+            android:id="@+id/nav_arviewer"
             android:icon="@drawable/ic_menu_slideshow"
-            android:title="Slideshow" />
+            android:title="@string/side_menu_arviewer" />
         <item
-            android:id="@+id/nav_manage"
+            android:id="@+id/nav_arservice"
             android:icon="@drawable/ic_menu_manage"
-            android:title="Tools" />
+            android:title="@string/side_menu_arservice" />
+        </menu>
+        </item>
     </group>
 
-    <item android:title="Communicate">
+    <item android:title="@string/side_menu_group2">
         <menu>
             <item
-                android:id="@+id/nav_share"
+                android:id="@+id/nav_location"
                 android:icon="@drawable/ic_menu_share"
-                android:title="Share" />
+                android:title="@string/side_menu_location" />
             <item
-                android:id="@+id/nav_send"
+                android:id="@+id/nav_instore"
                 android:icon="@drawable/ic_menu_send"
-                android:title="Send" />
+                android:title="@string/side_menu_instore" />
         </menu>
     </item>
 
