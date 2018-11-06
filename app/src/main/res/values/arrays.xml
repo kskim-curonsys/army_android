@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="image_get_choice_list">
+        <item>사진 촬영</item>
+        <item>앨범에서 가져오기</item>
+    </string-array>
+</resources>

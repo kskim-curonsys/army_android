@@ -1,0 +1,124 @@
+{
+  "project_info": {
+    "project_number": "206767239201",
+    "firebase_url": "https://my-first-project-7e28c.firebaseio.com",
+    "project_id": "my-first-project-7e28c",
+    "storage_bucket": "my-first-project-7e28c.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:206767239201:android:359eaeb81791031f",
+        "android_client_info": {
+          "package_name": "com.curonsys.android_java"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "206767239201-vl9evr1ug4chp2s8g8iutd2qhd4653js.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBZ6rBVjTc9zDYl89b1hbRuD2AkSFIzoB8"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:206767239201:android:d1c6ca53499a6ea2",
+        "android_client_info": {
+          "package_name": "com.curonsys.army"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "206767239201-vl9evr1ug4chp2s8g8iutd2qhd4653js.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBZ6rBVjTc9zDYl89b1hbRuD2AkSFIzoB8"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:206767239201:android:d7958d907186fa16",
+        "android_client_info": {
+          "package_name": "com.curonsys.army_android"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "206767239201-vo5i42qcqch85hi1iaat0elodbsgvspo.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.curonsys.army_android",
+            "certificate_hash": "e8b5dc87ffc0552eb1b56b822154f87f4db3feb3"
+          }
+        },
+        {
+          "client_id": "206767239201-vl9evr1ug4chp2s8g8iutd2qhd4653js.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBZ6rBVjTc9zDYl89b1hbRuD2AkSFIzoB8"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "206767239201-vl9evr1ug4chp2s8g8iutd2qhd4653js.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "206767239201-o4un9thru2okcoqvqujvcud2jmht360s.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.curonsys.FriendlyChatObjC"
+              }
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
