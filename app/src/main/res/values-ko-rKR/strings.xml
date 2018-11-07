@@ -31,4 +31,6 @@
     <string name="Hello">안녕, 친구.</string>
     <string name="not_yet_implemented">이 기능은 아직 구현되지 않았습니다.</string>
     <string name="not_yet_login">아직 로그인이 되지 않았습니다.</string>
+    <string name="fit_image_to_scan">스캔할 이미지를 맞춰주세요.</string>
+    <string name="plane_finding">표면을 탐색중입니다.</string>
 </resources>

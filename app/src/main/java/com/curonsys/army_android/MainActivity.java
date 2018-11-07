@@ -17,6 +17,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.curonsys.army_android.activity.LoginActivity;
+import com.curonsys.army_android.arcore.AugmentedImageActivity;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
@@ -105,6 +106,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         } else if (id == R.id.nav_arcontents) {
 
         } else if (id == R.id.nav_arviewer) {
+            goARViewer();
 
         } else if (id == R.id.nav_arservice) {
 
@@ -151,6 +153,14 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     private void goLogin() {
         Intent intent = new Intent(this, LoginActivity.class);
+        if (intent.resolveActivity(getPackageManager()) != null) {
+            intent.putExtra("ParentClassSource", MainActivity.class.getName());
+            startActivity(intent);
+        }
+    }
+
+    private void goARViewer() {
+        Intent intent = new Intent(this, AugmentedImageActivity.class);
         if (intent.resolveActivity(getPackageManager()) != null) {
             intent.putExtra("ParentClassSource", MainActivity.class.getName());
             startActivity(intent);

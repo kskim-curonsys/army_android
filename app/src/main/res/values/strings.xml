@@ -33,4 +33,6 @@
     <string name="Hello">Hey, buddy.</string>
     <string name="not_yet_implemented">This function is not implemented yet.</string>
     <string name="not_yet_login">You haven\'t signed in yet.</string>
+    <string name="fit_image_to_scan">Fit image to scan</string>
+    <string name="plane_finding">Searching for surfaces&#8230;</string>
 </resources>

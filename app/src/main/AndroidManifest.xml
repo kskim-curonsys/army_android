@@ -63,6 +63,38 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.curonsys.army_android.MainActivity" />
         </activity>
+
+        <activity
+            android:name=".arcore.AugmentedImageActivity"
+            android:configChanges="orientation|screenSize"
+            android:exported="true"
+            android:theme="@style/Theme.AppCompat.NoActionBar"
+            android:screenOrientation="locked">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.curonsys.army_android.MainActivity" />
+        </activity>
+        <activity
+            android:name=".arcore.ChromaKeyVideoActivity"
+            android:configChanges="orientation|screenSize"
+            android:theme="@style/Theme.AppCompat.NoActionBar"
+            android:screenOrientation="locked"
+            android:exported="true">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.curonsys.army_android.MainActivity" />
+        </activity>
+
+        <activity
+            android:name=".arcore.SolarActivity"
+            android:configChanges="orientation|screenSize"
+            android:theme="@style/Theme.AppCompat.NoActionBar"
+            android:exported="true">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.curonsys.army_android.MainActivity" />
+        </activity>
+
     </application>
 
 </manifest>
