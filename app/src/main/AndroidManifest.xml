@@ -57,8 +57,16 @@
                 android:value="com.curonsys.army_android.MainActivity" />
         </activity>
         <activity
-            android:name=".SignupActivity"
+            android:name=".activity.SignupActivity"
             android:label="@string/title_activity_signup"
+            android:parentActivityName=".MainActivity">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.curonsys.army_android.MainActivity" />
+        </activity>
+        <activity
+            android:name=".activity.TrivialDriveActivity"
+            android:label="@string/title_activity_trivialdrive"
             android:parentActivityName=".MainActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"

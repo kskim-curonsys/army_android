@@ -20,6 +20,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.curonsys.army_android.activity.LoginActivity;
+import com.curonsys.army_android.activity.TrivialDriveActivity;
 import com.curonsys.army_android.arcore.AugmentedImageActivity;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -106,6 +107,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         if (id == R.id.nav_armaker) {
 
         } else if (id == R.id.nav_arcontents) {
+            // test
+            goBillingTest();
 
         } else if (id == R.id.nav_arviewer) {
             goARViewer();
@@ -162,6 +165,15 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     private void goARViewer() {
         Intent intent = new Intent(this, AugmentedImageActivity.class);
+        if (intent.resolveActivity(getPackageManager()) != null) {
+            intent.putExtra("ParentClassSource", MainActivity.class.getName());
+            startActivity(intent);
+        }
+    }
+
+    // test
+    private void goBillingTest() {
+        Intent intent = new Intent(this, TrivialDriveActivity.class);
         if (intent.resolveActivity(getPackageManager()) != null) {
             intent.putExtra("ParentClassSource", MainActivity.class.getName());
             startActivity(intent);
