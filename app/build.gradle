@@ -9,13 +9,13 @@ android {
             keyPassword project.KEYSTORE_KEY_PASSWORD
         }
     }
-    compileSdkVersion 28
+    compileSdkVersion Integer.valueOf(project.TARGET_SDK_VERSION)
     defaultConfig {
         applicationId "com.curonsys.army_android"
-        minSdkVersion 24
-        targetSdkVersion 28
-        versionCode 10
-        versionName "1.0.1.0"
+        minSdkVersion Integer.valueOf(project.MINIMUM_SDK_VERSION)
+        targetSdkVersion Integer.valueOf(project.TARGET_SDK_VERSION)
+        versionCode project.FEATURE_VERSION_CODE
+        versionName project.FEATURE_VERSION_NAME
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
 
         ndk {
@@ -44,20 +44,20 @@ android {
 }
 
 configurations.all {
-    resolutionStrategy.force 'com.android.support:support-annotations:28.0.0'
+    resolutionStrategy.force "com.android.support:support-annotations:$project.SUPPORT_VERSION"
 }
 
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
 
-    implementation 'com.android.support:appcompat-v7:28.0.0'
-    implementation 'com.android.support:support-v4:28.0.0'
-    implementation 'com.android.support:design:28.0.0'
-    implementation 'com.android.support.constraint:constraint-layout:1.1.3'
-    implementation 'com.android.support:animated-vector-drawable:28.0.0'
-    implementation 'com.android.support:cardview-v7:28.0.0'
-    implementation 'com.android.support:recyclerview-v7:28.0.0'
-    implementation 'com.android.support:customtabs:28.0.0'
+    implementation "com.android.support:appcompat-v7:$project.SUPPORT_VERSION"
+    implementation "com.android.support:support-v4:$project.SUPPORT_VERSION"
+    implementation "com.android.support:design:$project.SUPPORT_VERSION"
+    implementation "com.android.support:animated-vector-drawable:$project.SUPPORT_VERSION"
+    implementation "com.android.support:cardview-v7:$project.SUPPORT_VERSION"
+    implementation "com.android.support:recyclerview-v7:$project.SUPPORT_VERSION"
+    implementation "com.android.support:customtabs:$project.SUPPORT_VERSION"
+    implementation "com.android.support.constraint:constraint-layout:1.1.3"
 
     implementation 'com.google.android.gms:play-services-auth:15.0.1'
     implementation 'com.google.android.gms:play-services-base:15.0.1'
