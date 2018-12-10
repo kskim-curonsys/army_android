@@ -59,10 +59,10 @@
         <activity
             android:name=".activity.SignupActivity"
             android:label="@string/title_activity_signup"
-            android:parentActivityName=".MainActivity">
+            android:parentActivityName=".activity.LoginActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.curonsys.army_android.MainActivity" />
+                android:value="com.curonsys.army_android.activity.LoginActivity" />
         </activity>
         <activity
             android:name=".activity.TrivialDriveActivity"

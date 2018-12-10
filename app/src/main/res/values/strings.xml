@@ -1,27 +1,12 @@
 <resources>
     <string name="app_name">AR Maker</string>
+
+    <!-- Strings related to side menu -->
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
     <string name="nav_header_title">Android Studio</string>
     <string name="nav_header_subtitle">android.studio@android.com</string>
     <string name="nav_header_desc">Navigation header</string>
-    <string name="action_settings">Settings</string>
-    <string name="title_activity_login">Sign in</string>
-    <!-- Strings related to login -->
-    <string name="prompt_email">Email</string>
-    <string name="prompt_password">Password (optional)</string>
-    <string name="action_sign_in">Sign in or login</string>
-    <string name="action_sign_in_short">Log in</string>
-    <string name="error_invalid_email">This email address is invalid</string>
-    <string name="error_invalid_password">This password is too short</string>
-    <string name="error_incorrect_password">This password is incorrect</string>
-    <string name="error_field_required">This field is required</string>
-    <string name="permission_rationale">"Contacts permissions are needed for providing email
-        completions."
-    </string>
-    <string name="title_activity_signup">Sign up</string>
-    <string name="action_sign_up">Sign up or register</string>
-    <string name="action_sign_up_short">Sign up</string>
     <string name="side_menu_armaker">AR Maker</string>
     <string name="side_menu_contents">AR Contents</string>
     <string name="side_menu_arviewer">AR Viewer</string>
@@ -30,15 +15,39 @@
     <string name="side_menu_instore">In-Store</string>
     <string name="side_menu_group1">Augmented Reality</string>
     <string name="side_menu_group2">Place</string>
+
+    <!-- Strings related to main -->
+    <string name="action_settings">Settings</string>
     <string name="Hello">Hey, buddy.</string>
     <string name="not_yet_implemented">This function is not implemented yet.</string>
     <string name="not_yet_login">You haven\'t signed in yet.</string>
-    <string name="fit_image_to_scan">Fit image to scan</string>
     <string name="plane_finding">Searching for surfaces&#8230;</string>
-
-    <string name="title_activity_trivialdrive">Trivial Drive</string>
     <string name="search_title">Search AR Marker</string>
     <string name="search_hint">Search</string>
+
+    <!-- Strings related to login -->
+    <string name="title_activity_login">Sign in</string>
+    <string name="prompt_email">Email</string>
+    <string name="prompt_password">Password (optional)</string>
+    <string name="action_sign_in">Sign in or login</string>
+    <string name="action_sign_in_short">Log in</string>
+    <string name="error_invalid_email">This email address is invalid</string>
+    <string name="error_invalid_password">This password is too short</string>
+    <string name="error_incorrect_password">This password is incorrect</string>
+    <string name="error_field_required">This field is required</string>
+    <string name="permission_rationale">"Contacts permissions are needed for providing email completions." </string>
+
+    <!-- Strings related to signup -->
+    <string name="title_activity_signup">Sign up</string>
+    <string name="action_sign_up">Sign up or register</string>
+    <string name="action_sign_up_short">Sign up</string>
+
+    <!-- Strings related to signup -->
+    <string name="fit_image_to_scan">Fit image to scan</string>
+
+    <!-- Strings related to trivialdrive -->
+    <string name="title_activity_trivialdrive">Trivial Drive</string>
+
     <string name="service_not_available">The background geocoding service is not available due to a network error or IO exception.</string>
     <string name="invalid_lat_long_used">The latitude and/or longitude values that are provided in the Location object are invalid.</string>
     <string name="no_address_found">The geocoder cannot find an address for the given latitude/longitude.</string>
@@ -56,5 +65,16 @@
     <string name="title_activity_generalar">General AR Activity</string>
     <string name="title_activity_markergeneration">Marker Generation</string>
     <string name="title_activity_markertest">Marker Test</string>
+
+    <string name="action_find_id">Find ID</string>
+    <string name="action_find_password">Find Password</string>
+    <string name="action_google_login">Google Login</string>
+    <string name="action_facebook_login">Facebook Login</string>
+    <string name="action_create_account">Create Account</string>
+    <string name="prompt_login_email">Email</string>
+    <string name="prompt_login_password">Password</string>
+    <string name="prompt_signup_email">Email</string>
+    <string name="prompt_signup_password">Password</string>
+    <string name="prompt_signup_password2">Password (verify)</string>
 
 </resources>

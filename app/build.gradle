@@ -77,10 +77,10 @@ dependencies {
     implementation 'com.facebook.android:facebook-login:4.35.0'
     implementation 'com.afollestad.material-dialogs:commons:0.9.6.0'
 
-    implementation 'com.google.ar:core:1.5.0'
-    implementation 'com.google.ar.sceneform:core:1.5.1'
-    implementation 'com.google.ar.sceneform:assets:1.5.1'
-    implementation "com.google.ar.sceneform.ux:sceneform-ux:1.5.1"
+    implementation 'com.google.ar:core:1.6.0'
+    implementation 'com.google.ar.sceneform:core:1.6.0'
+    implementation 'com.google.ar.sceneform:assets:1.6.0'
+    implementation "com.google.ar.sceneform.ux:sceneform-ux:1.6.0"
 
     implementation 'com.android.billingclient:billing:1.2'
 

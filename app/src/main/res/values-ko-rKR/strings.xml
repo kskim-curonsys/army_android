@@ -53,4 +53,14 @@
     <string name="title_activity_generalar">AR 뷰어</string>
     <string name="title_activity_markergeneration">마커 생성</string>
     <string name="title_activity_markertest">마커 테스트</string>
+    <string name="action_find_id">아이디 찾기</string>
+    <string name="action_find_password">패스워드 찾기</string>
+    <string name="action_google_login">구글 로그인</string>
+    <string name="action_facebook_login">페이스북 로그인</string>
+    <string name="action_create_account">계정 만들기</string>
+    <string name="prompt_login_email">이메일</string>
+    <string name="prompt_login_password">패스워드</string>
+    <string name="prompt_signup_email">이메일</string>
+    <string name="prompt_signup_password">패스워드</string>
+    <string name="prompt_signup_password2">패스워드 (확인)</string>
 </resources>

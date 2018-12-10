@@ -22,6 +22,7 @@ import android.widget.TextView;
 import com.curonsys.army_android.activity.LoginActivity;
 import com.curonsys.army_android.activity.TrivialDriveActivity;
 import com.curonsys.army_android.arcore.AugmentedImageActivity;
+import com.curonsys.army_android.util.PermissionManager;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
@@ -40,6 +41,12 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        //ARAPIKey key = ARAPIKey.getInstance();
+        //key.setAPIKey(KUDAN_API_KEY_DEV);
+
+        PermissionManager permissionManager = new PermissionManager(this);
+        permissionManager.permissionCheck();
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
