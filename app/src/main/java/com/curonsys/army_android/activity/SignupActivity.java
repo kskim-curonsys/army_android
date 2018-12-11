@@ -122,8 +122,8 @@ public class SignupActivity extends AppCompatActivity implements LoaderCallbacks
             }
         });
 
-        mSingUpFormView = findViewById(R.id.login_form);
-        mProgressView = findViewById(R.id.login_progress);
+        mSingUpFormView = findViewById(R.id.signup_form);
+        mProgressView = findViewById(R.id.signup_progress);
 
         mAuth = FirebaseAuth.getInstance();
         mRequestManager = RequestManager.getInstance();
