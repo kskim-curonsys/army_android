@@ -287,26 +287,44 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 Log.d(TAG, "onResponse: UserInfo (" +
                         response.getUserId() + ", " + response.getName() + ", " + response.getImageUrl() + ")");
 
-                String imagename = "profile";
-                String imageurl = response.getImageUrl();
-                String imagesuffix = imageurl.substring(imageurl.indexOf('.'), imageurl.length());
                 String username = response.getName();
                 mProfileName.setText(username);
 
-                mRequestManager.requestDownloadFileFromStorage(imagename, imageurl, imagesuffix, new RequestManager.TransferCallback() {
-                    @Override
-                    public void onResponse(TransferModel download) {
-                        String imgurl = download.getPath();
-                        File imgFile = new File(imgurl);
-                        if (imgFile.exists()) {
-                            Bitmap myBitmap = BitmapFactory.decodeFile(imgFile.getAbsolutePath());
-                            if (myBitmap != null) {
-                                mProfileImage.setImageBitmap(myBitmap);
-                                mUserProfileStatus = true;
+                String imagename = "profile";
+                String imageurl = response.getImageUrl();
+                if (imageurl != null && !imageurl.isEmpty()) {
+                    // profile image
+                    String imagesuffix = imageurl.substring(imageurl.indexOf('.'), imageurl.length());
+                    mRequestManager.requestDownloadFileFromStorage(imagename, imageurl, imagesuffix, new RequestManager.TransferCallback() {
+                        @Override
+                        public void onResponse(TransferModel download) {
+                            String imgurl = download.getPath();
+                            File imgFile = new File(imgurl);
+                            if (imgFile.exists()) {
+                                Bitmap myBitmap = BitmapFactory.decodeFile(imgFile.getAbsolutePath());
+                                if (myBitmap != null) {
+                                    mProfileImage.setImageBitmap(myBitmap);
+                                    mUserProfileStatus = true;
+                                }
                             }
                         }
+                    });
+                } else {
+                    // default image
+                    try {
+                        AssetManager am = getResources().getAssets();
+                        InputStream is = null;
+                        is = am.open("lake.png");
+                        if (is != null) {
+                            Bitmap bm = BitmapFactory.decodeStream(is);
+                            mProfileImage.setImageBitmap(bm);
+                            is.close();
+                            mUserProfileStatus = true;
+                        }
+                    } catch (IOException e) {
+                        e.printStackTrace();
                     }
-                });
+                }
             }
         });
     }
