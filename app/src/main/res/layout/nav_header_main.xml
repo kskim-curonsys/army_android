@@ -17,8 +17,9 @@
         android:layout_width="65dp"
         android:layout_height="65dp"
         android:elevation="12dp"
-        app:cardCornerRadius="20dp"
+        app:cardCornerRadius="24dp"
         android:layout_centerHorizontal="true"
+        app:cardBackgroundColor="@android:color/transparent"
         android:innerRadius="0dp"
         android:shape="ring"
         android:thicknessRatio="1.9">
@@ -28,7 +29,6 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:contentDescription="@string/nav_header_desc"
-            android:paddingTop="@dimen/nav_header_vertical_spacing"
             app:srcCompat="@mipmap/ic_launcher_round" />
 
     </android.support.v7.widget.CardView>
