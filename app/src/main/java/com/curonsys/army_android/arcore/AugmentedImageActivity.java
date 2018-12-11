@@ -9,11 +9,11 @@ import android.view.View;
 import android.widget.ImageView;
 
 import com.curonsys.army_android.R;
+import com.curonsys.army_android.util.SnackbarHelper;
 import com.google.ar.core.AugmentedImage;
 import com.google.ar.core.Frame;
 import com.google.ar.core.TrackingState;
 import com.google.ar.sceneform.FrameTime;
-import com.google.ar.sceneform.samples.common.helpers.SnackbarHelper;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;

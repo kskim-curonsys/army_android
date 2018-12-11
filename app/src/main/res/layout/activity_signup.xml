@@ -19,16 +19,6 @@
         android:layout_marginBottom="8dp"
         android:visibility="gone" />
 
-    <TextView
-        android:id="@+id/signup_title"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="@string/title_activity_signup"
-        android:textSize="24sp"
-        android:layout_marginBottom="64dp"
-        android:layout_marginTop="8dp"
-        tools:text="@string/title_activity_signup" />
-
     <ScrollView
         android:id="@+id/signup_form"
         android:layout_width="match_parent"
@@ -39,6 +29,16 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/signup_title"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/title_activity_signup"
+                android:textSize="24sp"
+                android:layout_marginBottom="64dp"
+                android:layout_marginTop="8dp"
+                tools:text="@string/title_activity_signup" />
 
             <android.support.design.widget.TextInputLayout
                 android:layout_width="match_parent"
@@ -90,6 +90,22 @@
                     android:singleLine="true" />
 
             </android.support.design.widget.TextInputLayout>
+
+            <android.support.design.widget.TextInputLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <AutoCompleteTextView
+                    android:id="@+id/signup_name"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="@string/prompt_signup_name"
+                    android:inputType="textPersonName"
+                    android:maxLines="1"
+                    android:singleLine="true" />
+
+            </android.support.design.widget.TextInputLayout>
+
 
             <Button
                 android:id="@+id/email_sign_up"

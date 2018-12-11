@@ -22,6 +22,7 @@ import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.curonsys.army_android.R;
+import com.curonsys.army_android.util.SnackbarHelper;
 import com.google.ar.core.Anchor;
 import com.google.ar.core.AugmentedImage;
 import com.google.ar.core.AugmentedImageDatabase;
@@ -241,7 +242,7 @@ public class ChromaKeyVideoActivity extends AppCompatActivity {
                     // When an image is in PAUSED state, but the camera is not PAUSED, it has been detected,
                     // but not yet tracked.
                     String text = "Detected Image " + augmentedImage.getIndex();
-                    com.google.ar.sceneform.samples.common.helpers.SnackbarHelper.getInstance().showMessage(this, text);
+                    SnackbarHelper.getInstance().showMessage(this, text);
                     break;
 
                 case TRACKING:

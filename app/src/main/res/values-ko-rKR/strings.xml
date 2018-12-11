@@ -63,4 +63,16 @@
     <string name="prompt_signup_email">이메일</string>
     <string name="prompt_signup_password">패스워드</string>
     <string name="prompt_signup_password2">패스워드 (확인)</string>
+    <string name="login_hello_start">"안녕하세요. "</string>
+    <string name="login_hello_end">님.</string>
+    <string name="error_login_failed">로그인에 실패하였습니다.</string>
+    <string name="authentication_success">인증에 성공하였습니다.</string>
+    <string name="authentication_failed">인증에 실패하였습니다.</string>
+    <string name="create_user_success">사용자 등록에 성공하였습니다.</string>
+    <string name="create_user_failed">사용자 등록에 실패하였습니다.</string>
+    <string name="verification_email_sent">확인 메일을 발송하였습니다.</string>
+    <string name="verification_email_sent_failed">확인 메일 발송에 실패하였습니다.</string>
+    <string name="prompt_signup_name">이름 (선택)</string>
+    <string name="logout_success">로그아웃 되었습니다.</string>
+    <string name="logout_failed">로그아웃에 실패하였습니다.</string>
 </resources>

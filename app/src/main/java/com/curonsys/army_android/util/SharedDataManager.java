@@ -13,19 +13,19 @@ import java.util.ArrayList;
 
 public class SharedDataManager {
 
-    //frag1
+    // step1
     public Uri imageURI = null;
     public double markerRating = 0;
     public String generatorId = null;
 
-    //frag2
+    // step2
     public double currentLongtitude = 0;
     public double currentLatitude = 0;
     public String currentCountryCode = "";
     public String currentLocality = "";
     public String currentThoroughfare = "";
 
-    //frag3
+    // step3
     public String contentId = "";
     public String contentName = "";
     public String contentFileName = "";
@@ -34,7 +34,7 @@ public class SharedDataManager {
     public String[] contentTextureFiles;
     public Boolean contentHasAnimation = false;
 
-    //frag4
+    // step4
     public float contentScale = 0;
     public ArrayList<Float> contentRotation = new ArrayList<Float>();
 
@@ -42,9 +42,8 @@ public class SharedDataManager {
     }
 
     private static SharedDataManager instance;
-
     public static SharedDataManager getInstance () {
-        if ( instance == null )
+        if (instance == null)
             instance = new SharedDataManager();
         return instance;
     }

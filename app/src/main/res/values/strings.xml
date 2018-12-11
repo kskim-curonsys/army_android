@@ -76,5 +76,17 @@
     <string name="prompt_signup_email">Email</string>
     <string name="prompt_signup_password">Password</string>
     <string name="prompt_signup_password2">Password (verify)</string>
+    <string name="login_hello_start">"Hi, "</string>
+    <string name="login_hello_end">.</string>
+    <string name="error_login_failed">Login Failed.</string>
+    <string name="authentication_success">Authentication Success</string>
+    <string name="authentication_failed">Authenticationi Failed</string>
+    <string name="create_user_success">Create User Success</string>
+    <string name="create_user_failed">Create User Failed</string>
+    <string name="verification_email_sent">"verification email sent to "</string>
+    <string name="verification_email_sent_failed">Failed to send verification email.</string>
+    <string name="prompt_signup_name">Name (optional)</string>
+    <string name="logout_success">You have been logged out</string>
+    <string name="logout_failed">Logout failed</string>
 
 </resources>
