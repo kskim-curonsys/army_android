@@ -7,6 +7,8 @@ import android.graphics.BitmapFactory;
 import android.location.Location;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.ResultReceiver;
 import android.os.VibrationEffect;
 import android.os.Vibrator;
 import android.support.design.widget.FloatingActionButton;
@@ -30,6 +32,8 @@ import com.curonsys.army_android.activity.TrivialDriveActivity;
 import com.curonsys.army_android.arcore.AugmentedImageActivity;
 import com.curonsys.army_android.model.TransferModel;
 import com.curonsys.army_android.model.UserModel;
+import com.curonsys.army_android.service.FetchAddressIntentService;
+import com.curonsys.army_android.util.Constants;
 import com.curonsys.army_android.util.PermissionManager;
 import com.curonsys.army_android.util.RequestManager;
 import com.curonsys.army_android.util.SharedDataManager;
@@ -346,6 +350,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
                                 String output = "last lat : " + latitude + "\n" + "last lon : " + longitude + "\n" + "speed : " + speed + "m/s" + "\n\n";
                                 mMainMessage.setText(output);
+
+                                startFetchAddressIntentService();
                             }
                         }
                     });
@@ -353,5 +359,32 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         } catch (SecurityException e) {
             e.printStackTrace();
         }
+    }
+
+    private AddressResultReceiver mResultReceiver = new AddressResultReceiver(new Handler());
+    class AddressResultReceiver extends ResultReceiver {
+        public AddressResultReceiver(Handler handler) {
+            super(handler);
+        }
+        @Override
+        protected void onReceiveResult(int resultCode, Bundle resultData) {
+            if (resultData == null) {
+                return;
+            }
+            String info = resultData.getString(Constants.RESULT_DATA_KEY);
+            if (info != null) {
+                info += "\n";
+            }
+            if (resultCode == Constants.SUCCESS_RESULT) {
+                updateUI();
+            }
+        }
+    }
+
+    protected void startFetchAddressIntentService() {
+        Intent intent = new Intent(this, FetchAddressIntentService.class);
+        intent.putExtra(Constants.RECEIVER, mResultReceiver);
+        intent.putExtra(Constants.LOCATION_DATA_EXTRA, mLastLocation);
+        startService(intent);
     }
 }

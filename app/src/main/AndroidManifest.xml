@@ -104,6 +104,12 @@
                 android:value="com.curonsys.army_android.MainActivity" />
         </activity>
 
+        <service
+            android:name=".service.FetchAddressIntentService"
+            android:exported="false" />
+        <service
+            android:name=".service.GeofenceTransitionsIntentService" />
+
     </application>
 
 </manifest>
