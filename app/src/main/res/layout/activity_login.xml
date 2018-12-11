@@ -36,7 +36,7 @@
                 android:layout_height="wrap_content"
                 android:text="@string/title_activity_login"
                 android:textSize="24sp"
-                android:layout_marginBottom="64dp"
+                android:layout_marginBottom="32dp"
                 android:layout_marginTop="8dp"
                 tools:text="@string/title_activity_login" />
 

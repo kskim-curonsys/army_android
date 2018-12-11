@@ -25,6 +25,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.curonsys.army_android.activity.LoginActivity;
+import com.curonsys.army_android.activity.SignupActivity;
 import com.curonsys.army_android.activity.TrivialDriveActivity;
 import com.curonsys.army_android.arcore.AugmentedImageActivity;
 import com.curonsys.army_android.model.TransferModel;
@@ -168,6 +169,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         } else if (id == R.id.nav_arservice) {
 
         } else if (id == R.id.nav_location) {
+            goSignUp();
 
         } else if (id == R.id.nav_instore) {
             //doVibration(2000);
@@ -249,6 +251,15 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             //updateUI();
         } else {
             Snackbar.make(mProfileImage, getString(R.string.logout_failed), Snackbar.LENGTH_LONG).setAction("Action", null).show();
+        }
+    }
+
+    // test
+    private void goSignUp() {
+        Intent intent = new Intent(this, SignupActivity.class);
+        if (intent.resolveActivity(getPackageManager()) != null) {
+            intent.putExtra("ParentClassSource", LoginActivity.class.getName());
+            startActivity(intent);
         }
     }
 
