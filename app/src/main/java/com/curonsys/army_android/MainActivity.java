@@ -350,7 +350,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                                 mSharedDataManager.currentLatitude = latitude;
                                 mSharedDataManager.currentLongtitude = longitude;
 
-                                String output = "latitude : " + latitude + "\n" + "longitude : " + longitude + "\n" + "speed : " + speed + " m/s" + "\n\n";
+                                String output = getString(R.string.latitude) + " : " + latitude + "\n" + getString(R.string.longitude) + " : " + longitude + "\n" + getString(R.string.speed) + " : " + speed + " m/s" + "\n\n";
                                 mCurrentLocation.setText(output);
 
                                 startFetchAddressIntentService();
