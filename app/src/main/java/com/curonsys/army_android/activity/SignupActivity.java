@@ -20,6 +20,7 @@ import android.os.Bundle;
 import android.provider.ContactsContract;
 import android.text.TextUtils;
 import android.util.Log;
+import android.util.Patterns;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -194,7 +195,7 @@ public class SignupActivity extends AppCompatActivity implements LoaderCallbacks
             valid = false;
         }
         if (!TextUtils.equals(password, password2)) {
-            mPasswordView2.setError(getString(R.string.error_invalid_password));
+            mPasswordView2.setError(getString(R.string.error_password_not_match));
             focusView = mPasswordView2;
             valid = false;
         }
@@ -236,16 +237,23 @@ public class SignupActivity extends AppCompatActivity implements LoaderCallbacks
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if (task.isSuccessful()) {
                             Log.d(TAG, "signUpWithEmail:success");
-                            //Toast.makeText(SignupActivity.this, getString(R.string.authentication_success), Toast.LENGTH_SHORT).show();
                             sendEmailVerification();
                         } else {
                             Log.w(TAG, "signUpWithEmail:failure", task.getException());
-                            Toast.makeText(SignupActivity.this, getString(R.string.create_user_failed), Toast.LENGTH_SHORT).show();
+
+                            String exception_message = task.getException().getMessage();
+                            String error_message = "";
+                            if (exception_message.contains("The email address is already in use")) {
+                                error_message = getString(R.string.error_already_used_email);
+                            } else {
+                                error_message = getString(R.string.create_user_failed);
+                            }
+
+                            Toast.makeText(SignupActivity.this, error_message, Toast.LENGTH_SHORT).show();
                         }
                         showProgress(false);
                     }
                 });
-        //Snackbar.make(mEmailView, "SignUp Try", Snackbar.LENGTH_LONG).setAction("Action", null).show();
     }
 
     private void sendEmailVerification() {
@@ -255,13 +263,16 @@ public class SignupActivity extends AppCompatActivity implements LoaderCallbacks
                     @Override
                     public void onComplete(@NonNull Task<Void> task) {
                         if (task.isSuccessful()) {
-                            Toast.makeText(SignupActivity.this, getString(R.string.verification_email_sent) + user.getEmail(),
+                            Toast.makeText(SignupActivity.this, getString(R.string.check_verification_email) + user.getEmail(),
                                     Toast.LENGTH_SHORT).show();
                             setUserInfo();
                         } else {
                             Log.e(TAG, "sendEmailVerification", task.getException());
-                            Toast.makeText(SignupActivity.this, getString(R.string.verification_email_sent_failed), Toast.LENGTH_SHORT).show();
-                            // TODO: handle exception (re-send)
+
+                            String exception_message = task.getException().getMessage();
+                            String error_message = "";
+
+                            Toast.makeText(SignupActivity.this, exception_message, Toast.LENGTH_SHORT).show();
                         }
                     }
                 });
@@ -306,7 +317,8 @@ public class SignupActivity extends AppCompatActivity implements LoaderCallbacks
     }
 
     private boolean isEmailValid(String email) {
-        return email.contains("@");
+        return Patterns.EMAIL_ADDRESS.matcher(email).matches();
+        //return email.contains("@");
     }
 
     private boolean isPasswordValid(String password) {

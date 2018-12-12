@@ -30,7 +30,7 @@
     <string name="side_menu_group2">서비스 지역</string>
     <string name="Hello">안녕, 친구.</string>
     <string name="not_yet_implemented">이 기능은 아직 구현되지 않았습니다.</string>
-    <string name="not_yet_login">아직 로그인이 되지 않았습니다.</string>
+    <string name="not_yet_login">아직 로그인하지 않았습니다.</string>
     <string name="fit_image_to_scan">스캔할 이미지를 맞춰주세요.</string>
     <string name="plane_finding">표면을 탐색중입니다.</string>
     <string name="title_activity_trivialdrive">트리비얼 드라이브</string>
@@ -79,4 +79,9 @@
     <string name="longitude">경도</string>
     <string name="speed">이동 속도</string>
     <string name="address">주소</string>
+    <string name="error_unregistered_email">등록되지 않은 사용자 이메일 입니다.</string>
+    <string name="error_many_request_failed">올바르지 않은 로그인 요청이 너무 많습니다. 잠시 후 다시 시도해 주세요.</string>
+    <string name="error_password_not_match">패스워드가 일치하지 않습니다.</string>
+    <string name="check_verification_email">인증 메일을 확인해주세요.</string>
+    <string name="error_already_used_email">이미 등록된 이메일 입니다.</string>
 </resources>

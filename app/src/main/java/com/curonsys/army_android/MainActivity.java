@@ -123,7 +123,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         mCurrentLocation = (TextView) findViewById(R.id.current_location);
         mCurrentAddress = (TextView) findViewById(R.id.current_address);
 
-        getLastLocation();
         updateUI();
     }
 
@@ -175,7 +174,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         } else if (id == R.id.nav_arservice) {
 
         } else if (id == R.id.nav_location) {
-            goSignUp();
+            //goSignUp();
 
         } else if (id == R.id.nav_instore) {
             //doVibration(2000);
@@ -254,9 +253,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         if (checkLogin()) {
             mAuth.signOut();
             Snackbar.make(mProfileImage, getString(R.string.logout_success), Snackbar.LENGTH_LONG).setAction("Action", null).show();
-            //updateUI();
+            updateUI();
         } else {
-            Snackbar.make(mProfileImage, getString(R.string.logout_failed), Snackbar.LENGTH_LONG).setAction("Action", null).show();
+            Snackbar.make(mProfileImage, getString(R.string.not_yet_login), Snackbar.LENGTH_LONG).setAction("Action", null).show();
         }
     }
 
@@ -270,6 +269,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     }
 
     private void updateUI() {
+        getLastLocation();
         if (checkLogin()) {
             FirebaseUser currentUser = mAuth.getCurrentUser();
             String userid = currentUser.getUid();

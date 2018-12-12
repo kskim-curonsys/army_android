@@ -92,5 +92,10 @@
     <string name="longitude">longitude</string>
     <string name="speed">speed</string>
     <string name="address">address</string>
+    <string name="error_unregistered_email">There is no email record corresponding to this identifier</string>
+    <string name="error_many_request_failed">Too many unsuccessful login attempts. Please try again later</string>
+    <string name="error_password_not_match">Password does not match</string>
+    <string name="check_verification_email">Please check the verification email.</string>
+    <string name="error_already_used_email">The email address is already in use by another account</string>
 
 </resources>

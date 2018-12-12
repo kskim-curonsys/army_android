@@ -178,7 +178,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
         String email = mEmailView.getText().toString();
         String password = mPasswordView.getText().toString();
 
-        if (!TextUtils.isEmpty(password) && !isPasswordValid(password)) {
+        if (TextUtils.isEmpty(password) || !isPasswordValid(password)) {
             mPasswordView.setError(getString(R.string.error_invalid_password));
             focusView = mPasswordView;
             valid = false;
@@ -218,13 +218,32 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if (task.isSuccessful()) {
-                            Log.d(TAG, "signInWithEmail:success");
-                            Toast.makeText(LoginActivity.this, getString(R.string.authentication_success), Toast.LENGTH_SHORT).show();
                             FirebaseUser user = mAuth.getCurrentUser();
-                            nextStep();
+                            if (!user.isEmailVerified()) {
+                                Log.d(TAG, "signInWithEmail:check verification email");
+                                Toast.makeText(LoginActivity.this, getString(R.string.check_verification_email), Toast.LENGTH_SHORT).show();
+                            } else {
+                                Log.d(TAG, "signInWithEmail:success");
+                                Toast.makeText(LoginActivity.this, getString(R.string.authentication_success), Toast.LENGTH_SHORT).show();
+                                nextStep();
+                            }
+
                         } else {
                             Log.w(TAG, "signInWithEmail:failure", task.getException());
-                            Toast.makeText(LoginActivity.this, getString(R.string.authentication_failed), Toast.LENGTH_SHORT).show();
+
+                            String exception_message = task.getException().getMessage();
+                            String error_message = "";
+                            if (exception_message.contains("The password is invalid")) {
+                                error_message = getString(R.string.error_incorrect_password);
+                            } else if (exception_message.contains("There is no user record corresponding")) {
+                                error_message = getString(R.string.error_unregistered_email);
+                            } else if (exception_message.contains("We have blocked all requests from")) {
+                                error_message = getString(R.string.error_many_request_failed);
+                            } else {
+                                error_message = getString(R.string.authentication_failed);
+                            }
+
+                            Toast.makeText(LoginActivity.this, error_message, Toast.LENGTH_SHORT).show();
                         }
                         showProgress(false);
                     }
