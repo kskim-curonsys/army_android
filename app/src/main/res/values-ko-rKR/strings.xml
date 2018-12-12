@@ -75,4 +75,8 @@
     <string name="prompt_signup_name">이름 (선택)</string>
     <string name="logout_success">로그아웃 되었습니다.</string>
     <string name="logout_failed">로그아웃에 실패하였습니다.</string>
+    <string name="latitude">위도</string>
+    <string name="longitude">경도</string>
+    <string name="speed">속도</string>
+    <string name="address">주소</string>
 </resources>

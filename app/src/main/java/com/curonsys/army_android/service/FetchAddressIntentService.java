@@ -45,13 +45,17 @@ public class FetchAddressIntentService extends IntentService {
         mSharedDataManager = SharedDataManager.getInstance();
         String errorMessage = "";
 
-        Geocoder geocoder = new Geocoder(this, new Locale("en"));   //Locale.getDefault()
+        // database default: en
+        Geocoder geocoder = new Geocoder(this, Locale.getDefault());
+        Geocoder geocoder_en = new Geocoder(this, new Locale("en"));
         Location location = intent.getParcelableExtra( Constants.LOCATION_DATA_EXTRA);
         mReceiver = intent.getParcelableExtra(Constants.RECEIVER);
 
         List<Address> addresses = null;
+        List<Address> addresses_en = null;
         try {
             addresses = geocoder.getFromLocation( location.getLatitude(), location.getLongitude(), 1);
+            addresses_en = geocoder_en.getFromLocation( location.getLatitude(), location.getLongitude(), 1);
         } catch (IOException ioException) {
             errorMessage = getString(R.string.service_not_available);
             Log.e(TAG, errorMessage, ioException);
@@ -62,7 +66,7 @@ public class FetchAddressIntentService extends IntentService {
                     location.getLongitude(), illegalArgumentException);
         }
 
-        if (addresses == null || addresses.size()  == 0) {
+        if (addresses_en == null || addresses_en.size()  == 0) {
             if (errorMessage.isEmpty()) {
                 errorMessage = getString(R.string.no_address_found);
                 Log.e(TAG, errorMessage);
@@ -70,6 +74,7 @@ public class FetchAddressIntentService extends IntentService {
             deliverResultToReceiver(Constants.FAILURE_RESULT, errorMessage);
         } else {
             Address address = addresses.get(0);
+            Address address_en = addresses_en.get(0);
             ArrayList<String> addressFragments = new ArrayList<String>();
 
             for (int i = 0; i <= address.getMaxAddressLineIndex(); i++) {
@@ -77,17 +82,11 @@ public class FetchAddressIntentService extends IntentService {
             }
             addressFragments.add(address.getPostalCode());
             Log.i(TAG, getString(R.string.address_found));
-            //deliverResultToReceiver(Constants.SUCCESS_RESULT, TextUtils.join(System.getProperty("line.separator"), addressFragments));
 
-            mSharedDataManager.currentCountryCode = address.getCountryCode();
-            mSharedDataManager.currentLocality = address.getLocality();
-            mSharedDataManager.currentThoroughfare = address.getThoroughfare();
+            mSharedDataManager.currentAddress = address_en;
 
             Bundle bundle = new Bundle();
             bundle.putString(Constants.RESULT_DATA_KEY, TextUtils.join(System.getProperty("line.separator"), addressFragments));
-            bundle.putString(Constants.RESULT_COUNTRY_KEY, address.getCountryCode());
-            bundle.putString(Constants.RESULT_LOCALITY_KEY, address.getLocality());
-            bundle.putString(Constants.RESULT_THOROUGHFARE_KEY, address.getThoroughfare());
             mReceiver.send(Constants.SUCCESS_RESULT, bundle);
         }
     }

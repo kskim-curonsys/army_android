@@ -1,6 +1,7 @@
 package com.curonsys.army_android.util;
 
 import android.content.Context;
+import android.location.Address;
 import android.net.Uri;
 import android.util.Log;
 
@@ -21,9 +22,16 @@ public class SharedDataManager {
     // step2
     public double currentLongtitude = 0;
     public double currentLatitude = 0;
-    public String currentCountryCode = "";
-    public String currentLocality = "";
+
+    public Address currentAddress = null;
+
+    public String currentSubThoroughfare = "";
     public String currentThoroughfare = "";
+    public String currentLocality = "";
+    public String currentAdminArea = "";
+    public String currentCountryName = "";
+    public String currentCountryCode = "";
+    public String currentPostalCode = "";
 
     // step3
     public String contentId = "";

@@ -55,7 +55,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private ImageView mProfileImage;
     private TextView mProfileName;
     private TextView mProfileEmail;
-    private TextView mMainMessage;
+    private TextView mCurrentLocation;
+    private TextView mCurrentAddress;
 
     private FirebaseAuth mAuth;
     private RequestManager mRequestManager;
@@ -119,7 +120,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         mProfileName = (TextView) header.findViewById(R.id.nav_profile_name);
         mProfileEmail = (TextView) header.findViewById(R.id.nav_profile_email);
 
-        mMainMessage = (TextView) findViewById(R.id.main_message);
+        mCurrentLocation = (TextView) findViewById(R.id.current_location);
+        mCurrentAddress = (TextView) findViewById(R.id.current_address);
 
         getLastLocation();
         updateUI();
@@ -348,8 +350,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                                 mSharedDataManager.currentLatitude = latitude;
                                 mSharedDataManager.currentLongtitude = longitude;
 
-                                String output = "last lat : " + latitude + "\n" + "last lon : " + longitude + "\n" + "speed : " + speed + "m/s" + "\n\n";
-                                mMainMessage.setText(output);
+                                String output = "latitude : " + latitude + "\n" + "longitude : " + longitude + "\n" + "speed : " + speed + " m/s" + "\n\n";
+                                mCurrentLocation.setText(output);
 
                                 startFetchAddressIntentService();
                             }
@@ -371,13 +373,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             if (resultData == null) {
                 return;
             }
-            String info = resultData.getString(Constants.RESULT_DATA_KEY);
-            if (info != null) {
-                info += "\n";
-            }
-            if (resultCode == Constants.SUCCESS_RESULT) {
-                updateUI();
-            }
+            String result = resultData.getString(Constants.RESULT_DATA_KEY);
+
+            mCurrentAddress.setText(result);
         }
     }
 

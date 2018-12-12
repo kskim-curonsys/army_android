@@ -88,5 +88,9 @@
     <string name="prompt_signup_name">Name (optional)</string>
     <string name="logout_success">You have been logged out</string>
     <string name="logout_failed">Logout failed</string>
+    <string name="latitude">latitude</string>
+    <string name="longitude">longitude</string>
+    <string name="speed">speed</string>
+    <string name="address">address</string>
 
 </resources>
