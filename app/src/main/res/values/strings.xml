@@ -97,5 +97,6 @@
     <string name="error_password_not_match">Password does not match</string>
     <string name="check_verification_email">Please check the verification email.</string>
     <string name="error_already_used_email">The email address is already in use by another account</string>
+    <string name="tracking_location">Real-time Location</string>
 
 </resources>

@@ -84,4 +84,5 @@
     <string name="error_password_not_match">패스워드가 일치하지 않습니다.</string>
     <string name="check_verification_email">인증 메일을 확인해주세요.</string>
     <string name="error_already_used_email">이미 등록된 이메일 입니다.</string>
+    <string name="tracking_location">실시간 위치</string>
 </resources>

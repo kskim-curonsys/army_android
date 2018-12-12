@@ -1,10 +1,14 @@
 package com.curonsys.army_android;
 
+import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.content.res.AssetManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.location.Location;
+import android.location.LocationListener;
+import android.location.LocationManager;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
@@ -23,7 +27,9 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.CompoundButton;
 import android.widget.ImageView;
+import android.widget.Switch;
 import android.widget.TextView;
 
 import com.curonsys.army_android.activity.LoginActivity;
@@ -37,8 +43,14 @@ import com.curonsys.army_android.util.Constants;
 import com.curonsys.army_android.util.PermissionManager;
 import com.curonsys.army_android.util.RequestManager;
 import com.curonsys.army_android.util.SharedDataManager;
+import com.google.android.gms.common.GooglePlayServicesNotAvailableException;
+import com.google.android.gms.common.GooglePlayServicesRepairableException;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationServices;
+import com.google.android.gms.location.places.Place;
+import com.google.android.gms.location.places.ui.PlacePicker;
+import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -48,23 +60,38 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
 
+import static com.curonsys.army_android.util.DistanceUtil.distanceFrom;
+import static com.curonsys.army_android.util.DistanceUtil.latitudeInDifference;
+import static com.curonsys.army_android.util.DistanceUtil.longitudeInDifference;
+
 
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
     private static final String TAG = MainActivity.class.getSimpleName();
+
+    private static final int MY_PERMISSION_STORAGE = 1;
+    private static final int REQUEST_TAKE_PHOTO = 2;
+    private static final int REQUEST_TAKE_ALBUM = 3;
+    private static final int REQUEST_IMAGE_CROP = 4;
+    private static final int PLACE_AUTOCOMPLETE_REQUEST_CODE = 5;
+    private static final int REQUEST_PLACE_PICKER = 6;
 
     private ImageView mProfileImage;
     private TextView mProfileName;
     private TextView mProfileEmail;
     private TextView mCurrentLocation;
     private TextView mCurrentAddress;
+    private Switch mLocationSwitch;
 
     private FirebaseAuth mAuth;
     private RequestManager mRequestManager;
     private SharedDataManager mSharedDataManager;
     private FusedLocationProviderClient mFusedLocationProviderClient;
+    private LocationManager mLocationManager;
 
     protected boolean mUserProfileStatus = false;
     protected Location mLastLocation = null;
+    protected String mFindPlace = "";
+    protected boolean mLocationUpdateState = false;
 
     public MainActivity() {
     }
@@ -84,6 +111,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         mRequestManager = RequestManager.getInstance();
         mSharedDataManager = SharedDataManager.getInstance();
         mFusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this);
+        mLocationManager = (LocationManager) this.getSystemService(Context.LOCATION_SERVICE);
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -122,6 +150,18 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         mCurrentLocation = (TextView) findViewById(R.id.current_location);
         mCurrentAddress = (TextView) findViewById(R.id.current_address);
+
+        mLocationSwitch = (Switch) findViewById(R.id.switch_location);
+        mLocationSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if (isChecked) {
+                    startLocationUpdate();
+                } else {
+                    stopLocationUpdate();
+                }
+            }
+        });
 
         updateUI();
     }
@@ -175,6 +215,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         } else if (id == R.id.nav_location) {
             //goSignUp();
+            goFindPlace();
 
         } else if (id == R.id.nav_instore) {
             //doVibration(2000);
@@ -184,6 +225,33 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (requestCode == MY_PERMISSION_STORAGE) {
+        } else if (requestCode == REQUEST_TAKE_PHOTO) {
+        } else if (requestCode == REQUEST_TAKE_ALBUM) {
+        } else if (requestCode == REQUEST_IMAGE_CROP) {
+        } else if (requestCode == PLACE_AUTOCOMPLETE_REQUEST_CODE) {
+        } else if (requestCode == REQUEST_PLACE_PICKER) {
+            if (resultCode == Activity.RESULT_OK) {
+                final Place place = PlacePicker.getPlace(data, this);
+                final CharSequence name = place.getName();
+                final CharSequence address = place.getAddress();
+                String attributions = PlacePicker.getAttributions(data);
+                if (attributions == null) {
+                    attributions = "";
+                }
+
+                String info = "Find Place: " + "\n" + place.getName() + "\n" + place.getAddress() +
+                        "\n" + place.getLatLng() + "\n" + place.getViewport();
+
+                mFindPlace = info;
+            }
+        } else {
+            super.onActivityResult(requestCode, resultCode, data);
+        }
     }
 
     private void closeDrawer() {
@@ -256,6 +324,20 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             updateUI();
         } else {
             Snackbar.make(mProfileImage, getString(R.string.not_yet_login), Snackbar.LENGTH_LONG).setAction("Action", null).show();
+        }
+    }
+
+    private void goFindPlace() {
+        // findPlaceByPicker
+        try {
+            PlacePicker.IntentBuilder intentBuilder = new PlacePicker.IntentBuilder();
+            Intent intent = intentBuilder.build(this);
+            startActivityForResult(intent, REQUEST_PLACE_PICKER);
+
+        } catch (GooglePlayServicesRepairableException e) {
+            // ...
+        } catch (GooglePlayServicesNotAvailableException e) {
+            // ...
         }
     }
 
@@ -384,5 +466,48 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         intent.putExtra(Constants.RECEIVER, mResultReceiver);
         intent.putExtra(Constants.LOCATION_DATA_EXTRA, mLastLocation);
         startService(intent);
+    }
+
+    private final LocationListener mLocationListener = new LocationListener() {
+        public void onLocationChanged(Location location) {
+            String output = getString(R.string.latitude) + " : " + location.getLatitude() + "\n" + getString(R.string.longitude) + " : " + location.getLongitude() + "\n" + getString(R.string.speed) + " : " + location.getSpeed() + " m/s" + "\n\n";
+            mCurrentLocation.setText(output);
+            mLastLocation = location;
+
+            startFetchAddressIntentService();
+        }
+
+        public void onProviderDisabled(String provider) {
+            Log.d(TAG, "onProviderDisabled: " + provider);
+        }
+
+        public void onProviderEnabled(String provider) {
+            Log.d(TAG, "onProviderEnabled: " + provider);
+        }
+
+        public void onStatusChanged(String provider, int status, Bundle extras) {
+            //Log.d(TAG, "onStatusChanged: " + provider + ", status: " + status + " ,Bundle: " + extras);
+        }
+    };
+
+    private void startLocationUpdate() {
+        try {
+            mLocationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER,
+                    100, 1, mLocationListener);
+            mLocationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER,
+                    100, 1, mLocationListener);
+            mLocationUpdateState = true;
+
+        } catch (SecurityException e) {
+            mLocationUpdateState = false;
+            e.printStackTrace();
+        }
+    }
+
+    private void stopLocationUpdate() {
+        if (mLocationUpdateState) {
+            mLocationManager.removeUpdates(mLocationListener);
+            mLocationUpdateState = false;
+        }
     }
 }
