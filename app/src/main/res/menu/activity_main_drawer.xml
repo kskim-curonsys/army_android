@@ -8,7 +8,7 @@
         <menu>
         <item
             android:id="@+id/nav_armaker"
-            android:icon="@drawable/ic_menu_camera"
+            android:icon="@drawable/ic_menu_slideshow"
             android:title="@string/side_menu_armaker" />
         <item
             android:id="@+id/nav_arcontents"
@@ -16,7 +16,7 @@
             android:title="@string/side_menu_contents" />
         <item
             android:id="@+id/nav_arviewer"
-            android:icon="@drawable/ic_menu_slideshow"
+            android:icon="@drawable/ic_menu_camera"
             android:title="@string/side_menu_arviewer" />
         <item
             android:id="@+id/nav_arservice"
