@@ -33,7 +33,9 @@ import android.widget.Switch;
 import android.widget.TextView;
 
 import com.curonsys.army_android.activity.LoginActivity;
+import com.curonsys.army_android.activity.MarkerGenerationActivity;
 import com.curonsys.army_android.activity.SignupActivity;
+import com.curonsys.army_android.activity.TabbedActivity;
 import com.curonsys.army_android.activity.TrivialDriveActivity;
 import com.curonsys.army_android.arcore.AugmentedImageActivity;
 import com.curonsys.army_android.model.TransferModel;
@@ -49,8 +51,6 @@ import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.location.places.Place;
 import com.google.android.gms.location.places.ui.PlacePicker;
-import com.google.android.gms.maps.model.LatLng;
-import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -58,11 +58,10 @@ import com.google.firebase.auth.FirebaseUser;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.ArrayList;
 
-import static com.curonsys.army_android.util.DistanceUtil.distanceFrom;
-import static com.curonsys.army_android.util.DistanceUtil.latitudeInDifference;
-import static com.curonsys.army_android.util.DistanceUtil.longitudeInDifference;
+import eu.kudan.kudan.ARAPIKey;
+
+import static com.curonsys.army_android.util.Constants.KUDAN_API_KEY_DEV;
 
 
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
@@ -101,8 +100,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        //ARAPIKey key = ARAPIKey.getInstance();
-        //key.setAPIKey(KUDAN_API_KEY_DEV);
+        ARAPIKey key = ARAPIKey.getInstance();
+        key.setAPIKey(KUDAN_API_KEY_DEV);
 
         PermissionManager permissionManager = new PermissionManager(this);
         permissionManager.permissionCheck();
@@ -191,7 +190,11 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
+        if (id == R.id.main_action_search) {
+            Log.d(TAG, "Do Find: ");
+            goARViewer();
+            return true;
+        } else if (id == R.id.main_action_settings) {
             return true;
         }
 
@@ -204,19 +207,16 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         int id = item.getItemId();
 
         if (id == R.id.nav_armaker) {
-
+            goARMaker();
         } else if (id == R.id.nav_arcontents) {
-            // test
-            goBillingTest();
-
+            goARContents();
         } else if (id == R.id.nav_arviewer) {
             goARViewer();
         } else if (id == R.id.nav_arservice) {
-
+            // test
+            goBillingTest();
         } else if (id == R.id.nav_location) {
-            //goSignUp();
             goFindPlace();
-
         } else if (id == R.id.nav_instore) {
             //doVibration(2000);
             doSignOut();
@@ -286,6 +286,22 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     private void goLogin() {
         Intent intent = new Intent(this, LoginActivity.class);
+        if (intent.resolveActivity(getPackageManager()) != null) {
+            intent.putExtra("ParentClassSource", MainActivity.class.getName());
+            startActivity(intent);
+        }
+    }
+
+    private void goARMaker() {
+        Intent intent = new Intent(this, MarkerGenerationActivity.class);
+        if (intent.resolveActivity(getPackageManager()) != null) {
+            intent.putExtra("ParentClassSource", MainActivity.class.getName());
+            startActivity(intent);
+        }
+    }
+
+    private void goARContents() {
+        Intent intent = new Intent(this, TabbedActivity.class);
         if (intent.resolveActivity(getPackageManager()) != null) {
             intent.putExtra("ParentClassSource", MainActivity.class.getName());
             startActivity(intent);
@@ -456,7 +472,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 return;
             }
             String result = resultData.getString(Constants.RESULT_DATA_KEY);
-
             mCurrentAddress.setText(result);
         }
     }

@@ -19,12 +19,6 @@ android {
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
 
         ndk {
-            /*
-             * Sceneform is available for the following ABIs: arm64-v8a, armeabi-v7a,
-             * x86_64 and x86. This sample app enables arm64-v8a to run on
-             * devices and x86 to run on the emulator. Your application should
-             * list the ABIs most appropriate to minimize APK size (arm64-v8a recommended).
-             */
             abiFilters 'arm64-v8a','x86'
         }
     }
@@ -40,6 +34,10 @@ android {
     }
     lintOptions {
         abortOnError false
+    }
+    aaptOptions {
+        noCompress 'KARMarker'
+        noCompress 'armodel'
     }
 }
 
@@ -91,6 +89,7 @@ dependencies {
     androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.2'
 
     implementation project(':shared-module')
+    implementation project(':KudanAR')
 }
 
 apply plugin: 'com.google.gms.google-services'

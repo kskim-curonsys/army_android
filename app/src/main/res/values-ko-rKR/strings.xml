@@ -85,4 +85,21 @@
     <string name="check_verification_email">인증 메일을 확인해주세요.</string>
     <string name="error_already_used_email">이미 등록된 이메일 입니다.</string>
     <string name="tracking_location">실시간 위치</string>
+    <string name="bottom_general">일반</string>
+    <string name="bottom_contents">콘텐츠</string>
+    <string name="bottom_service">서비스</string>
+    <string name="bottom_user">사용자</string>
+    <string name="bottom_Information">정보</string>
+    <string name="item_select">선택</string>
+    <string name="arcore_test1">마커 이미지</string>
+    <string name="arcore_test2">크로마키 비디오</string>
+    <string name="arcore_test3">씬폼 테스트</string>
+    <string name="arcore_test4">클라우드 테스트</string>
+    <string name="tab_my">보유</string>
+    <string name="tab_contents">스토어</string>
+    <string name="tab_published">게시</string>
+    <string name="title_activity_bottom">상세 정보</string>
+    <string name="title_activity_itemdetail">아이템 상세 정보</string>
+    <string name="title_activity_itemlist">아이템 리스트</string>
+    <string name="title_activity_tabbed">콘텐츠 리스트</string>
 </resources>
