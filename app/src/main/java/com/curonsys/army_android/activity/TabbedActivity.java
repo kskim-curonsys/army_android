@@ -5,6 +5,7 @@ import android.app.Dialog;
 import android.app.TimePickerDialog;
 import android.content.Intent;
 import android.icu.util.Calendar;
+import android.support.annotation.StringRes;
 import android.support.design.widget.TabLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -31,15 +32,21 @@ import android.widget.DatePicker;
 import android.widget.TextView;
 import android.widget.TimePicker;
 
+import com.android.billingclient.api.BillingClient;
+import com.android.billingclient.api.Purchase;
+import com.android.billingclient.api.SkuDetails;
+import com.android.billingclient.api.SkuDetailsResponseListener;
 import com.curonsys.army_android.R;
 import com.curonsys.army_android.adapter.ContentsListRecyclerViewAdapter;
 import com.curonsys.army_android.adapter.StoreListRecyclerViewAdapter;
+import com.curonsys.army_android.billing.BillingManager;
 import com.curonsys.army_android.model.ContentModel;
 import com.curonsys.army_android.model.TransferModel;
 import com.curonsys.army_android.util.RequestManager;
 import com.curonsys.billingmodule.skulist.CardsDecoration;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class TabbedActivity extends AppCompatActivity {
     private static final String TAG = TabbedActivity.class.getSimpleName();
@@ -155,16 +162,17 @@ public class TabbedActivity extends AppCompatActivity {
                 mRecyclerView = (RecyclerView) rootView.findViewById(R.id.store_contents_list);
                 mRecyclerView.addItemDecoration(new CardsDecoration((int) getResources().getDimension(R.dimen.header_gap), (int) getResources().getDimension(R.dimen.row_gap)));
 
+                //getSkuList();
                 getStoreList();
 
             } else if (index == 3) {
-                /*
                 rootView = inflater.inflate(R.layout.fragment_tabbed3, container, false);
 
+                /*
                 mRecyclerView = (RecyclerView) rootView.findViewById(R.id.published_list);
                 mRecyclerView.addItemDecoration(new CardsDecoration((int) getResources().getDimension(R.dimen.header_gap), (int) getResources().getDimension(R.dimen.row_gap)));
 
-                getContentsList();
+                getPublishedList();
                 */
             }
 

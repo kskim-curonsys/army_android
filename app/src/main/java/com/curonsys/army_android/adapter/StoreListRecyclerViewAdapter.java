@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
+import android.support.design.widget.Snackbar;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -27,7 +28,7 @@ public class StoreListRecyclerViewAdapter
 
     private final ItemListActivity mParentActivity;
     private final List<ContentModel> mValues;
-    private final View.OnClickListener mOnClickListener = new View.OnClickListener() {
+    private final View.OnClickListener mOnItemClickListener = new View.OnClickListener() {
         @Override
         public void onClick(View view) {
             ContentModel item = (ContentModel) view.getTag();
@@ -36,6 +37,13 @@ public class StoreListRecyclerViewAdapter
             intent.putExtra(ContentModelDetailFragment.ARG_ITEM_ID, item.getContentId());
             intent.putExtra(ContentModelDetailFragment.ARG_ITEM, item);
             context.startActivity(intent);
+        }
+    };
+    private final View.OnClickListener mOnPurchaseClickListener = new View.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+            Snackbar.make(v, R.string.not_yet_implemented, Snackbar.LENGTH_LONG)
+                    .setAction("Action", null).show();
         }
     };
 
@@ -55,6 +63,8 @@ public class StoreListRecyclerViewAdapter
     public void onBindViewHolder(final ViewHolder holder, int position) {
         holder.mTitle.setText(mValues.get(position).getContentName());
         holder.mDescription.setText(mValues.get(position).getDescription());
+        // test
+        holder.mPrice.setText("₩1,000");
 
         String thumbpath = mValues.get(position).getThumb();
         String separator = thumbpath.substring(0, 7);
@@ -70,7 +80,8 @@ public class StoreListRecyclerViewAdapter
         }
 
         holder.itemView.setTag(mValues.get(position));
-        holder.itemView.setOnClickListener(mOnClickListener);
+        holder.itemView.setOnClickListener(mOnItemClickListener);
+        holder.itemView.setOnClickListener(mOnPurchaseClickListener);
     }
 
     @Override
