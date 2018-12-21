@@ -81,7 +81,7 @@ public class StoreListRecyclerViewAdapter
 
         holder.itemView.setTag(mValues.get(position));
         holder.itemView.setOnClickListener(mOnItemClickListener);
-        holder.itemView.setOnClickListener(mOnPurchaseClickListener);
+        holder.mPurchase.setOnClickListener(mOnPurchaseClickListener);
     }
 
     @Override
