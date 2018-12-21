@@ -115,5 +115,6 @@
     <string name="title_activity_itemdetail">Item Detail</string>
     <string name="title_activity_itemlist">Item List</string>
     <string name="title_activity_tabbed">Contents List</string>
+    <string name="button_store_purchase">Buy</string>
 
 </resources>

@@ -4,6 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="@dimen/list_item_card_height"
     android:orientation="vertical"
+    android:background="@color/colorWhite"
     android:paddingBottom="@dimen/activity_vertical_margin"
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
@@ -48,6 +49,7 @@
             android:layout_height="50dp"
             android:layout_gravity="center_vertical"
             android:textSize="10sp"
+            style="@style/DriveButtonStyle"
             android:text="@string/item_select"/>
 
     </LinearLayout>

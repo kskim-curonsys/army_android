@@ -206,11 +206,8 @@ public class AcquireFragment extends DialogFragment {
                                 if (mRecyclerView.getAdapter() == null) {
                                     mRecyclerView.setAdapter(mAdapter);
                                     Resources res = getContext().getResources();
-                                    mRecyclerView.addItemDecoration(new CardsWithHeadersDecoration(
-                                            mAdapter, (int) res.getDimension(R.dimen.header_gap),
-                                            (int) res.getDimension(R.dimen.row_gap)));
-                                    mRecyclerView.setLayoutManager(
-                                            new LinearLayoutManager(getContext()));
+                                    mRecyclerView.addItemDecoration(new CardsWithHeadersDecoration(mAdapter, (int) res.getDimension(R.dimen.header_gap), (int) res.getDimension(R.dimen.row_gap)));
+                                    mRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
                                 }
 
                                 mAdapter.updateData(inList);

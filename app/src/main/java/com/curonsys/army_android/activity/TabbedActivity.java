@@ -33,9 +33,11 @@ import android.widget.TimePicker;
 
 import com.curonsys.army_android.R;
 import com.curonsys.army_android.adapter.ContentsListRecyclerViewAdapter;
+import com.curonsys.army_android.adapter.StoreListRecyclerViewAdapter;
 import com.curonsys.army_android.model.ContentModel;
 import com.curonsys.army_android.model.TransferModel;
 import com.curonsys.army_android.util.RequestManager;
+import com.curonsys.billingmodule.skulist.CardsDecoration;
 
 import java.util.ArrayList;
 
@@ -119,7 +121,8 @@ public class TabbedActivity extends AppCompatActivity {
     public static class PlaceholderFragment extends Fragment {
         private static final String ARG_SECTION_NUMBER = "section_number";
         private RecyclerView mRecyclerView;
-        private ContentsListRecyclerViewAdapter mContentsListAdapter;
+        ContentsListRecyclerViewAdapter mContentsListAdapter;
+        StoreListRecyclerViewAdapter mStoreListAdapter;
 
         public PlaceholderFragment() {
         }
@@ -144,29 +147,31 @@ public class TabbedActivity extends AppCompatActivity {
                 mRecyclerView = (RecyclerView) rootView.findViewById(R.id.my_contents_list);
                 mRecyclerView.addItemDecoration(new DividerItemDecoration(mRecyclerView.getContext(), DividerItemDecoration.VERTICAL));
 
-                getContentsList(rootView);
+                getContentsList();
 
             } else if (index == 2) {
                 rootView = inflater.inflate(R.layout.fragment_tabbed2, container, false);
 
                 mRecyclerView = (RecyclerView) rootView.findViewById(R.id.store_contents_list);
-                mRecyclerView.addItemDecoration(new DividerItemDecoration(mRecyclerView.getContext(), DividerItemDecoration.VERTICAL));
+                mRecyclerView.addItemDecoration(new CardsDecoration((int) getResources().getDimension(R.dimen.header_gap), (int) getResources().getDimension(R.dimen.row_gap)));
 
-                getContentsList(rootView);
+                getStoreList();
 
             } else if (index == 3) {
+                /*
                 rootView = inflater.inflate(R.layout.fragment_tabbed3, container, false);
 
                 mRecyclerView = (RecyclerView) rootView.findViewById(R.id.published_list);
-                mRecyclerView.addItemDecoration(new DividerItemDecoration(mRecyclerView.getContext(), DividerItemDecoration.VERTICAL));
+                mRecyclerView.addItemDecoration(new CardsDecoration((int) getResources().getDimension(R.dimen.header_gap), (int) getResources().getDimension(R.dimen.row_gap)));
 
-                getContentsList(rootView);
+                getContentsList();
+                */
             }
 
             return rootView;
         }
 
-        private void getContentsList(View rootView) {
+        private void getContentsList() {
             ArrayList<ContentModel> items = new ArrayList<ContentModel>();
 
             RequestManager rm = RequestManager.getInstance();
@@ -175,8 +180,21 @@ public class TabbedActivity extends AppCompatActivity {
                 public void onResponse(ArrayList<ContentModel> contents) {
                     mContentsListAdapter = new ContentsListRecyclerViewAdapter(null, contents, false);
                     mRecyclerView.setAdapter(mContentsListAdapter);
-
                     getThumbnails(contents);
+                }
+            });
+        }
+
+        private void getStoreList() {
+            ArrayList<ContentModel> items = new ArrayList<ContentModel>();
+
+            RequestManager rm = RequestManager.getInstance();
+            rm.requestGetAllContents(new RequestManager.ContentsListCallback() {
+                @Override
+                public void onResponse(ArrayList<ContentModel> contents) {
+                    mStoreListAdapter = new StoreListRecyclerViewAdapter(null, contents);
+                    mRecyclerView.setAdapter(mStoreListAdapter);
+                    getStoreThumbnails(contents);
                 }
             });
         }
@@ -195,8 +213,27 @@ public class TabbedActivity extends AppCompatActivity {
                         ContentModel model = contents.get(index);
                         model.setThumb(download.getPath());
                         contents.set(index, model);
-
                         mContentsListAdapter.notifyItemChanged(index);
+                    }
+                });
+            }
+        }
+
+        private void getStoreThumbnails(ArrayList<ContentModel> contents) {
+            for (int i = 0; i < contents.size(); i++) {
+                String thumbname = contents.get(i).getContentName();
+                String thumbpath = contents.get(i).getThumb();
+                String thumbsuffix = thumbpath.substring(thumbpath.indexOf('.'), thumbpath.length());
+
+                final int index = i;
+                RequestManager rm = RequestManager.getInstance();
+                rm.requestDownloadFileFromStorage(thumbname, thumbpath, thumbsuffix, new RequestManager.TransferCallback() {
+                    @Override
+                    public void onResponse(TransferModel download) {
+                        ContentModel model = contents.get(index);
+                        model.setThumb(download.getPath());
+                        contents.set(index, model);
+                        mStoreListAdapter.notifyItemChanged(index);
                     }
                 });
             }

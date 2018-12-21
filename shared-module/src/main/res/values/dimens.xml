@@ -19,7 +19,7 @@
     <dimen name="single_padding">8dp</dimen>
     <dimen name="double_padding">16dp</dimen>
 
-    <dimen name="header_gap">8dp</dimen>
+    <dimen name="header_gap">4dp</dimen>
     <dimen name="row_gap">1px</dimen>
     <dimen name="button_width">152dp</dimen>
     <dimen name="button_height">48dp</dimen>
