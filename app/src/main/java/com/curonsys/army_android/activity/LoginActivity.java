@@ -343,19 +343,23 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
     }
 
     private void goFindID() {
-
+        Snackbar.make(mEmailView, R.string.not_yet_implemented, Snackbar.LENGTH_LONG)
+                .setAction("Action", null).show();
     }
 
     private void goFindPassword() {
-
+        Snackbar.make(mEmailView, R.string.not_yet_implemented, Snackbar.LENGTH_LONG)
+                .setAction("Action", null).show();
     }
 
     private void goGoogleLogin() {
-
+        Snackbar.make(mEmailView, R.string.not_yet_implemented, Snackbar.LENGTH_LONG)
+                .setAction("Action", null).show();
     }
 
     private void goFacebookLogin() {
-
+        Snackbar.make(mEmailView, R.string.not_yet_implemented, Snackbar.LENGTH_LONG)
+                .setAction("Action", null).show();
     }
 
     private void nextStep() {

@@ -14,11 +14,14 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.android.billingclient.api.BillingClient;
 import com.curonsys.army_android.R;
 import com.curonsys.army_android.activity.ItemDetailActivity;
 import com.curonsys.army_android.activity.ItemListActivity;
 import com.curonsys.army_android.fragment.ContentModelDetailFragment;
 import com.curonsys.army_android.model.ContentModel;
+import com.curonsys.army_android.model.SkuDetailsModel;
+import com.curonsys.army_android.util.PurchaseManager;
 
 import java.io.File;
 import java.util.List;
@@ -27,7 +30,10 @@ public class StoreListRecyclerViewAdapter
         extends RecyclerView.Adapter<StoreListRecyclerViewAdapter.ViewHolder> {
 
     private final ItemListActivity mParentActivity;
-    private final List<ContentModel> mValues;
+    private final List<ContentModel> mContents;
+    private List<SkuDetailsModel> mSkus;
+    PurchaseManager mPurchaseManager;
+
     private final View.OnClickListener mOnItemClickListener = new View.OnClickListener() {
         @Override
         public void onClick(View view) {
@@ -39,17 +45,17 @@ public class StoreListRecyclerViewAdapter
             context.startActivity(intent);
         }
     };
-    private final View.OnClickListener mOnPurchaseClickListener = new View.OnClickListener() {
-        @Override
-        public void onClick(View v) {
-            Snackbar.make(v, R.string.not_yet_implemented, Snackbar.LENGTH_LONG)
-                    .setAction("Action", null).show();
-        }
-    };
 
-    public StoreListRecyclerViewAdapter(ItemListActivity parent, List<ContentModel> items) {
-        mValues = items;
+    public StoreListRecyclerViewAdapter(ItemListActivity parent, List<ContentModel> items, List<SkuDetailsModel> skus,
+                                        PurchaseManager purchase) {
+        mContents = items;
+        mSkus = skus;
         mParentActivity = parent;
+        mPurchaseManager = purchase;
+    }
+
+    public void setSkus(List<SkuDetailsModel> skus) {
+        mSkus = skus;
     }
 
     @Override
@@ -61,12 +67,12 @@ public class StoreListRecyclerViewAdapter
 
     @Override
     public void onBindViewHolder(final ViewHolder holder, int position) {
-        holder.mTitle.setText(mValues.get(position).getContentName());
-        holder.mDescription.setText(mValues.get(position).getDescription());
-        // test
-        holder.mPrice.setText("₩1,000");
+        holder.mTitle.setText(mContents.get(position).getContentName());
+        holder.mDescription.setText(mContents.get(position).getDescription());
+        String price = getContentPrice(mContents.get(position).getSkuId());
+        holder.mPrice.setText(price);
 
-        String thumbpath = mValues.get(position).getThumb();
+        String thumbpath = mContents.get(position).getThumb();
         String separator = thumbpath.substring(0, 7);
 
         if (separator.compareTo("models/") != 0) {
@@ -79,14 +85,51 @@ public class StoreListRecyclerViewAdapter
             holder.mThumbnail.setImageResource(R.mipmap.ic_launcher_round);
         }
 
-        holder.itemView.setTag(mValues.get(position));
+        holder.itemView.setTag(mContents.get(position));
         holder.itemView.setOnClickListener(mOnItemClickListener);
-        holder.mPurchase.setOnClickListener(mOnPurchaseClickListener);
+        holder.mPurchase.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String skuid = mContents.get(position).getSkuId();
+                String skutype = getSkuType(skuid);
+
+                mPurchaseManager.purchaseItem(skuid, skutype);
+            }
+        });
+    }
+
+    private String getContentPrice(String skuid) {
+        // default price
+        String price = "₩1,000";
+
+        if (mSkus != null) {
+            for (SkuDetailsModel details : mSkus) {
+                if (skuid.compareTo(details.getSkuId()) == 0) {
+                    price = details.getPrice();
+                }
+            }
+        }
+
+        return price;
+    }
+
+    private String getSkuType(String skuid) {
+        String skutype = BillingClient.SkuType.INAPP;
+
+        if (mSkus != null) {
+            for (SkuDetailsModel details : mSkus) {
+                if (skuid.compareTo(details.getSkuId()) == 0) {
+                    skutype = details.getBillingType();
+                }
+            }
+        }
+
+        return skutype;
     }
 
     @Override
     public int getItemCount() {
-        return mValues.size();
+        return mContents.size();
     }
 
     class ViewHolder extends RecyclerView.ViewHolder {

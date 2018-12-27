@@ -7,6 +7,7 @@ import java.util.Map;
 
 public class ContentModel implements Serializable {
     private String mContentId;
+    private String mSkuId;
     private String mName;
     private String mDescription;
     private boolean m3D;
@@ -17,6 +18,7 @@ public class ContentModel implements Serializable {
 
     public ContentModel() {
         mContentId = "";
+        mSkuId = "";
         mName = "";
         mDescription = "";
         m3D = true;
@@ -31,6 +33,12 @@ public class ContentModel implements Serializable {
             mContentId = (String) data.get("content_id");
         } else {
             mContentId = "";
+        }
+
+        if (data.containsKey("sku_id")) {
+            mSkuId = (String) data.get("sku_id");
+        } else {
+            mSkuId = "";
         }
 
         if (data.containsKey("name")) {
@@ -80,12 +88,20 @@ public class ContentModel implements Serializable {
         mContentId = contentid;
     }
 
+    public void setSkuId(String skuid) {
+        mSkuId = skuid;
+    }
+
     public void setThumb(String path) {
         mThumb = path;
     }
 
     public String getContentId() {
         return mContentId;
+    }
+
+    public String getSkuId() {
+        return mSkuId;
     }
 
     public String getContentName() {
@@ -120,6 +136,7 @@ public class ContentModel implements Serializable {
         Map<String, Object> data = new HashMap<>();
 
         data.put("content_id", mContentId);
+        data.put("sku_id", mSkuId);
         data.put("name", mName);
         data.put("describe", mDescription);
         data.put("3d", m3D);

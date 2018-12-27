@@ -1,11 +1,11 @@
 package com.curonsys.army_android.activity;
 
+import android.app.Activity;
 import android.app.DatePickerDialog;
 import android.app.Dialog;
 import android.app.TimePickerDialog;
 import android.content.Intent;
 import android.icu.util.Calendar;
-import android.support.annotation.StringRes;
 import android.support.design.widget.TabLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -33,37 +33,22 @@ import android.widget.TextView;
 import android.widget.TimePicker;
 
 import com.android.billingclient.api.BillingClient;
-import com.android.billingclient.api.Purchase;
-import com.android.billingclient.api.SkuDetails;
-import com.android.billingclient.api.SkuDetailsResponseListener;
 import com.curonsys.army_android.R;
 import com.curonsys.army_android.adapter.ContentsListRecyclerViewAdapter;
 import com.curonsys.army_android.adapter.StoreListRecyclerViewAdapter;
-import com.curonsys.army_android.billing.BillingManager;
 import com.curonsys.army_android.model.ContentModel;
+import com.curonsys.army_android.model.SkuDetailsModel;
 import com.curonsys.army_android.model.TransferModel;
+import com.curonsys.army_android.util.PurchaseManager;
 import com.curonsys.army_android.util.RequestManager;
 import com.curonsys.billingmodule.skulist.CardsDecoration;
 
 import java.util.ArrayList;
-import java.util.List;
 
 public class TabbedActivity extends AppCompatActivity {
     private static final String TAG = TabbedActivity.class.getSimpleName();
 
-    /**
-     * The {@link android.support.v4.view.PagerAdapter} that will provide
-     * fragments for each of the sections. We use a
-     * {@link FragmentPagerAdapter} derivative, which will keep every
-     * loaded fragment in memory. If this becomes too memory intensive, it
-     * may be best to switch to a
-     * {@link android.support.v4.app.FragmentStatePagerAdapter}.
-     */
     private SectionsPagerAdapter mSectionsPagerAdapter;
-
-    /**
-     * The {@link ViewPager} that will host the section contents.
-     */
     private ViewPager mViewPager;
 
     @Override
@@ -93,6 +78,7 @@ public class TabbedActivity extends AppCompatActivity {
                         .setAction("Action", null).show();
             }
         });
+
     }
 
     @Override
@@ -130,6 +116,9 @@ public class TabbedActivity extends AppCompatActivity {
         private RecyclerView mRecyclerView;
         ContentsListRecyclerViewAdapter mContentsListAdapter;
         StoreListRecyclerViewAdapter mStoreListAdapter;
+        ArrayList<ContentModel> mContents;
+        ArrayList<SkuDetailsModel> mSkus;
+        PurchaseManager mPurchaseManager;
 
         public PlaceholderFragment() {
         }
@@ -145,33 +134,27 @@ public class TabbedActivity extends AppCompatActivity {
         @Override
         public View onCreateView(LayoutInflater inflater, ViewGroup container,
                                  Bundle savedInstanceState) {
+            mPurchaseManager = PurchaseManager.getInstance(getActivity());
+
             int index = getArguments().getInt(ARG_SECTION_NUMBER);
             View rootView = inflater.inflate(R.layout.fragment_tabbed, container, false);
-
             if (index == 1) {
                 rootView = inflater.inflate(R.layout.fragment_tabbed, container, false);
-
                 mRecyclerView = (RecyclerView) rootView.findViewById(R.id.my_contents_list);
                 mRecyclerView.addItemDecoration(new DividerItemDecoration(mRecyclerView.getContext(), DividerItemDecoration.VERTICAL));
-
                 getContentsList();
 
             } else if (index == 2) {
                 rootView = inflater.inflate(R.layout.fragment_tabbed2, container, false);
-
                 mRecyclerView = (RecyclerView) rootView.findViewById(R.id.store_contents_list);
                 mRecyclerView.addItemDecoration(new CardsDecoration((int) getResources().getDimension(R.dimen.header_gap), (int) getResources().getDimension(R.dimen.row_gap)));
-
-                //getSkuList();
-                getStoreList();
+                getStoreItemList();
 
             } else if (index == 3) {
                 rootView = inflater.inflate(R.layout.fragment_tabbed3, container, false);
-
                 /*
                 mRecyclerView = (RecyclerView) rootView.findViewById(R.id.published_list);
                 mRecyclerView.addItemDecoration(new CardsDecoration((int) getResources().getDimension(R.dimen.header_gap), (int) getResources().getDimension(R.dimen.row_gap)));
-
                 getPublishedList();
                 */
             }
@@ -180,31 +163,49 @@ public class TabbedActivity extends AppCompatActivity {
         }
 
         private void getContentsList() {
-            ArrayList<ContentModel> items = new ArrayList<ContentModel>();
-
-            RequestManager rm = RequestManager.getInstance();
-            rm.requestGetAllContents(new RequestManager.ContentsListCallback() {
-                @Override
-                public void onResponse(ArrayList<ContentModel> contents) {
-                    mContentsListAdapter = new ContentsListRecyclerViewAdapter(null, contents, false);
-                    mRecyclerView.setAdapter(mContentsListAdapter);
-                    getThumbnails(contents);
+            if (mContents == null) {
+                RequestManager rm = RequestManager.getInstance();
+                rm.requestGetAllContents(new RequestManager.ContentsListCallback() {
+                    @Override
+                    public void onResponse(ArrayList<ContentModel> contents) {
+                        mContents = contents;
+                        mContentsListAdapter = new ContentsListRecyclerViewAdapter(null, mContents, false);
+                        mRecyclerView.setAdapter(mContentsListAdapter);
+                        getThumbnails(mContents);
+                    }
+                });
+            } else {
+                mContentsListAdapter = new ContentsListRecyclerViewAdapter(null, mContents, false);
+                mRecyclerView.setAdapter(mContentsListAdapter);
+                if (mContents.get(0).getThumb() == null || mContents.get(0).getThumb().isEmpty()) {
+                    getThumbnails(mContents);
                 }
-            });
+            }
         }
 
-        private void getStoreList() {
-            ArrayList<ContentModel> items = new ArrayList<ContentModel>();
-
-            RequestManager rm = RequestManager.getInstance();
-            rm.requestGetAllContents(new RequestManager.ContentsListCallback() {
-                @Override
-                public void onResponse(ArrayList<ContentModel> contents) {
-                    mStoreListAdapter = new StoreListRecyclerViewAdapter(null, contents);
-                    mRecyclerView.setAdapter(mStoreListAdapter);
-                    getStoreThumbnails(contents);
+        private void getStoreItemList() {
+            if (mContents == null) {
+                RequestManager rm = RequestManager.getInstance();
+                rm.requestGetAllContents(new RequestManager.ContentsListCallback() {
+                    @Override
+                    public void onResponse(ArrayList<ContentModel> contents) {
+                        mContents = contents;
+                        mStoreListAdapter = new StoreListRecyclerViewAdapter(null, mContents, mSkus, mPurchaseManager);
+                        mRecyclerView.setAdapter(mStoreListAdapter);
+                        getStoreThumbnails(contents);
+                        getSkuList();
+                    }
+                });
+            } else {
+                mStoreListAdapter = new StoreListRecyclerViewAdapter(null, mContents, mSkus, mPurchaseManager);
+                mRecyclerView.setAdapter(mStoreListAdapter);
+                if (mContents.get(0).getThumb() == null || mContents.get(0).getThumb().isEmpty()) {
+                    getStoreThumbnails(mContents);
                 }
-            });
+                if (mSkus == null) {
+                    getSkuList();
+                }
+            }
         }
 
         private void getThumbnails(ArrayList<ContentModel> contents) {
@@ -246,6 +247,18 @@ public class TabbedActivity extends AppCompatActivity {
                 });
             }
         }
+
+        private void getSkuList() {
+            mPurchaseManager.requestSkuDetailsList(BillingClient.SkuType.INAPP, new PurchaseManager.SkuDetailsListCallback() {
+                @Override
+                public void onResponse(ArrayList<SkuDetailsModel> response) {
+                    mSkus = response;
+                    mStoreListAdapter.setSkus(mSkus);
+                    mStoreListAdapter.notifyDataSetChanged();
+                }
+            });
+        }
+
     }
 
     public class SectionsPagerAdapter extends FragmentPagerAdapter {
@@ -309,4 +322,5 @@ public class TabbedActivity extends AppCompatActivity {
         DialogFragment newFragment = new DatePickerFragment();
         newFragment.show(getSupportFragmentManager(), "datePicker");
     }
+
 }

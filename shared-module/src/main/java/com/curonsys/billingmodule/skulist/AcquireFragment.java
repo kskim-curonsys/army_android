@@ -162,14 +162,12 @@ public class AcquireFragment extends DialogFragment {
             final UiManager uiManager = createUiManager(mAdapter, mBillingProvider);
             mAdapter.setUiManager(uiManager);
             // Filling the list with all the data to render subscription rows
-            List<String> subscriptionsSkus = uiManager.getDelegatesFactory()
-                    .getSkuList(SkuType.SUBS);
+            List<String> subscriptionsSkus = uiManager.getDelegatesFactory().getSkuList(SkuType.SUBS);
             addSkuRows(dataList, subscriptionsSkus, SkuType.SUBS, new Runnable() {
                 @Override
                 public void run() {
                     // Once we added all the subscription items, fill the in-app items rows below
-                    List<String> inAppSkus = uiManager.getDelegatesFactory()
-                            .getSkuList(SkuType.INAPP);
+                    List<String> inAppSkus = uiManager.getDelegatesFactory().getSkuList(SkuType.INAPP);
                     addSkuRows(dataList, inAppSkus, SkuType.INAPP, null);
                 }
             });
@@ -185,19 +183,15 @@ public class AcquireFragment extends DialogFragment {
                     public void onSkuDetailsResponse(int responseCode, List<SkuDetails> skuDetailsList) {
 
                         if (responseCode != BillingResponse.OK) {
-                            Log.w(TAG, "Unsuccessful query for type: " + billingType
-                                    + ". Error code: " + responseCode);
-                        } else if (skuDetailsList != null
-                                && skuDetailsList.size() > 0) {
+                            Log.w(TAG, "Unsuccessful query for type: " + billingType + ". Error code: " + responseCode);
+                        } else if (skuDetailsList != null && skuDetailsList.size() > 0) {
                             // If we successfully got SKUs, add a header in front of the row
-                            @StringRes int stringRes = SkuType.INAPP.equals(billingType)
-                                    ? R.string.header_inapp : R.string.header_subscriptions;
+                            @StringRes int stringRes = SkuType.INAPP.equals(billingType) ? R.string.header_inapp : R.string.header_subscriptions;
                             inList.add(new SkuRowData(getString(stringRes)));
                             // Then fill all the other rows
                             for (SkuDetails details : skuDetailsList) {
                                 Log.i(TAG, "Adding sku: " + details);
-                                inList.add(new SkuRowData(details, SkusAdapter.TYPE_NORMAL,
-                                        billingType));
+                                inList.add(new SkuRowData(details, SkusAdapter.TYPE_NORMAL, billingType));
                             }
 
                             if (inList.size() == 0) {
