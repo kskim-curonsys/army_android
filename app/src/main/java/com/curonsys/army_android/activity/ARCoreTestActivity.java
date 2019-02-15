@@ -23,7 +23,7 @@ public class ARCoreTestActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_arcore_test);
 
-        mBtnAugmentedImage = (Button) findViewById(R.id.button_arcore1);
+        mBtnAugmentedImage = findViewById(R.id.button_arcore1);
         mBtnAugmentedImage.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

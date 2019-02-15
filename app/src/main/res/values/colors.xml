@@ -17,4 +17,7 @@
     <color name="colorDarkGrayFont">#666666</color>
     <color name="colorDarkFont">#484848</color>
     <color name="deep_teal">#ff009688</color>
+
+    <color name="button_gray">#595959</color>
+    <color name="button_blue">#5b5eff</color>
 </resources>

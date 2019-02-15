@@ -177,19 +177,13 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.main, menu);
         return true;
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
-
-        //noinspection SimplifiableIfStatement
         if (id == R.id.main_action_search) {
             Log.d(TAG, "Do Find: ");
             goARViewer();
@@ -214,7 +208,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             goARViewer();
         } else if (id == R.id.nav_arservice) {
             // test
-            goBillingTest();
+            //goBillingTest();
         } else if (id == R.id.nav_location) {
             goFindPlace();
         } else if (id == R.id.nav_instore) {
@@ -246,7 +240,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
                 String info = "Find Place: " + "\n" + place.getName() + "\n" + place.getAddress() +
                         "\n" + place.getLatLng() + "\n" + place.getViewport();
-
                 mFindPlace = info;
             }
         } else {
@@ -269,7 +262,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     private void profileImageClicked(View v) {
         if (checkLogin()) {
-            //goAccount();
             closeDrawer();
         } else {
             goLogin();

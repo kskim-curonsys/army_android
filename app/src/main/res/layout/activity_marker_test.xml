@@ -1,20 +1,97 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context=".activity.MarkerTestActivity">
-
-    <SeekBar
-        android:max="300"
-        android:id="@+id/scaleSeekbar"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
+    tools:context="com.curonsys.army_android.activity.MarkerTestActivity">
     <Button
         android:text="complete"
         android:id="@+id/completeBtn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content" />
+
+
+    <LinearLayout
+        android:layout_weight="0"
+        android:orientation="vertical"
+        android:layout_gravity="bottom"
+        android:gravity="bottom"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <SeekBar
+            style="@style/CustSeekBar"
+            android:max="600"
+            android:id="@+id/scaleSeekbar"
+            android:layout_width="match_parent"
+            android:layout_height="30dp" />
+        <LinearLayout
+            android:gravity="bottom|center"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+            <LinearLayout
+                android:layout_margin="30dp"
+                android:orientation="vertical"
+                android:gravity="center"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content">
+                <ImageButton
+                    android:id="@+id/arrow_ux"
+                    android:background="#00000000"
+                    android:src="@drawable/arrow_u"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+                <ImageButton
+                    android:id="@+id/arrow_dx"
+                    android:background="#00000000"
+                    android:src="@drawable/arrow_d"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+            </LinearLayout>
+            <LinearLayout
+                android:layout_margin="30dp"
+                android:orientation="vertical"
+                android:gravity="center"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content">
+                <ImageButton
+                    android:id="@+id/arrow_uy"
+                    android:background="#00000000"
+                    android:src="@drawable/arrow_u"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+                <ImageButton
+                    android:id="@+id/arrow_dy"
+                    android:background="#00000000"
+                    android:src="@drawable/arrow_d"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+            </LinearLayout>
+            <LinearLayout
+                android:layout_margin="30dp"
+                android:orientation="vertical"
+                android:gravity="center"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content">
+                <ImageButton
+                    android:id="@+id/arrow_uz"
+                    android:background="#00000000"
+                    android:src="@drawable/arrow_u"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+                <ImageButton
+                    android:id="@+id/arrow_dz"
+                    android:background="#00000000"
+                    android:src="@drawable/arrow_d"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+            </LinearLayout>
+        </LinearLayout>
+
+    </LinearLayout>
+
+
+
 
 </LinearLayout>

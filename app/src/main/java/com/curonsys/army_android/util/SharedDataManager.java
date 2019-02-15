@@ -14,37 +14,35 @@ import java.util.ArrayList;
 
 public class SharedDataManager {
 
-    // step1
+    //frag1
     public Uri imageURI = null;
     public double markerRating = 0;
     public String generatorId = null;
 
-    // step2
+    //frag2
     public double currentLongtitude = 0;
     public double currentLatitude = 0;
-
-    public Address currentAddress = null;
-
-    public String currentSubThoroughfare = "";
-    public String currentThoroughfare = "";
-    public String currentLocality = "";
-    public String currentAdminArea = "";
-    public String currentCountryName = "";
     public String currentCountryCode = "";
-    public String currentPostalCode = "";
+    public String currentLocality = "";
+    public String currentThoroughfare = "";
+    public  Address currentAddress;
 
-    // step3
+    //frag3
     public String contentId = "";
     public String contentName = "";
     public String contentFileName = "";
     public int textureCount = 0;
     public String[] contentTextureNames;
     public String[] contentTextureFiles;
-    public Boolean contentHasAnimation = false;
 
-    // step4
+    //수정!
+    public Boolean is3D = true;
+
+    //frag4
     public float contentScale = 0;
     public ArrayList<Float> contentRotation = new ArrayList<Float>();
+
+    public String phoneNumber = "";
 
     public SharedDataManager() {
     }

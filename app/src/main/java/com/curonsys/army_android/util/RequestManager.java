@@ -7,6 +7,7 @@ import android.support.annotation.Nullable;
 import android.util.Log;
 import android.widget.Toast;
 
+import com.curonsys.army_android.model.BusinessCardModel;
 import com.curonsys.army_android.model.ContentModel;
 import com.curonsys.army_android.model.MarkerModel;
 import com.curonsys.army_android.model.OrderModel;
@@ -34,12 +35,21 @@ import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageMetadata;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
+import com.loopj.android.http.JsonHttpResponseHandler;
+import com.loopj.android.http.RequestParams;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.ByteArrayOutputStream;
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
+
+import cz.msebera.android.httpclient.Header;
 
 import static com.curonsys.army_android.util.Constants.STORAGE_BASE_URL;
 
@@ -116,6 +126,14 @@ public class RequestManager {
 
     public interface OrderListCallback {
         public void onResponse(ArrayList<OrderModel> response);
+    }
+
+    public interface CardCallback {
+        public void onResponse(BusinessCardModel response);
+    }
+
+    public interface DjangoImageUploadCallback {
+        public void onCallback(JSONObject result);
     }
 
     public RequestManager() {
@@ -307,6 +325,46 @@ public class RequestManager {
         }
 
         docRef.set(marker.getData())
+                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void aVoid) {
+                        Log.d(TAG, "Marker data successfully written!");
+                        callback.onResponse(true);
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Log.w(TAG, "Error writing marker document", e);
+                        callback.onResponse(false);
+                    }
+                });
+    }
+
+    public void requestGetCardInfo(String card_id, final CardCallback callback) {
+        DocumentReference docRef = mFirestore.collection("cards").document(card_id);
+        docRef.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+            @Override
+            public void onSuccess(DocumentSnapshot documentSnapshot) {
+                Log.d(TAG, documentSnapshot.getId() + " => " + documentSnapshot.getData());
+                BusinessCardModel model = new BusinessCardModel(documentSnapshot.getData());
+                callback.onResponse(model);
+            }
+        });
+    }
+
+    public void requestSetCardInfo(BusinessCardModel card, final SuccessCallback callback) {
+        DocumentReference docRef;
+        if (card.getMarkerId().isEmpty()) {
+            docRef = mFirestore.collection("cards").document();
+            String docid = docRef.getId();
+            card.setMarkerId(docid);
+
+        } else {
+            docRef = mFirestore.collection("cards").document(card.getMarkerId());
+        }
+
+        docRef.set(card.getData())
                 .addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
                     public void onSuccess(Void aVoid) {
@@ -543,6 +601,165 @@ public class RequestManager {
                 TransferModel result = new TransferModel(values);
 
                 callback.onResponse(result);
+            }
+        });
+    }
+
+    public void requestUploadCardMarkerToStorage(TransferModel model,String phone, Uri uri, final TransferCallback callback) {
+        StorageReference ref = mStorage.getReference();
+        StorageReference upRef = ref.child("markers/"+"cards" + "/"+phone+"/" + model.getName());
+
+        mUploadTask = upRef.putFile(uri);
+        mUploadTask.addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception exception) {
+                callback.onResponse(null);
+            }
+        }).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+            @Override
+            public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                StorageMetadata meta = taskSnapshot.getMetadata();
+
+                Map<String, Object> values = new HashMap<>();
+                values.put("path", meta.getPath());
+                String url = meta.getPath();
+                String suffix = url.substring(url.indexOf('.'), url.length());
+                values.put("suffix", suffix);
+                values.put("content_type", meta.getContentType());
+                values.put("name", meta.getName());
+                values.put("md5hash", meta.getMd5Hash());
+                values.put("size", meta.getSizeBytes());
+                values.put("creation_time", meta.getCreationTimeMillis());
+                values.put("updated_time", meta.getUpdatedTimeMillis());
+                TransferModel result = new TransferModel(values);
+
+                callback.onResponse(result);
+            }
+        });
+    }
+
+    public void getCardIdToDjango(String phoneNum, final DjangoImageUploadCallback callback) throws JSONException {
+        RequestParams params = new RequestParams();
+        params.put("phone",phoneNum);
+
+        DjangoClient.get("get_card_id",params,new JsonHttpResponseHandler(){
+            @Override
+            public void onSuccess(int statusCode, Header[] headers, JSONObject response){
+                super.onSuccess(statusCode,headers,response);
+                callback.onCallback(response);
+            }
+            @Override
+            public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
+                super.onFailure(statusCode, headers, throwable, errorResponse);
+                if (errorResponse == null) {
+                    Log.d("errorResponse", "is null");
+                    callback.onCallback(null);
+                } else {
+                    callback.onCallback(errorResponse);
+                }
+            }
+        });
+    }
+
+
+    public void uploadImageToDjango(File img_file,double latitude, double longitude, final DjangoImageUploadCallback callback) throws JSONException {
+
+//        File photo = new File(img_path.substring(7));
+        DjangoClient.setTimeOut();
+
+        RequestParams params = new RequestParams();
+
+        try {
+            params.put("photo", img_file);
+        } catch(FileNotFoundException e) {}
+
+        params.put("latitude",latitude);
+        params.put("longitude",longitude);
+//        params.put("locality",locality);
+//        params.put("thoroughfare",thoroughfare);
+
+//        Log.d("locality",locality);
+//        Log.d("thoroughfare",thoroughfare);
+
+        DjangoClient.post("test",params, new JsonHttpResponseHandler(){
+            @Override
+            public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
+                super.onSuccess(statusCode, headers, response);
+                callback.onCallback(response);
+            }
+
+            @Override
+            public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
+                super.onFailure(statusCode, headers, throwable, errorResponse);
+                if(errorResponse ==null){
+                    Log.d("errorResponse","is null");
+                    callback.onCallback(null);
+                }
+                else{
+                    callback.onCallback(errorResponse);
+                }
+
+            }
+
+            @Override
+            public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
+                super.onFailure(statusCode, headers, responseString, throwable);
+                callback.onCallback(null);
+            }
+        });
+    }
+    public void markerEvaluationToDjango(File img_file, final DjangoImageUploadCallback callback) throws JSONException {
+
+//        File photo = new File(img_path.substring(7));
+        DjangoClient.setTimeOut();
+
+        RequestParams params = new RequestParams();
+
+        try {
+            params.put("photo", img_file);
+        } catch(FileNotFoundException e) {}
+
+        DjangoClient.post("evaluation",params, new JsonHttpResponseHandler(){
+            @Override
+            public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
+                super.onSuccess(statusCode, headers, response);
+                callback.onCallback(response);
+            }
+
+            @Override
+            public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
+                super.onFailure(statusCode, headers, throwable, errorResponse);
+                if(errorResponse ==null){
+                    Log.d("errorResponse","is null");
+                    callback.onCallback(null);
+                }
+                else
+                    callback.onCallback(errorResponse);
+            }
+        });
+    }
+
+
+    public void markerImageUpload(StorageReference storageReference, Bitmap bitmap, String filename){
+        StorageReference storageRef = mStorage.getReference();
+
+        StorageReference imagesRef = storageRef.child("images/"+filename);
+
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        bitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos);
+        byte[] data = baos.toByteArray();
+
+        UploadTask uploadTask = imagesRef.putBytes(data);
+        uploadTask.addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception exception) {
+                // Handle unsuccessful uploads
+            }
+        }).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+            @Override
+            public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                // taskSnapshot.getMetadata() contains file metadata such as size, content-type, etc.
+                // ...
             }
         });
     }

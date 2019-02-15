@@ -116,5 +116,8 @@
     <string name="title_activity_itemlist">Item List</string>
     <string name="title_activity_tabbed">Contents List</string>
     <string name="button_store_purchase">Buy</string>
+    <string name="button_next_step">Next Step</string>
+    <string name="card_input_hint">Enter your phone number</string>
+    <string name="card_input_prefill"></string>
 
 </resources>

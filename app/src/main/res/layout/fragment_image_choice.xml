@@ -5,20 +5,39 @@
     android:layout_height="match_parent"
     android:orientation="vertical">
 
-    <TextView
-        android:text="Step 1. 사진등록"
+
+    <LinearLayout
+        android:layout_gravity="center"
+        android:orientation="horizontal"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content">
+        <Button
+            android:id="@+id/marker_select_btn"
+            android:text="마커등록"
+            android:background="@color/colorAccent"
+            android:layout_marginRight="0dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+        <Button
+            android:id="@+id/card_select_btn"
+            android:background="@color/common_google_signin_btn_text_light_disabled"
+            android:text="명함등록"
+            android:layout_marginLeft="0dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+    </LinearLayout>
 
     <ImageView
+        android:layout_marginTop="10dp"
         android:layout_gravity="center"
         android:id="@+id/preview_img"
         android:src="@mipmap/ic_launcher"
         android:scaleType="centerCrop"
         android:layout_width="200dp"
         android:layout_height="200dp" />
-
     <RatingBar
+        android:layout_gravity="center"
         android:id="@+id/ratingbar"
         android:visibility="gone"
         android:layout_width="wrap_content"

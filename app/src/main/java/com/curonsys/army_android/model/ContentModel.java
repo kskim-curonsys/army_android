@@ -96,6 +96,14 @@ public class ContentModel implements Serializable {
         mThumb = path;
     }
 
+    public void setTextures(ArrayList<String> texturesUrl) {
+        mTextures = texturesUrl;
+    }
+
+    public void setModel(String modelUrl) {
+        mModel = modelUrl;
+    }
+
     public String getContentId() {
         return mContentId;
     }
