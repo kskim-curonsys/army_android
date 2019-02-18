@@ -51,7 +51,6 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.os.Handler;
 import android.os.HandlerThread;
-import android.os.Looper;
 import android.os.Message;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
@@ -67,13 +66,11 @@ import android.view.Surface;
 import android.view.TextureView;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.Window;
 import android.widget.Button;
 import android.widget.Toast;
 
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.airbnb.lottie.LottieAnimationView;
-import com.airbnb.lottie.utils.LottieValueAnimator;
 import com.curonsys.army_android.util.CallBackListener;
 import com.curonsys.army_android.R;
 import com.curonsys.army_android.util.RequestManager;
@@ -82,10 +79,8 @@ import com.curonsys.army_android.model.ContentModel;
 import com.curonsys.army_android.model.MarkerModel;
 import com.curonsys.army_android.model.TransferModel;
 import com.curonsys.army_android.util.SharedDataManager;
-import com.curonsys.army_android.util.MarkerUploader;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationServices;
-import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 
@@ -1173,8 +1168,8 @@ public class Camera2BasicFragment extends Fragment
 
 
                 //materialDialog.dismiss();
-                MarkerUploader uploader = new MarkerUploader(getActivity());
-                uploader.start(false);
+                //MarkerUploader uploader = new MarkerUploader(getActivity());
+                //uploader.start(false);
 
             }catch (NullPointerException e){
                 e.printStackTrace();

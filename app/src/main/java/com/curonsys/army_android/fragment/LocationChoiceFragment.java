@@ -15,7 +15,6 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.afollestad.materialdialogs.MaterialDialog;
@@ -45,19 +44,17 @@ import java.util.List;
  */
 
 public class LocationChoiceFragment extends Fragment implements OnMapReadyCallback {
-
-    int PLACE_AUTOCOMPLETE_REQUEST_CODE = 1;
-    Context thisContext;
-    FusedLocationProviderClient fusedLocationProviderClient;
+    //int PLACE_AUTOCOMPLETE_REQUEST_CODE = 1;
+    Context mContext;
+    FusedLocationProviderClient mFusedLocationProviderClient;
     GoogleMap mMap;
-    private Geocoder geocoder;
-    LocationManager lm;
-    SharedDataManager dbManager = SharedDataManager.getInstance();
-    CallBackListener callBackListener;
-    TextView tv;
-    MaterialDialog.Builder builder = null;
-    MaterialDialog materialDialog = null;
-    private MapFragment mapFragment;
+    private Geocoder mGeocoder;
+    LocationManager mLocationManager;
+    SharedDataManager mSDManager = SharedDataManager.getInstance();
+    CallBackListener mCallBackListener;
+    MaterialDialog.Builder mBuilder = null;
+    MaterialDialog mMaterialDialog = null;
+    private MapFragment mMapFragment;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -66,39 +63,39 @@ public class LocationChoiceFragment extends Fragment implements OnMapReadyCallba
         View view = inflater.inflate(R.layout.fragment_location_choice, container, false);
         /*FragmentManager fragmentManager = this.getChildFragmentManager();
 
-        MapFragment mapFragment = (MapFragment)fragmentManager.findFragmentById(R.id.map);
-        mapFragment.getMapAsync(this);
-        callBackListener = (CallBackListener)getActivity();
-        callBackListener.onDoneBack();
+        MapFragment mMapFragment = (MapFragment)fragmentManager.findFragmentById(R.id.map);
+        mMapFragment.getMapAsync(this);
+        mCallBackListener = (CallBackListener)getActivity();
+        mCallBackListener.onDoneBack();
         */
-        lm = (LocationManager) thisContext.getSystemService(Context.LOCATION_SERVICE);
-        fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(thisContext);
+        mLocationManager = (LocationManager) mContext.getSystemService(Context.LOCATION_SERVICE);
+        mFusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(mContext);
 
         try {
-            lm.requestLocationUpdates(LocationManager.GPS_PROVIDER, // 등록할 위치제공자
+            mLocationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, // 등록할 위치제공자
                     100, // 통지사이의 최소 시간간격 (miliSecond)
                     1, // 통지사이의 최소 변경거리 (m)
                     mLocationListener);
-            lm.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, // 등록할 위치제공자
+            mLocationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, // 등록할 위치제공자
                     100, // 통지사이의 최소 시간간격 (miliSecond)
                     1, // 통지사이의 최소 변경거리 (m)
                     mLocationListener);
-        }catch (SecurityException e){
+        } catch (SecurityException e) {
             e.printStackTrace();
         }
 
-        builder = new MaterialDialog.Builder(thisContext)
+        mBuilder = new MaterialDialog.Builder(mContext)
                 .title("위치 수신중")
                 .content("현재 위치를 확인중입니다...")
-                .progress(true,0);
-        materialDialog = builder.build();
-        materialDialog.show();
+                .progress(true, 0);
+        mMaterialDialog = mBuilder.build();
+        mMaterialDialog.show();
 
         FragmentManager fragmentManager = this.getChildFragmentManager();
-        callBackListener = (CallBackListener) getActivity();
-        callBackListener.onDoneBack();
-        mapFragment = (MapFragment) fragmentManager.findFragmentById(R.id.map);
-        mapFragment.getMapAsync(this);
+        mCallBackListener = (CallBackListener) getActivity();
+        mCallBackListener.onDoneBack();
+        mMapFragment = (MapFragment) fragmentManager.findFragmentById(R.id.map);
+        mMapFragment.getMapAsync(this);
 
         //자동완성
         PlaceAutocompleteFragment fragment = (PlaceAutocompleteFragment)
@@ -107,13 +104,14 @@ public class LocationChoiceFragment extends Fragment implements OnMapReadyCallba
         fragment.setOnPlaceSelectedListener(new PlaceSelectionListener() {
             @Override
             public void onPlaceSelected(Place place) {
-                Log.d("clicked","d");
+                Log.d("clicked", "d");
                 Log.d("", "Place: " + place.getName());//get place details here
-                search_adress(place.getName().toString());
+                search_address(place.getName().toString());
             }
+
             @Override
             public void onError(Status status) {
-                Log.d("status",status.toString());
+                Log.d("status", status.toString());
             }
         });
         fragment.setHint("위치를 검색하세요.");
@@ -122,10 +120,10 @@ public class LocationChoiceFragment extends Fragment implements OnMapReadyCallba
         /*
         try {
             Intent intent = new PlaceAutocomplete.IntentBuilder(PlaceAutocomplete.MODE_OVERLAY)
-                            .build((Activity)thisContext);
+                            .build((Activity)mContext);
             startActivityForResult(intent, PLACE_AUTOCOMPLETE_REQUEST_CODE);
         } catch (GooglePlayServicesRepairableException e) {
-            GooglePlayServicesUtil.getErrorDialog(e.getConnectionStatusCode(), (Activity)thisContext, 0);
+            GooglePlayServicesUtil.getErrorDialog(e.getConnectionStatusCode(), (Activity)mContext, 0);
         } catch (GooglePlayServicesNotAvailableException e) {
             // Handle the exception
         }*/
@@ -142,22 +140,18 @@ public class LocationChoiceFragment extends Fragment implements OnMapReadyCallba
     public void onAttach(Activity activity) {
         // TODO Auto-generated method stub
         super.onAttach(activity);
-        thisContext=activity;
-
+        mContext = activity;
     }
 
     @Override
     public void onMapReady(final GoogleMap googleMap) {
         mMap = googleMap;
-        geocoder = new Geocoder(thisContext);
+        mGeocoder = new Geocoder(mContext);
 
         // 맵 클릭시 마커생성과 gps 얻기
-
         mMap.setOnCameraMoveCanceledListener(new GoogleMap.OnCameraMoveCanceledListener() {
             @Override
             public void onCameraMoveCanceled() {
-
-
             }
         });
         mMap.setOnCameraMoveListener(new GoogleMap.OnCameraMoveListener() {
@@ -166,21 +160,19 @@ public class LocationChoiceFragment extends Fragment implements OnMapReadyCallba
                 CameraPosition position = mMap.getCameraPosition();
                 LatLng latLng = position.target;
                 //Log.d("맵 터치",latLng.toString());
-                dbManager.currentLatitude = latLng.latitude;
-                dbManager.currentLongtitude = latLng.longitude;
+                mSDManager.currentLatitude = latLng.latitude;
+                mSDManager.currentLongtitude = latLng.longitude;
             }
         });
 
         mMap.setOnMapClickListener(new GoogleMap.OnMapClickListener() {
             @Override
             public void onMapClick(LatLng point) {
-
-
                 MarkerOptions mOptions = new MarkerOptions();
                 // 마커 타이틀
                 mOptions.title("마커 좌표");
                 Double latitude = point.latitude; //위도
-                Double longitude = point.longitude; //경도tn
+                Double longitude = point.longitude; //경도
                 // 마커의 스니펫(간단한 텍스트) 설정
                 mOptions.snippet(latitude.toString() + ", " + longitude.toString());
                 // LatLng: 위도 경도 쌍을 나타냄
@@ -188,7 +180,6 @@ public class LocationChoiceFragment extends Fragment implements OnMapReadyCallba
                 // 마커(핀) 추가
                 //mMap.clear();
                 //googleMap.addMarker(mOptions);
-
             }
         });
         //LatLng seoul = new LatLng(37.541, 126.986);
@@ -202,11 +193,11 @@ public class LocationChoiceFragment extends Fragment implements OnMapReadyCallba
 
             double longitude = location.getLongitude(); //경도
             double latitude = location.getLatitude();   //위도
-    //        double altitude = location.getAltitude();   //고도//          float accuracy = location.getAccuracy();    //정확도//            String provider = location.getProvider();   //위치제공자
-            materialDialog.dismiss();
+            //double altitude = location.getAltitude();   //고도//          float accuracy = location.getAccuracy();    //정확도//            String provider = location.getProvider();   //위치제공자
+            mMaterialDialog.dismiss();
 
-            try{
-                LatLng currentLocation = new LatLng(latitude,longitude);
+            try {
+                LatLng currentLocation = new LatLng(latitude, longitude);
                 MarkerOptions markerOptions = new MarkerOptions();
                 markerOptions.position(currentLocation);
                 markerOptions.title("현재 위치");
@@ -214,21 +205,21 @@ public class LocationChoiceFragment extends Fragment implements OnMapReadyCallba
                 //mMap.addMarker(markerOptions);
                 mMap.moveCamera(CameraUpdateFactory.newLatLng(currentLocation));
                 mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(currentLocation, 16));
-                lm.removeUpdates(mLocationListener);  //  미수신할때는 반드시 자원해체를 해주어야 한다.
-                dbManager.currentLongtitude = longitude;
-                dbManager.currentLatitude = latitude;
-            }catch (NullPointerException e){
+                mLocationManager.removeUpdates(mLocationListener);  //  미수신할때는 반드시 자원해체를 해주어야 한다.
+                mSDManager.currentLongtitude = longitude;
+                mSDManager.currentLatitude = latitude;
+            } catch (NullPointerException e) {
                 e.printStackTrace();
                 try {
-                    lm.requestLocationUpdates(LocationManager.GPS_PROVIDER, // 등록할 위치제공자
+                    mLocationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, // 등록할 위치제공자
                             100, // 통지사이의 최소 시간간격 (miliSecond)
                             1, // 통지사이의 최소 변경거리 (m)
                             mLocationListener);
-                    lm.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, // 등록할 위치제공자
+                    mLocationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, // 등록할 위치제공자
                             100, // 통지사이의 최소 시간간격 (miliSecond)
                             1, // 통지사이의 최소 변경거리 (m)
                             mLocationListener);
-                }catch (SecurityException ee) {
+                } catch (SecurityException ee) {
                     ee.printStackTrace();
                 }
             }
@@ -250,15 +241,13 @@ public class LocationChoiceFragment extends Fragment implements OnMapReadyCallba
         }
     };
 
-    public void search_adress(String placeName){
+    public void search_address(String placeName) {
         String str = placeName;
         mMap.clear();
         List<Address> addressList = null;
         try {
             // editText에 입력한 텍스트(주소, 지역, 장소 등)을 지오 코딩을 이용해 변환
-            addressList = geocoder.getFromLocationName(
-                    str, // 주소
-                    10); // 최대 검색 결과 개수
+            addressList = mGeocoder.getFromLocationName(str, 10); // 최대 검색 결과 개수
 
             // 콤마를 기준으로 split
             System.out.println(addressList.get(0).toString());
@@ -282,14 +271,13 @@ public class LocationChoiceFragment extends Fragment implements OnMapReadyCallba
             // 마커 추가
             //mMap.addMarker(mOptions2);
             // 해당 좌표로 화면 줌
-            mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(point,16));
+            mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(point, 16));
 
         } catch (IOException e) {
             e.printStackTrace();
         } catch (IndexOutOfBoundsException e) {
             e.printStackTrace();
-            Toast.makeText(thisContext, "잘못된 입력입니다.", Toast.LENGTH_SHORT).show();
+            Toast.makeText(mContext, "잘못된 입력입니다.", Toast.LENGTH_SHORT).show();
         }
-
     }
 }

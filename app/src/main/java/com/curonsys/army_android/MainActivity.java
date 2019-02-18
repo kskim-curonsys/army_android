@@ -1,6 +1,7 @@
 package com.curonsys.army_android;
 
 import android.app.Activity;
+import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.AssetManager;
@@ -15,6 +16,7 @@ import android.os.Handler;
 import android.os.ResultReceiver;
 import android.os.VibrationEffect;
 import android.os.Vibrator;
+import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.util.Log;
@@ -38,9 +40,11 @@ import com.curonsys.army_android.activity.SignupActivity;
 import com.curonsys.army_android.activity.TabbedActivity;
 import com.curonsys.army_android.activity.TrivialDriveActivity;
 import com.curonsys.army_android.arcore.AugmentedImageActivity;
+import com.curonsys.army_android.camera2basic.CameraActivity;
 import com.curonsys.army_android.model.TransferModel;
 import com.curonsys.army_android.model.UserModel;
 import com.curonsys.army_android.service.FetchAddressIntentService;
+import com.curonsys.army_android.service.GeofenceTransitionsIntentService;
 import com.curonsys.army_android.util.Constants;
 import com.curonsys.army_android.util.PermissionManager;
 import com.curonsys.army_android.util.RequestManager;
@@ -48,9 +52,14 @@ import com.curonsys.army_android.util.SharedDataManager;
 import com.google.android.gms.common.GooglePlayServicesNotAvailableException;
 import com.google.android.gms.common.GooglePlayServicesRepairableException;
 import com.google.android.gms.location.FusedLocationProviderClient;
+import com.google.android.gms.location.Geofence;
+import com.google.android.gms.location.GeofencingClient;
+import com.google.android.gms.location.GeofencingRequest;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.location.places.Place;
 import com.google.android.gms.location.places.ui.PlacePicker;
+import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -58,11 +67,12 @@ import com.google.firebase.auth.FirebaseUser;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
 
 import eu.kudan.kudan.ARAPIKey;
-
 import static com.curonsys.army_android.util.Constants.KUDAN_API_KEY_DEV;
-
 
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
     private static final String TAG = MainActivity.class.getSimpleName();
@@ -86,6 +96,10 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private SharedDataManager mSharedDataManager;
     private FusedLocationProviderClient mFusedLocationProviderClient;
     private LocationManager mLocationManager;
+
+    private GeofencingClient mGeofencingClient;
+    private List<Geofence> mGeofenceList = new ArrayList<Geofence>();
+    private PendingIntent mGeofencePendingIntent;
 
     protected boolean mUserProfileStatus = false;
     protected Location mLastLocation = null;
@@ -186,7 +200,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         int id = item.getItemId();
         if (id == R.id.main_action_search) {
             Log.d(TAG, "Do Find: ");
-            goARViewer();
+            //goARViewer();
+            goKudanViewer();
             return true;
         } else if (id == R.id.main_action_settings) {
             return true;
@@ -205,15 +220,15 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         } else if (id == R.id.nav_arcontents) {
             goARContents();
         } else if (id == R.id.nav_arviewer) {
-            goARViewer();
+            //goARViewer();
+            goKudanViewer();
         } else if (id == R.id.nav_arservice) {
             // test
-            //goBillingTest();
         } else if (id == R.id.nav_location) {
             goFindPlace();
         } else if (id == R.id.nav_instore) {
             //doVibration(2000);
-            doSignOut();
+            //doSignOut();
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -285,6 +300,11 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     }
 
     private void goARMaker() {
+        if (!checkLogin()) {
+            Snackbar.make(mProfileImage, getString(R.string.not_yet_login), Snackbar.LENGTH_LONG).setAction("Action", null).show();
+            return;
+        }
+
         Intent intent = new Intent(this, MarkerGenerationActivity.class);
         if (intent.resolveActivity(getPackageManager()) != null) {
             intent.putExtra("ParentClassSource", MainActivity.class.getName());
@@ -293,6 +313,11 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     }
 
     private void goARContents() {
+        if (!checkLogin()) {
+            Snackbar.make(mProfileImage, getString(R.string.not_yet_login), Snackbar.LENGTH_LONG).setAction("Action", null).show();
+            return;
+        }
+
         Intent intent = new Intent(this, TabbedActivity.class);
         if (intent.resolveActivity(getPackageManager()) != null) {
             intent.putExtra("ParentClassSource", MainActivity.class.getName());
@@ -308,9 +333,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         }
     }
 
-    // test
-    private void goBillingTest() {
-        Intent intent = new Intent(this, TrivialDriveActivity.class);
+    private void goKudanViewer() {
+        Intent intent = new Intent(this, CameraActivity.class);
         if (intent.resolveActivity(getPackageManager()) != null) {
             intent.putExtra("ParentClassSource", MainActivity.class.getName());
             startActivity(intent);
@@ -336,25 +360,12 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     }
 
     private void goFindPlace() {
-        // findPlaceByPicker
         try {
             PlacePicker.IntentBuilder intentBuilder = new PlacePicker.IntentBuilder();
             Intent intent = intentBuilder.build(this);
             startActivityForResult(intent, REQUEST_PLACE_PICKER);
-
         } catch (GooglePlayServicesRepairableException e) {
-            // ...
         } catch (GooglePlayServicesNotAvailableException e) {
-            // ...
-        }
-    }
-
-    // test
-    private void goSignUp() {
-        Intent intent = new Intent(this, SignupActivity.class);
-        if (intent.resolveActivity(getPackageManager()) != null) {
-            intent.putExtra("ParentClassSource", LoginActivity.class.getName());
-            startActivity(intent);
         }
     }
 
@@ -465,6 +476,11 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             }
             String result = resultData.getString(Constants.RESULT_DATA_KEY);
             mCurrentAddress.setText(result);
+            if (mSharedDataManager.currentAddress != null) {
+                mSharedDataManager.currentCountryCode = mSharedDataManager.currentAddress.getCountryCode();
+                mSharedDataManager.currentLocality = mSharedDataManager.currentAddress.getLocality();
+                mSharedDataManager.currentThoroughfare = mSharedDataManager.currentAddress.getThoroughfare();
+            }
         }
     }
 
@@ -482,16 +498,15 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             mLastLocation = location;
 
             startFetchAddressIntentService();
+            startMonitorGeofences();
         }
 
         public void onProviderDisabled(String provider) {
             Log.d(TAG, "onProviderDisabled: " + provider);
         }
-
         public void onProviderEnabled(String provider) {
             Log.d(TAG, "onProviderEnabled: " + provider);
         }
-
         public void onStatusChanged(String provider, int status, Bundle extras) {
             //Log.d(TAG, "onStatusChanged: " + provider + ", status: " + status + " ,Bundle: " + extras);
         }
@@ -516,5 +531,78 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             mLocationManager.removeUpdates(mLocationListener);
             mLocationUpdateState = false;
         }
+        stopMonitorGeofences();
+    }
+
+    private GeofencingRequest getGeofencingRequest() {
+        GeofencingRequest.Builder builder = new GeofencingRequest.Builder();
+        builder.setInitialTrigger(GeofencingRequest.INITIAL_TRIGGER_ENTER);
+        builder.addGeofences(mGeofenceList);
+        return builder.build();
+    }
+
+    private PendingIntent getGeofencePendingIntent() {
+        if (mGeofencePendingIntent != null) {
+            return mGeofencePendingIntent;
+        }
+        Intent intent = new Intent(this, GeofenceTransitionsIntentService.class);
+        mGeofencePendingIntent = PendingIntent.getService(this, 0,
+                intent, PendingIntent. FLAG_UPDATE_CURRENT);
+        return mGeofencePendingIntent;
+    }
+
+    private void startMonitorGeofences() {
+        for (Map.Entry<String, LatLng> entry : Constants.BAY_AREA_LANDMARKS.entrySet()) {
+            mGeofenceList.add(new Geofence.Builder()
+                    .setRequestId(entry.getKey())
+                    .setCircularRegion(
+                            entry.getValue().latitude,
+                            entry.getValue().longitude,
+                            Constants.GEOFENCE_SERVICE_RADIUS_IN_METERS
+                    )
+                    .setExpirationDuration(Constants.GEOFENCE_EXPIRATION_IN_MILLISECONDS)
+                    .setTransitionTypes(Geofence.GEOFENCE_TRANSITION_ENTER |
+                            Geofence.GEOFENCE_TRANSITION_EXIT)
+                    .build());
+        }
+
+        if (mGeofenceList.size() < 1) {
+            Log.d(TAG, "startMonitorGeofences: geofence list is empty!");
+            return;
+        }
+
+        try {
+            mGeofencingClient.addGeofences(getGeofencingRequest(), getGeofencePendingIntent())
+                    .addOnSuccessListener(this, new OnSuccessListener<Void>() {
+                        @Override
+                        public void onSuccess(Void aVoid) {
+                            Log.d(TAG, "onSuccess: add geofences success");
+                        }
+                    })
+                    .addOnFailureListener(this, new OnFailureListener() {
+                        @Override
+                        public void onFailure(@NonNull Exception e) {
+                            Log.d(TAG, "onFailure: " + e.getMessage());
+                        }
+                    });
+        } catch (SecurityException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void stopMonitorGeofences() {
+        mGeofencingClient.removeGeofences(getGeofencePendingIntent())
+                .addOnSuccessListener(this, new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void aVoid) {
+                        Log.d(TAG, "onSuccess: remove geofences success");
+                    }
+                })
+                .addOnFailureListener(this, new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Log.d(TAG, "onFailure: " + e.getMessage());
+                    }
+                });
     }
 }

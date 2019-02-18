@@ -25,7 +25,7 @@ public class SharedDataManager {
     public String currentCountryCode = "";
     public String currentLocality = "";
     public String currentThoroughfare = "";
-    public  Address currentAddress;
+    public Address currentAddress = null;
 
     //frag3
     public String contentId = "";

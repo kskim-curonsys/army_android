@@ -3,7 +3,6 @@ package com.curonsys.army_android.fragment;
 import android.app.Activity;
 import android.app.Fragment;
 import android.app.FragmentManager;
-import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -20,7 +19,6 @@ import android.widget.Toast;
 
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.curonsys.army_android.util.CallBackListener;
-import com.curonsys.army_android.activity.MarkerGenerationActivity;
 import com.curonsys.army_android.activity.MarkerTestActivity;
 import com.curonsys.army_android.R;
 import com.curonsys.army_android.util.RequestManager;
@@ -44,10 +42,7 @@ import static android.content.ContentValues.TAG;
  * 마커 등록 최종 확인 엑티비티
  */
 
-
-
 public class MarkerConfirmForCardFragment extends Fragment {
-
     Activity thisContext;
     ContentModel contentModel;
     ContentModel contentModel_putExtra;
@@ -59,12 +54,10 @@ public class MarkerConfirmForCardFragment extends Fragment {
 
     MaterialDialog.Builder builder = null;
     MaterialDialog materialDialog = null;
-    //TextView tv;
-    TextView userText,ratingText,phoneText,scaleText,textRotateX,textRotateY,textRotateZ;
+    TextView userText, ratingText, phoneText, scaleText, textRotateX, textRotateY, textRotateZ;
     ImageView markerPreview;
     SharedDataManager dbManager = SharedDataManager.getInstance();
-    int textureCount =0;
-
+    int textureCount = 0;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -85,8 +78,8 @@ public class MarkerConfirmForCardFragment extends Fragment {
 
 
         userText.setText(dbManager.generatorId);
-        ratingText.setText(ratingText.getText()+String.valueOf(dbManager.markerRating));
-        phoneText.setText(((MarkerGenerationActivity)getActivity()).getPhoneNumber());
+        ratingText.setText(ratingText.getText() + String.valueOf(dbManager.markerRating));
+        phoneText.setText(dbManager.phoneNumber);
 //        Bitmap bitmap = BitmapFactory.decodeFile(dbManager.imageURI.toString());
 
         markerPreview.setBackground(getResources().getDrawable(R.drawable.round_fg));
@@ -106,9 +99,9 @@ public class MarkerConfirmForCardFragment extends Fragment {
         btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(thisContext,MarkerTestActivity.class);
-                intent.putExtra("info",contentModel_putExtra);
-                startActivityForResult(intent,0);
+                Intent intent = new Intent(thisContext, MarkerTestActivity.class);
+                intent.putExtra("info", contentModel_putExtra);
+                startActivityForResult(intent, 0);
             }
         });
 
@@ -121,10 +114,10 @@ public class MarkerConfirmForCardFragment extends Fragment {
         callBackListener = new CallBackListener() {
             @Override
             public void onSuccess(String message) {
-                switch (message){
+                switch (message) {
                     case "contentsModel":
                         materialDialog.dismiss();
-                        Log.e("getContentsModel :","sucess");
+                        Log.e("getContentsModel :", "sucess");
                         showDialog("모델 파일을 가져오는 중입니다...");
                         getModelFromStorage(dbManager.is3D);
 
@@ -133,19 +126,19 @@ public class MarkerConfirmForCardFragment extends Fragment {
                         materialDialog.dismiss();
                         showDialog("텍스쳐를 가져오는 중입니다...");
 
-                        if(dbManager.is3D){
-                            Log.e("getJet :","sucess");
+                        if (dbManager.is3D) {
+                            Log.e("getJet :", "sucess");
                             getTextures();
-                        }else {
-                            Log.e("is3d","false");
+                        } else {
+                            Log.e("is3d", "false");
                             callBackListener.onSuccess("textures");
                         }
 
                         break;
                     case "textures":
                         materialDialog.dismiss();
-                        Log.e("getTextures :","sucess");
-                        Toast.makeText(thisContext,"컨텐츠를 정상적으로 가져왔습니다",Toast.LENGTH_SHORT).show();
+                        Log.e("getTextures :", "sucess");
+                        Toast.makeText(thisContext, "컨텐츠를 정상적으로 가져왔습니다", Toast.LENGTH_SHORT).show();
                         setContentsModel();
                         break;
                 }
@@ -153,7 +146,7 @@ public class MarkerConfirmForCardFragment extends Fragment {
             }
 
             @Override
-            public void onSuccess(String message,boolean isMarker) {
+            public void onSuccess(String message, boolean isMarker) {
 
             }
 
@@ -167,11 +160,11 @@ public class MarkerConfirmForCardFragment extends Fragment {
     }
 
     private void setContentsModel() {
-        if(dbManager.is3D){
+        if (dbManager.is3D) {
             contentModel_putExtra = new ContentModel();
             contentModel_putExtra.setTextures(textures);
             contentModel_putExtra.setModel(modelUrl);
-        }else {
+        } else {
             contentModel_putExtra = new ContentModel();
             contentModel_putExtra.setModel(modelUrl);
         }
@@ -187,7 +180,7 @@ public class MarkerConfirmForCardFragment extends Fragment {
     public void onAttach(Activity activity) {
         // TODO Auto-generated method stub
         super.onAttach(activity);
-        thisContext=activity;
+        thisContext = activity;
         //step 4
 
     }
@@ -195,19 +188,19 @@ public class MarkerConfirmForCardFragment extends Fragment {
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        Log.d("onActivityResult","okok");
+        Log.d("onActivityResult", "okok");
         switch (resultCode) {
             case 1:
-                Log.d("resultInput","ok");
+                Log.d("resultInput", "ok");
                 String scale = data.getStringExtra("scale");
                 String rotateX = data.getStringExtra("rotateX");
                 String rotateY = data.getStringExtra("rotateY");
                 String rotateZ = data.getStringExtra("rotateZ");
 
-                scaleText.setText(scaleText.getText()+scale);
-                textRotateX.setText(textRotateX.getText()+rotateX);
-                textRotateY.setText(textRotateY.getText()+rotateY);
-                textRotateZ.setText(textRotateZ.getText()+rotateZ);
+                scaleText.setText(scaleText.getText() + scale);
+                textRotateX.setText(textRotateX.getText() + rotateX);
+                textRotateY.setText(textRotateY.getText() + rotateY);
+                textRotateZ.setText(textRotateZ.getText() + rotateZ);
                 dbManager.contentScale = Float.parseFloat(scale);
 
                 ArrayList<Float> rotates = new ArrayList<>();
@@ -221,25 +214,25 @@ public class MarkerConfirmForCardFragment extends Fragment {
         }
     }
 
-    public String saveTemptoJet(FileInputStream fis,String folder, String name){
+    public String saveTemptoJet(FileInputStream fis, String folder, String name) {
         String ex_storage = Environment.getExternalStorageDirectory().getAbsolutePath(); // Get Absolute Path in External Sdcard
-        String foler_name = "/kudan/"+folder+"/";
-        String file_name = name+".jet";
-        String string_path = ex_storage+foler_name;
+        String foler_name = "/kudan/" + folder + "/";
+        String file_name = name + ".jet";
+        String string_path = ex_storage + foler_name;
         File file_path;
-        try{
+        try {
             file_path = new File(string_path);
-            if(!file_path.isDirectory()){
+            if (!file_path.isDirectory()) {
                 file_path.mkdirs();
             }
 
             BufferedInputStream bis = new BufferedInputStream(fis);
-            FileOutputStream fos = new FileOutputStream(string_path+file_name);
+            FileOutputStream fos = new FileOutputStream(string_path + file_name);
             BufferedOutputStream bos = new BufferedOutputStream(fos);
             int data = 0;
 
 //            final byte[] buffer = new byte[1024];
-            while ((data = bis.read()) != -1){
+            while ((data = bis.read()) != -1) {
                 bos.write(data);
             }
 
@@ -249,59 +242,59 @@ public class MarkerConfirmForCardFragment extends Fragment {
             bos.close();
             fos.close();
 
-            Log.d("model_path",string_path+file_name);
+            Log.d("model_path", string_path + file_name);
 
-        }catch(FileNotFoundException exception){
+        } catch (FileNotFoundException exception) {
             Log.e("FileNotFoundException", exception.getMessage());
-        }catch(IOException exception){
+        } catch (IOException exception) {
             Log.e("IOException", exception.getMessage());
         }
-        return string_path+file_name;
+        return string_path + file_name;
     }
 
-    public String saveBitmaptoJpeg(Bitmap bitmap, String folder, String name){
-        String ex_storage =Environment.getExternalStorageDirectory().getAbsolutePath(); // Get Absolute Path in External Sdcard
-        String foler_name = "/kudan/"+folder+"/";
-        String file_name = name+".jpg";
-        String string_path = ex_storage+foler_name;
+    public String saveBitmaptoJpeg(Bitmap bitmap, String folder, String name) {
+        String ex_storage = Environment.getExternalStorageDirectory().getAbsolutePath(); // Get Absolute Path in External Sdcard
+        String foler_name = "/kudan/" + folder + "/";
+        String file_name = name + ".jpg";
+        String string_path = ex_storage + foler_name;
         File file_path;
-        try{
+        try {
             file_path = new File(string_path);
-            if(!file_path.isDirectory()){
+            if (!file_path.isDirectory()) {
                 file_path.mkdirs();
             }
-            FileOutputStream out = new FileOutputStream(string_path+file_name);
-            bitmap.compress(Bitmap.CompressFormat.JPEG, 100, out); out.close();
+            FileOutputStream out = new FileOutputStream(string_path + file_name);
+            bitmap.compress(Bitmap.CompressFormat.JPEG, 100, out);
+            out.close();
 
             //Log.d("textures_path",string_path+file_name);
-        }catch(FileNotFoundException exception){
+        } catch (FileNotFoundException exception) {
             Log.e("FileNotFoundException", exception.getMessage());
-        }catch(IOException exception){
+        } catch (IOException exception) {
             Log.e("IOException", exception.getMessage());
         }
-        return string_path+file_name;
+        return string_path + file_name;
     }
 
 
-
-    public String saveTemptoMp4(FileInputStream fis,String folder, String name){
+    public String saveTemptoMp4(FileInputStream fis, String folder, String name) {
         String ex_storage = Environment.getExternalStorageDirectory().getAbsolutePath(); // Get Absolute Path in External Sdcard
-        String foler_name = "/kudan/"+folder+"/";
-        String file_name = name+".mp4";
-        String string_path = ex_storage+foler_name;
+        String foler_name = "/kudan/" + folder + "/";
+        String file_name = name + ".mp4";
+        String string_path = ex_storage + foler_name;
         File file_path;
-        try{
+        try {
             file_path = new File(string_path);
-            if(!file_path.isDirectory()){
+            if (!file_path.isDirectory()) {
                 file_path.mkdirs();
             }
 
             BufferedInputStream bis = new BufferedInputStream(fis);
-            FileOutputStream fos = new FileOutputStream(string_path+file_name);
+            FileOutputStream fos = new FileOutputStream(string_path + file_name);
             BufferedOutputStream bos = new BufferedOutputStream(fos);
             int data = 0;
 
-            while ((data = bis.read()) != -1){
+            while ((data = bis.read()) != -1) {
                 bos.write(data);
             }
 
@@ -310,18 +303,18 @@ public class MarkerConfirmForCardFragment extends Fragment {
             bos.close();
             fos.close();
 
-            Log.d("model_path",string_path+file_name);
+            Log.d("model_path", string_path + file_name);
 
-        }catch(FileNotFoundException exception){
+        } catch (FileNotFoundException exception) {
             Log.e("FileNotFoundException", exception.getMessage());
-        }catch(IOException exception){
+        } catch (IOException exception) {
             Log.e("IOException", exception.getMessage());
         }
-        return string_path+file_name;
+        return string_path + file_name;
     }
 
 
-    public void getContentsModel(){
+    public void getContentsModel() {
         final String contentId = dbManager.contentId;
         RequestManager requestManager = RequestManager.getInstance();
 
@@ -335,25 +328,25 @@ public class MarkerConfirmForCardFragment extends Fragment {
         });
     }
 
-    public void getTextures(){
-        try{
-            Log.d("markertest",contentModel.toString());
+    public void getTextures() {
+        try {
+            Log.d("markertest", contentModel.toString());
 
-            for(int i=0;i<contentModel.getTextures().size();i++){
-                Log.d("texture real name",contentModel.getTextures().get(i)+"");
+            for (int i = 0; i < contentModel.getTextures().size(); i++) {
+                Log.d("texture real name", contentModel.getTextures().get(i) + "");
                 String texture_url = contentModel.getTextures().get(i);
-                getTexture(contentModel.getContentName(),texture_url,i,contentModel.getTextures().size());
+                getTexture(contentModel.getContentName(), texture_url, i, contentModel.getTextures().size());
             }
-        }catch (NullPointerException e){
+        } catch (NullPointerException e) {
             e.printStackTrace();
         }
     }
 
-    public void getTexture(final String name, final String url, final int request_count, final int last_count){
+    public void getTexture(final String name, final String url, final int request_count, final int last_count) {
         try {
             String suffix = url.substring(url.indexOf('.'), url.length());
-            Log.d("texture_request_suffix",suffix);
-            Log.d("texture_request_url",url);
+            Log.d("texture_request_suffix", suffix);
+            Log.d("texture_request_url", url);
             RequestManager mRequestManager = RequestManager.getInstance();
             mRequestManager.requestDownloadFileFromStorage(name, url, suffix, new RequestManager.TransferCallback() {
                 @Override
@@ -363,9 +356,9 @@ public class MarkerConfirmForCardFragment extends Fragment {
                         //imgView.setImageBitmap(downBitmap);
 
                         //String texture_file_name=response.getPath().substring(response.getPath().lastIndexOf("/")+1,response.getPath().length()-4);
-                        String texture_file_name = url.substring(url.lastIndexOf("/")+1,url.length()-4);
-                        Log.d("getTexture_name",texture_file_name);
-                        textures.add(saveBitmaptoJpeg(downBitmap,name,texture_file_name));
+                        String texture_file_name = url.substring(url.lastIndexOf("/") + 1, url.length() - 4);
+                        Log.d("getTexture_name", texture_file_name);
+                        textures.add(saveBitmaptoJpeg(downBitmap, name, texture_file_name));
                     }
                     Log.d(TAG, "onResponse: content download complete ");
                     String texture_url = response.getPath();
@@ -375,16 +368,18 @@ public class MarkerConfirmForCardFragment extends Fragment {
 
                     //very important
                     textureCount++;
-                    if(textureCount == last_count){
+                    if (textureCount == last_count) {
                         callBackListener.onSuccess("textures");
                     }
                 }
             });
-        }catch (StringIndexOutOfBoundsException e){e.printStackTrace();}
+        } catch (StringIndexOutOfBoundsException e) {
+            e.printStackTrace();
+        }
     }
 
-    public void getModelFromStorage(boolean is3D){
-        if(is3D == true){
+    public void getModelFromStorage(boolean is3D) {
+        if (is3D == true) {
 
             String url = contentModel.getModel();
             String suffix = url.substring(url.indexOf('.'), url.length());
@@ -392,8 +387,7 @@ public class MarkerConfirmForCardFragment extends Fragment {
             mRequestManager.requestDownloadFileFromStorage(contentModel.getContentName(), url, suffix, new RequestManager.TransferCallback() {
                 @Override
                 public void onResponse(TransferModel response) {
-                    if (response.getSuffix().compareTo(".jet") == 0)
-                    {
+                    if (response.getSuffix().compareTo(".jet") == 0) {
                         String model_file_name = contentModel.getContentName();
                         Log.d("getModel_name", model_file_name);
                         try {
@@ -406,7 +400,7 @@ public class MarkerConfirmForCardFragment extends Fragment {
                     callBackListener.onSuccess("model");
                 }
             });
-        }else {
+        } else {
             final String url = contentModel.getModel();
             String suffix = url.substring(url.indexOf('.'), url.length());
             RequestManager mRequestManager = RequestManager.getInstance();
@@ -418,13 +412,13 @@ public class MarkerConfirmForCardFragment extends Fragment {
                         //imgView.setImageBitmap(downBitmap);
 
                         //String texture_file_name=response.getPath().substring(response.getPath().lastIndexOf("/")+1,response.getPath().length()-4);
-                        String texture_file_name = url.substring(url.lastIndexOf("/")+1,url.length()-4);
-                        Log.d("getTexture_name",texture_file_name);
+                        String texture_file_name = url.substring(url.lastIndexOf("/") + 1, url.length() - 4);
+                        Log.d("getTexture_name", texture_file_name);
 
                         // name to be folder name
-                        modelUrl = saveBitmaptoJpeg(downBitmap,contentModel.getContentName(),texture_file_name);
+                        modelUrl = saveBitmaptoJpeg(downBitmap, contentModel.getContentName(), texture_file_name);
                         callBackListener.onSuccess("model");
-                    }else if(response.getSuffix().compareTo(".mp4") == 0){
+                    } else if (response.getSuffix().compareTo(".mp4") == 0) {
 
                         String model_file_name = contentModel.getContentName();
                         Log.d("getModel_name", model_file_name);
@@ -442,11 +436,11 @@ public class MarkerConfirmForCardFragment extends Fragment {
         }
     }
 
-    public void showDialog(String msg){
+    public void showDialog(String msg) {
         builder = new MaterialDialog.Builder(thisContext)
                 .title("요청")
                 .content(msg)
-                .progress(true,0);
+                .progress(true, 0);
         materialDialog = builder.build();
         materialDialog.show();
     }

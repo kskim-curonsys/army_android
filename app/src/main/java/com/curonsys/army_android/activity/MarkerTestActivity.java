@@ -40,8 +40,6 @@ import eu.kudan.kudan.ARVideoTexture;
 
 
 public class MarkerTestActivity extends ARActivity {
-
-    boolean contents_down_state = false;
     SharedDataManager dbManager = SharedDataManager.getInstance();
     String path;
     SeekBar scale_seekBar;
@@ -62,10 +60,8 @@ public class MarkerTestActivity extends ARActivity {
     CallBackListener callBackListener;
     Vibrator vibrator;
 
-
     @Override
     protected void onCreate(final Bundle savedInstanceState) {
-
         //getContentsFiles();
         super.onCreate(savedInstanceState);
         getWindow().requestFeature(Window.FEATURE_ACTION_BAR);
@@ -119,7 +115,7 @@ public class MarkerTestActivity extends ARActivity {
                 scaleValue = Float.parseFloat(String.valueOf(progress))/50;
                 scaleValue = scaleValue * scaleValue;
                 Log.d("scaleValue",scaleValue+"");
-//                Vector3f scales = node3d.getScale();
+//              Vector3f scales = node3d.getScale();
                 float newX;
                 float newY;
                 float newZ;
@@ -138,8 +134,6 @@ public class MarkerTestActivity extends ARActivity {
                         imageNode.setScale(newX,newY,newZ);
                         break;
                 }
-
-
             }
 
             @Override
@@ -393,9 +387,7 @@ public class MarkerTestActivity extends ARActivity {
         imageTracker.initialise();
         imageTracker.addTrackable(imageTrackable);
 
-
         imageNode = new ARImageNode().initWithPath(contentModel.getModel());
-
 
         // Add image node to image trackable
         imageTrackable.getWorld().addChild(imageNode);
@@ -429,7 +421,6 @@ public class MarkerTestActivity extends ARActivity {
     }
 
     public void add3DNode(){
-
         ARImageTrackable imageTrackable;
         //이름지정
         imageTrackable = new ARImageTrackable("MarkerForAR");
@@ -458,18 +449,15 @@ public class MarkerTestActivity extends ARActivity {
         textures = contentModel.getTextures();
 
         if(textures.size()<2){
-
-//                arModelImporter.loadFromAsset(dbManager.contentFileName);
-
+//          arModelImporter.loadFromAsset(dbManager.contentFileName);
             //model info[0]
             node3d = arModelImporter.getNode();
             node3d.setName("somthing");
-
-//                node3d.rotateByDegrees(90.0f, 1.0f, 0.0f, 0.0f);
-//                node3d.rotateByDegrees(180.0f, 1.0f, 100.0f, 0.0f);
+//          node3d.rotateByDegrees(90.0f, 1.0f, 0.0f, 0.0f);
+//          node3d.rotateByDegrees(180.0f, 1.0f, 100.0f, 0.0f);
             ARTexture2D texture2D = new ARTexture2D();
             if(textures.size()<2){
-//                    texture2D.loadFromAsset(dbManager.contentTextureFiles[0]);
+//              texture2D.loadFromAsset(dbManager.contentTextureFiles[0]);
                 Log.d("textures_path",textures.get(0));
                 texture2D.loadFromPath(textures.get(0));
             }
@@ -486,13 +474,11 @@ public class MarkerTestActivity extends ARActivity {
         }
         else if (textures.size()>1){
             //snake, animation
-//                arModelImporter.loadFromAsset(dbManager.contentFileName);
-
+//          arModelImporter.loadFromAsset(dbManager.contentFileName);
             node3d = arModelImporter.getNode();
             node3d.setName("somthing");
 
             ARTexture2D[] texture2DS = new ARTexture2D[textures.size()];
-
             ARLightMaterial[] material = new ARLightMaterial[textures.size()];
 
             int i = 0;
@@ -502,7 +488,7 @@ public class MarkerTestActivity extends ARActivity {
                 Log.d("textures's",i+"");
                 Log.d("textures_path",textures.get(i));
                 texture2DS[i] = new ARTexture2D();
-//                    texture2DS[i].loadFromAsset(dbManager.contentTextureFiles[i]);
+//              texture2DS[i].loadFromAsset(dbManager.contentTextureFiles[i]);
                 texture2DS[i].loadFromPath(textures.get(i));
                 material[i] = new ARLightMaterial();
                 material[i].setTexture(texture2DS[i]);
@@ -514,18 +500,15 @@ public class MarkerTestActivity extends ARActivity {
                 Log.d("material_name",material_name);
                 materialMap.put(material[i].getName(),material[i]);
             }
-//            i = 0;
-
+//          i = 0;
 
             for(ARMeshNode meshNode : arModelImporter.getMeshNodes()){
                 String name = meshNode.getName();
                 Log.d("mate_name",name);
                 Log.d("\n",materialMap.toString());
                 meshNode.setMaterial(materialMap.get(name));
-
             }
             node3d.scaleByUniform(3.0f);
-
         }
 
         imageTrackable.getWorld().addChild(node3d);
@@ -551,266 +534,6 @@ public class MarkerTestActivity extends ARActivity {
             }
         });
     }
-
-
-
-//    private void getContentsFiles() {
-//        final String contentId = dbManager.contentId;
-//        RequestManager requestManager = RequestManager.getInstance();
-//
-//
-//        requestManager.requestGetContentInfo(contentId, new RequestManager.ContentCallback() {
-//            @Override
-//            public void onResponse(ContentModel response) {
-//                contentModel = response;
-//
-//                try {
-//                    String url = contentModel.getModel();
-//                    String suffix = url.substring(url.indexOf('.'), url.length());
-//                    RequestManager mRequestManager = RequestManager.getInstance();
-//                    mRequestManager.requesetDownloadFileFromStorage(contentModel.getContentName(), url, suffix, new RequestManager.TransferCallback() {
-//                        @Override
-//                        public void onResponse(TransferModel response) {
-//                            if (response.getSuffix().compareTo(".jet") == 0) {
-//                                //modelUrl = response.getPath();
-//                                //Log.d("model file:",modelUrl.toString());
-//                                String model_file_name=response.getPath().substring(response.getPath().lastIndexOf("/")+1,response.getPath().length()-4);
-//                                Log.d("getModel_name",model_file_name);
-//                                try {
-//                                    FileInputStream file_readed = new FileInputStream(new File(response.getPath()));
-//                                    saveTemptoJet(file_readed,contentModel.getContentName(),model_file_name);
-//                                }catch (FileNotFoundException e){
-//                                    e.printStackTrace();
-//                                }
-//
-//
-//                            }
-//                            Log.d(TAG, "onResponse: content download complete ");
-//
-//                            //contetns Model down confirm and
-//                            try{
-//                                Log.d("markertest",contentModel.toString());
-//
-//                                for(int i=0;i<contentModel.getTextures().size();i++){
-//                                    Log.d("texture real name",contentModel.getTextures().get(i)+"");
-//                                    String texture_url = contentModel.getTextures().get(i);
-//
-//                                    getImage(contentModel.getContentName(),texture_url,i,contentModel.getTextures().size()-1);
-//                                }
-//                            }catch (NullPointerException e){
-//                                e.printStackTrace();
-//                            }
-//
-//                        }
-//                    });
-//                }catch (StringIndexOutOfBoundsException e){e.printStackTrace();}
-//
-//
-//
-//            }
-//        });
-//
-//    }
-
-
-//    public void getImage(final String name, final String url, final int request_count, final int last_count){
-//        try {
-//            String suffix = url.substring(url.indexOf('.'), url.length());
-//            Log.d("texture_request_suffix",suffix);
-//            Log.d("texture_request_url",url);
-//            RequestManager mRequestManager = RequestManager.getInstance();
-//            mRequestManager.requesetDownloadFileFromStorage(name, url, suffix, new RequestManager.TransferCallback() {
-//                @Override
-//                public void onResponse(TransferModel response) {
-//                    if (response.getSuffix().compareTo(".jpg") == 0 || response.getSuffix().compareTo(".png") == 0) {
-//                        Bitmap downBitmap = BitmapFactory.decodeFile(response.getPath());
-//                        //imgView.setImageBitmap(downBitmap);
-//
-//                        //String texture_file_name=response.getPath().substring(response.getPath().lastIndexOf("/")+1,response.getPath().length()-4);
-//                        String texture_file_name = url.substring(url.lastIndexOf("/")+1,url.length()-4);
-//                        Log.d("getTexture_name",texture_file_name);
-//                        saveBitmaptoJpeg(downBitmap,name,texture_file_name);
-//                    }
-//                    Log.d(TAG, "onResponse: content download complete ");
-//                    String texture_url = response.getPath();
-//                    //Log.d("texture_path",texture_url);
-//                    //textures.add(texture_url);
-//                    contents_down_state =true;
-//                    //setup();
-//
-//                    //very important
-//                    if(request_count == last_count){
-//                        callBackListener.onDoneBack();
-//                    }
-//
-//                }
-//            });
-//        }catch (StringIndexOutOfBoundsException e){e.printStackTrace();}
-//    }
-
-
-    /*
-    public void getFile(final String name, String url){
-        try {
-            String suffix = url.substring(url.indexOf('.'), url.length());
-            RequestManager mRequestManager = RequestManager.getInstance();
-            mRequestManager.requesetDownloadFileFromStorage(name, url, suffix, new RequestManager.TransferCallback() {
-                @Override
-                public void onResponse(TransferModel response) {
-                    if (response.getSuffix().compareTo(".jet") == 0) {
-
-                    }
-                        String ex_storage =Environment.getExternalStorageDirectory().getAbsolutePath(); // Get Absolute Path in External Sdcard
-                        String foler_name = "/kudan/"+name+"/";
-                        String file_name = name+".jet";
-                        String string_path = ex_storage+foler_name;
-
-                        File file_path;
-                        try {
-                            file_path = new File(string_path);
-                            if (!file_path.isDirectory()) {
-                                file_path.mkdirs();
-                            }
-                            File file = new File(response.getPath());
-                            FileInputStream in = new FileInputStream(file);
-                            in.close();
-                            FileOutputStream out = new FileOutputStream(string_path + file_name);
-                        }catch (FileNotFoundException e) {
-                            e.getMessage();
-                        }catch (IOException e){
-                            e.getMessage();
-                    }
-                    Log.d(TAG, "onResponse: content download complete ");
-                }
-            });
-        }catch (StringIndexOutOfBoundsException e){e.printStackTrace();}
-    }*/
-
-//    public void saveTemptoJet(FileInputStream file_input,String folder, String name){
-//        String ex_storage =Environment.getExternalStorageDirectory().getAbsolutePath(); // Get Absolute Path in External Sdcard
-//        String foler_name = "/kudan/"+folder+"/";
-//        String file_name = name+".jet";
-//        String string_path = ex_storage+foler_name;
-//        File file_path;
-//        try{
-//            file_path = new File(string_path);
-//            if(!file_path.isDirectory()){
-//                file_path.mkdirs();
-//            }
-//            FileOutputStream out = new FileOutputStream(string_path+file_name);
-//            int data;
-//            while ((data = file_input.read()) != -1) {
-//                // TODO : use data
-//                out.write(data);
-//            }
-//            file_input.close();
-//            out.close();
-//            file_input.close();
-////            textures.add(string_path+file_name);
-//            modelUrl = string_path+file_name;
-//            Log.d("model_path",string_path+file_name);
-//
-//        }catch(FileNotFoundException exception){
-//            Log.e("FileNotFoundException", exception.getMessage());
-//        }catch(IOException exception){
-//            Log.e("IOException", exception.getMessage());
-//        }
-//    }
-//    public void saveBitmaptoJpeg(Bitmap bitmap,String folder, String name){
-//        String ex_storage =Environment.getExternalStorageDirectory().getAbsolutePath(); // Get Absolute Path in External Sdcard
-//        String foler_name = "/kudan/"+folder+"/";
-//        String file_name = name+".jpg";
-//        String string_path = ex_storage+foler_name;
-//        File file_path;
-//        try{
-//            file_path = new File(string_path);
-//            if(!file_path.isDirectory()){
-//                file_path.mkdirs();
-//            }
-//            FileOutputStream out = new FileOutputStream(string_path+file_name);
-//            bitmap.compress(Bitmap.CompressFormat.JPEG, 100, out); out.close();
-//            textures.add(string_path+file_name);
-//            //Log.d("textures_path",string_path+file_name);
-//        }catch(FileNotFoundException exception){
-//            Log.e("FileNotFoundException", exception.getMessage());
-//        }catch(IOException exception){
-//            Log.e("IOException", exception.getMessage());
-//        }
-//
-//    }
-
-     /*rotate_x_seek.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
-            @Override
-            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-                if(Float.parseFloat(String.valueOf(progress))<1){
-                    setRotateX = 0;
-                }else
-                    setRotateX = 1;
-//                node3d.rotateByDegrees(0f, setRotateX, setRotateY, setRotateZ);
-
-
-                node3d.rotateByDegrees(90,setRotateX, 0, 0);
-
-
-            }
-
-            @Override
-            public void onStartTrackingTouch(SeekBar seekBar) {
-
-            }
-
-            @Override
-            public void onStopTrackingTouch(SeekBar seekBar) {
-
-            }
-        });
-        rotate_y_seek.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
-            @Override
-            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-                if(Float.parseFloat(String.valueOf(progress))<1){
-                    setRotateY = 0;
-                }else
-                    setRotateY = 1;
-//                node3d.rotateByDegrees(0f, setRotateX, setRotateY, setRotateZ);
-
-
-                node3d.rotateByDegrees(90,0, setRotateY, 0);
-            }
-
-            @Override
-            public void onStartTrackingTouch(SeekBar seekBar) {
-
-            }
-
-            @Override
-            public void onStopTrackingTouch(SeekBar seekBar) {
-
-            }
-        });
-        rotate_z_seek.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
-            @Override
-            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-                if(Float.parseFloat(String.valueOf(progress))<1){
-                    setRotateZ = 0;
-                }else
-                    setRotateZ = 1;
-//                node3d.rotateByDegrees(0f, setRotateX, setRotateY, setRotateZ);
-
-
-                node3d.rotateByDegrees(90,0, 0, setRotateZ);
-            }
-
-            @Override
-            public void onStartTrackingTouch(SeekBar seekBar) {
-
-            }
-
-            @Override
-            public void onStopTrackingTouch(SeekBar seekBar) {
-
-            }
-        });*/
-
 }
 
 
