@@ -116,14 +116,6 @@
                 android:value="com.curonsys.army_android.MainActivity" />
         </activity>
         <activity
-            android:name=".activity.TrivialDriveActivity"
-            android:label="@string/title_activity_trivialdrive"
-            android:parentActivityName=".MainActivity">
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.curonsys.army_android.MainActivity" />
-        </activity>
-        <activity
             android:name=".arcore.AugmentedImageActivity"
             android:configChanges="orientation|screenSize"
             android:exported="true"

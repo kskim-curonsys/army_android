@@ -38,7 +38,6 @@ import com.curonsys.army_android.activity.LoginActivity;
 import com.curonsys.army_android.activity.MarkerGenerationActivity;
 import com.curonsys.army_android.activity.SignupActivity;
 import com.curonsys.army_android.activity.TabbedActivity;
-import com.curonsys.army_android.activity.TrivialDriveActivity;
 import com.curonsys.army_android.arcore.AugmentedImageActivity;
 import com.curonsys.army_android.camera2basic.CameraActivity;
 import com.curonsys.army_android.model.TransferModel;

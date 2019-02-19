@@ -1,4 +1,4 @@
-package com.curonsys.billingmodule.skulist;
+package com.curonsys.army_android.util;
 
 import android.graphics.Rect;
 import android.support.v7.widget.RecyclerView;
@@ -20,3 +20,4 @@ public class CardsDecoration extends RecyclerView.ItemDecoration {
         outRect.bottom = mRowGap;
     }
 }
+

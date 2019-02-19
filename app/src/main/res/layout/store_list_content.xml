@@ -70,7 +70,7 @@
             style="@style/ButtonStyle"
             android:text="@string/button_store_purchase"
             android:layout_marginTop="@dimen/single_padding"
-            android:contentDescription="@string/button_buy"/>
+            android:contentDescription="@string/button_store_purchase"/>
 
     </LinearLayout>
 

@@ -1,1 +1,1 @@
-include ':app', ':shared-module', ':KudanAR'
+include ':app', ':KudanAR'

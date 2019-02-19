@@ -29,7 +29,6 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import android.widget.DatePicker;
-import android.widget.TextView;
 import android.widget.TimePicker;
 
 import com.android.billingclient.api.BillingClient;
@@ -41,7 +40,7 @@ import com.curonsys.army_android.model.SkuDetailsModel;
 import com.curonsys.army_android.model.TransferModel;
 import com.curonsys.army_android.util.PurchaseManager;
 import com.curonsys.army_android.util.RequestManager;
-import com.curonsys.billingmodule.skulist.CardsDecoration;
+import com.curonsys.army_android.util.CardsDecoration;
 
 import java.util.ArrayList;
 
