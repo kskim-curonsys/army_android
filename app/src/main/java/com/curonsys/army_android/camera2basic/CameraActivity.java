@@ -16,15 +16,11 @@
 
 package com.curonsys.army_android.camera2basic;
 
-import android.app.Fragment;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
-import android.view.View;
-import android.view.Window;
 import android.view.WindowManager;
-import android.widget.Toast;
 
 import com.airbnb.lottie.LottieAnimationView;
 import com.curonsys.army_android.util.CallBackListener;
@@ -33,19 +29,12 @@ import com.curonsys.army_android.activity.GeneralARActivity;
 
 public class CameraActivity extends AppCompatActivity implements CallBackListener {
     Camera2BasicFragment cameraFrag;
-    LottieAnimationView lottie;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        try{
-            getWindow().requestFeature(Window.FEATURE_ACTION_BAR);
-            getSupportActionBar().hide();
-        }catch (NullPointerException e){
-            e.printStackTrace();
-        }
+
         setContentView(R.layout.activity_camera);
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
-
 
         if (null == savedInstanceState) {
             cameraFrag = Camera2BasicFragment.newInstance();
@@ -111,13 +100,14 @@ public class CameraActivity extends AppCompatActivity implements CallBackListene
                 cameraFrag.showDialog("모델 파일을 가져오는 중입니다...",this);
                 cameraFrag.getModelFromStorage(this);
                 break;
+
             case "model":
                 cameraFrag.materialDialog.dismiss();
                 Log.e("getJet :","sucess");
                 cameraFrag.showDialog("텍스쳐를 가져오는 중입니다...",this);
                 cameraFrag.getTextures(this);
-
                 break;
+
             case "textures":
                 cameraFrag.materialDialog.dismiss();
                 Log.e("getTextures :","sucess");
@@ -128,9 +118,6 @@ public class CameraActivity extends AppCompatActivity implements CallBackListene
                 intent.putExtra("contents_model",cameraFrag.contentModel_putExtra);
                 startActivity(intent);
                 break;
-
         }
-
     }
-
 }

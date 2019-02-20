@@ -37,6 +37,9 @@
         <meta-data
             android:name="com.google.ar.core"
             android:value="optional" />
+        <uses-library
+            android:name="org.apache.http.legacy"
+            android:required="false" />
 
         <activity
             android:name=".MainActivity"
@@ -140,6 +143,16 @@
             android:configChanges="orientation|screenSize"
             android:theme="@style/Theme.AppCompat.NoActionBar"
             android:exported="true">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.curonsys.army_android.MainActivity" />
+        </activity>
+        <activity
+            android:name=".camera2basic.CameraActivity"
+            android:configChanges="orientation|screenSize"
+            android:exported="true"
+            android:theme="@style/Theme.AppCompat.NoActionBar"
+            android:screenOrientation="locked">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.curonsys.army_android.MainActivity" />

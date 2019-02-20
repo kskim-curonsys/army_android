@@ -501,11 +501,7 @@ public class Camera2BasicFragment extends Fragment
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-
-
-
-
-        initLoaction(getActivity());
+        //initLoaction(getActivity());
 
         View view = inflater.inflate(R.layout.fragment_camera2_basic, container, false);
 
@@ -532,10 +528,6 @@ public class Camera2BasicFragment extends Fragment
                 materialDialog.show();
             }
         });
-
-
-
-
         return view;
     }
 
@@ -545,11 +537,8 @@ public class Camera2BasicFragment extends Fragment
         mTextureView = (AutoFitTextureView) view.findViewById(R.id.texture);
         materialView = view.getContext();
 
-
         callBackListener = (CallBackListener) getActivity();
         lottie = view.findViewById(R.id.lottie_scan_view);
-
-
     }
 
     @Override
