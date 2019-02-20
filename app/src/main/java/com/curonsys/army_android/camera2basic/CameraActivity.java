@@ -22,7 +22,6 @@ import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.WindowManager;
 
-import com.airbnb.lottie.LottieAnimationView;
 import com.curonsys.army_android.util.CallBackListener;
 import com.curonsys.army_android.R;
 import com.curonsys.army_android.activity.GeneralARActivity;

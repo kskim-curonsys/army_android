@@ -35,9 +35,6 @@ public final class Constants {
         // Curonsys
         BAY_AREA_LANDMARKS.put("CURONSYS", new LatLng(34.9471727, 127.6876304));
 
-        // Home_APT
-        //BAY_AREA_LANDMARKS.put("HOME_APT", new LatLng(34.951302, 127.689964));
-
         // San Francisco International Airport.
         //BAY_AREA_LANDMARKS.put("SFO", new LatLng(37.621313, -122.378955));
 

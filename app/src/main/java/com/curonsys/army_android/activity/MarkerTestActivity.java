@@ -57,7 +57,6 @@ public class MarkerTestActivity extends ARActivity {
     ContentModel contentModel;
     ArrayList<String> textures = new ArrayList<String>();
     String modelUrl;
-    CallBackListener callBackListener;
     Vibrator vibrator;
 
     @Override
@@ -79,23 +78,6 @@ public class MarkerTestActivity extends ARActivity {
 
         //for 3d contents
         showLayout();
-
-        callBackListener = new CallBackListener() {
-            @Override
-            public void onSuccess(String message) {
-
-            }
-
-            @Override
-            public void onSuccess(String message, boolean isMarker) {
-
-            }
-
-            @Override
-            public void onDoneBack() {
-                //setup();
-            }
-        };
     }
 
     private void showLayout() {

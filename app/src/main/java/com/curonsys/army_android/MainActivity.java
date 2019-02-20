@@ -34,9 +34,9 @@ import android.widget.ImageView;
 import android.widget.Switch;
 import android.widget.TextView;
 
+import com.curonsys.army_android.activity.ARCoreTestActivity;
 import com.curonsys.army_android.activity.LoginActivity;
 import com.curonsys.army_android.activity.MarkerGenerationActivity;
-import com.curonsys.army_android.activity.SignupActivity;
 import com.curonsys.army_android.activity.TabbedActivity;
 import com.curonsys.army_android.arcore.AugmentedImageActivity;
 import com.curonsys.army_android.camera2basic.CameraActivity;
@@ -122,8 +122,10 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         mAuth = FirebaseAuth.getInstance();
         mRequestManager = RequestManager.getInstance();
         mSharedDataManager = SharedDataManager.getInstance();
+
         mFusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this);
         mLocationManager = (LocationManager) this.getSystemService(Context.LOCATION_SERVICE);
+        mGeofencingClient = LocationServices.getGeofencingClient(this);
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -222,12 +224,14 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             //goARViewer();
             goKudanViewer();
         } else if (id == R.id.nav_arservice) {
-            // test
+
         } else if (id == R.id.nav_location) {
             goFindPlace();
         } else if (id == R.id.nav_instore) {
             //doVibration(2000);
             //doSignOut();
+            //goARViewer();
+            goARCoreTest();
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -326,6 +330,14 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     private void goARViewer() {
         Intent intent = new Intent(this, AugmentedImageActivity.class);
+        if (intent.resolveActivity(getPackageManager()) != null) {
+            intent.putExtra("ParentClassSource", MainActivity.class.getName());
+            startActivity(intent);
+        }
+    }
+
+    private void goARCoreTest() {
+        Intent intent = new Intent(this, ARCoreTestActivity.class);
         if (intent.resolveActivity(getPackageManager()) != null) {
             intent.putExtra("ParentClassSource", MainActivity.class.getName());
             startActivity(intent);

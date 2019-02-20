@@ -157,6 +157,17 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.curonsys.army_android.MainActivity" />
         </activity>
+        <activity
+            android:name=".activity.ARCoreTestActivity"
+            android:configChanges="orientation|screenSize"
+            android:exported="true"
+            android:theme="@style/Theme.AppCompat.NoActionBar"
+            android:screenOrientation="locked">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.curonsys.army_android.MainActivity" />
+        </activity>
+
 
         <service
             android:name=".service.FetchAddressIntentService"

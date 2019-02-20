@@ -80,11 +80,11 @@ public class MarkerConfirmFragment extends Fragment {
         mRatingText.setText(mRatingText.getText() + String.valueOf(mSDManager.markerRating));
         mLatitudeText.setText(mLatitudeText.getText() + String.valueOf(mSDManager.currentLatitude));
         mLongitudeText.setText(mLongitudeText.getText() + String.valueOf(mSDManager.currentLongtitude));
-//        Bitmap bitmap = BitmapFactory.decodeFile(mSDManager.imageURI.toString());
+//      Bitmap bitmap = BitmapFactory.decodeFile(mSDManager.imageURI.toString());
 
         mMarkerPreview.setBackground(getResources().getDrawable(R.drawable.round_fg));
         mMarkerPreview.setClipToOutline(true);
-//        mMarkerPreview.setImageBitmap(bitmap);
+//      mMarkerPreview.setImageBitmap(bitmap);
         mMarkerPreview.setImageURI(mSDManager.imageURI);
 
 //        tv.setText(mSDManager.generatorId+",\n"
@@ -331,7 +331,7 @@ public class MarkerConfirmFragment extends Fragment {
             for (int i = 0; i < mContentModel.getTextures().size(); i++) {
                 Log.d("texture real name", mContentModel.getTextures().get(i) + "");
                 String texture_url = mContentModel.getTextures().get(i);
-                getTexture(mContentModel.getContentName(), texture_url, i, mContentModel.getTextures().size());
+                getTexture(mContentModel.getContentId(), texture_url, i, mContentModel.getTextures().size());
             }
         } catch (NullPointerException e) {
             e.printStackTrace();
@@ -379,15 +379,15 @@ public class MarkerConfirmFragment extends Fragment {
             String url = mContentModel.getModel();
             String suffix = url.substring(url.indexOf('.'), url.length());
             RequestManager mRequestManager = RequestManager.getInstance();
-            mRequestManager.requestDownloadFileFromStorage(mContentModel.getContentName(), url, suffix, new RequestManager.TransferCallback() {
+            mRequestManager.requestDownloadFileFromStorage(mContentModel.getContentId(), url, suffix, new RequestManager.TransferCallback() {
                 @Override
                 public void onResponse(TransferModel response) {
                     if (response.getSuffix().compareTo(".jet") == 0) {
-                        String model_file_name = mContentModel.getContentName();
+                        String model_file_name = mContentModel.getContentId();
                         Log.d("getModel_name", model_file_name);
                         try {
                             FileInputStream file_readed = new FileInputStream(new File(response.getPath()));
-                            mModelUrl = saveTemptoJet(file_readed, mContentModel.getContentName(), model_file_name);
+                            mModelUrl = saveTemptoJet(file_readed, mContentModel.getContentId(), model_file_name);
                         } catch (FileNotFoundException e) {
                             e.printStackTrace();
                         }
@@ -399,7 +399,7 @@ public class MarkerConfirmFragment extends Fragment {
             final String url = mContentModel.getModel();
             String suffix = url.substring(url.indexOf('.'), url.length());
             RequestManager mRequestManager = RequestManager.getInstance();
-            mRequestManager.requestDownloadFileFromStorage(mContentModel.getContentName(), url, suffix, new RequestManager.TransferCallback() {
+            mRequestManager.requestDownloadFileFromStorage(mContentModel.getContentId(), url, suffix, new RequestManager.TransferCallback() {
                 @Override
                 public void onResponse(TransferModel response) {
                     if (response.getSuffix().compareTo(".jpg") == 0 || response.getSuffix().compareTo(".png") == 0) {
@@ -411,15 +411,15 @@ public class MarkerConfirmFragment extends Fragment {
                         Log.d("getTexture_name", texture_file_name);
 
                         // name to be folder name
-                        mModelUrl = saveBitmaptoJpeg(downBitmap, mContentModel.getContentName(), texture_file_name);
+                        mModelUrl = saveBitmaptoJpeg(downBitmap, mContentModel.getContentId(), texture_file_name);
                         mCallBackListener.onSuccess("model");
                     } else if (response.getSuffix().compareTo(".mp4") == 0) {
 
-                        String model_file_name = mContentModel.getContentName();
+                        String model_file_name = mContentModel.getContentId();
                         Log.d("getModel_name", model_file_name);
                         try {
                             FileInputStream file_readed = new FileInputStream(new File(response.getPath()));
-                            mModelUrl = saveTemptoMp4(file_readed, mContentModel.getContentName(), model_file_name);
+                            mModelUrl = saveTemptoMp4(file_readed, mContentModel.getContentId(), model_file_name);
                         } catch (FileNotFoundException e) {
                             e.printStackTrace();
                         }
