@@ -7,9 +7,6 @@ import android.content.Context;
 import android.graphics.Color;
 import android.location.Address;
 import android.location.Geocoder;
-import android.location.Location;
-import android.location.LocationListener;
-import android.location.LocationManager;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -22,8 +19,6 @@ import com.curonsys.army_android.util.CallBackListener;
 import com.curonsys.army_android.R;
 import com.curonsys.army_android.util.SharedDataManager;
 import com.google.android.gms.common.api.Status;
-import com.google.android.gms.location.FusedLocationProviderClient;
-import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.location.places.Place;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -46,10 +41,8 @@ import java.util.List;
 public class LocationChoiceFragment extends Fragment implements OnMapReadyCallback {
     //int PLACE_AUTOCOMPLETE_REQUEST_CODE = 1;
     Context mContext;
-    FusedLocationProviderClient mFusedLocationProviderClient;
     GoogleMap mMap;
     private Geocoder mGeocoder;
-    LocationManager mLocationManager;
     SharedDataManager mSDManager = SharedDataManager.getInstance();
     CallBackListener mCallBackListener;
     MaterialDialog.Builder mBuilder = null;
@@ -68,21 +61,6 @@ public class LocationChoiceFragment extends Fragment implements OnMapReadyCallba
         mCallBackListener = (CallBackListener)getActivity();
         mCallBackListener.onDoneBack();
         */
-        mLocationManager = (LocationManager) mContext.getSystemService(Context.LOCATION_SERVICE);
-        mFusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(mContext);
-
-        try {
-            mLocationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, // 등록할 위치제공자
-                    100, // 통지사이의 최소 시간간격 (miliSecond)
-                    1, // 통지사이의 최소 변경거리 (m)
-                    mLocationListener);
-            mLocationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, // 등록할 위치제공자
-                    100, // 통지사이의 최소 시간간격 (miliSecond)
-                    1, // 통지사이의 최소 변경거리 (m)
-                    mLocationListener);
-        } catch (SecurityException e) {
-            e.printStackTrace();
-        }
 
         mBuilder = new MaterialDialog.Builder(mContext)
                 .title("위치 수신중")
@@ -187,59 +165,6 @@ public class LocationChoiceFragment extends Fragment implements OnMapReadyCallba
         //mMap.moveCamera(CameraUpdateFactory.newLatLng(seoul));
     }
 
-    private final LocationListener mLocationListener = new LocationListener() {
-        public void onLocationChanged(Location location) {
-            //if location data is change, listener event alert.
-
-            double longitude = location.getLongitude(); //경도
-            double latitude = location.getLatitude();   //위도
-            //double altitude = location.getAltitude();   //고도//          float accuracy = location.getAccuracy();    //정확도//            String provider = location.getProvider();   //위치제공자
-            mMaterialDialog.dismiss();
-
-            try {
-                LatLng currentLocation = new LatLng(latitude, longitude);
-                MarkerOptions markerOptions = new MarkerOptions();
-                markerOptions.position(currentLocation);
-                markerOptions.title("현재 위치");
-                markerOptions.snippet("ARZone");
-                //mMap.addMarker(markerOptions);
-                mMap.moveCamera(CameraUpdateFactory.newLatLng(currentLocation));
-                mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(currentLocation, 16));
-                mLocationManager.removeUpdates(mLocationListener);  //  미수신할때는 반드시 자원해체를 해주어야 한다.
-                mSDManager.currentLongtitude = longitude;
-                mSDManager.currentLatitude = latitude;
-            } catch (NullPointerException e) {
-                e.printStackTrace();
-                try {
-                    mLocationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, // 등록할 위치제공자
-                            100, // 통지사이의 최소 시간간격 (miliSecond)
-                            1, // 통지사이의 최소 변경거리 (m)
-                            mLocationListener);
-                    mLocationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, // 등록할 위치제공자
-                            100, // 통지사이의 최소 시간간격 (miliSecond)
-                            1, // 통지사이의 최소 변경거리 (m)
-                            mLocationListener);
-                } catch (SecurityException ee) {
-                    ee.printStackTrace();
-                }
-            }
-        }
-
-        public void onProviderDisabled(String provider) {
-            // Disabled시
-            Log.d("test", "onProviderDisabled, provider:" + provider);
-        }
-
-        public void onProviderEnabled(String provider) {
-            // Enabled시
-            Log.d("test", "onProviderEnabled, provider:" + provider);
-        }
-
-        public void onStatusChanged(String provider, int status, Bundle extras) {
-            // 변경시
-            Log.d("test", "onStatusChanged, provider:" + provider + ", status:" + status + " ,Bundle:" + extras);
-        }
-    };
 
     public void search_address(String placeName) {
         String str = placeName;

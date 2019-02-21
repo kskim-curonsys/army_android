@@ -59,7 +59,6 @@ public class ContentsChoiceFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         final View view = inflater.inflate(R.layout.fragment_contents_choice, container, false);
-        FragmentManager fragmentManager = this.getChildFragmentManager();
 
         //myOnClickListener = new MyOnClickListener(mContext,getActivity());
         mRecyclerView = (RecyclerView) view.findViewById(R.id.my_recycler_view);

@@ -104,7 +104,6 @@ import java.util.List;
 import java.util.concurrent.Semaphore;
 import java.util.concurrent.TimeUnit;
 
-import static android.content.ContentValues.TAG;
 import static android.widget.Toast.LENGTH_SHORT;
 
 public class Camera2BasicFragment extends Fragment
@@ -116,7 +115,6 @@ public class Camera2BasicFragment extends Fragment
     private static final int REQUEST_CAMERA_PERMISSION = 1;
     private static final String FRAGMENT_DIALOG = "dialog";
     private LocationManager lm;
-    private boolean swich = false;
     MaterialDialog.Builder builder = null;
     MaterialDialog materialDialog = null;
     CallBackListener callBackListener;

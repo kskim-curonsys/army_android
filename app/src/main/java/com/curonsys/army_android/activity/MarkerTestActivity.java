@@ -15,7 +15,6 @@ import android.widget.SeekBar;
 import android.widget.Toast;
 
 import com.afollestad.materialdialogs.MaterialDialog;
-import com.curonsys.army_android.util.CallBackListener;
 import com.curonsys.army_android.R;
 import com.curonsys.army_android.model.ContentModel;
 import com.curonsys.army_android.util.SharedDataManager;
@@ -52,11 +51,8 @@ public class MarkerTestActivity extends ARActivity {
     float setScale = 3.0f ,setRotateX = 1.0f, setRotateY = 1.0f, setRotateZ = 1.0f;
     String nodeType;
 
-    MaterialDialog.Builder builder = null;
-    MaterialDialog materialDialog = null;
     ContentModel contentModel;
     ArrayList<String> textures = new ArrayList<String>();
-    String modelUrl;
     Vibrator vibrator;
 
     @Override

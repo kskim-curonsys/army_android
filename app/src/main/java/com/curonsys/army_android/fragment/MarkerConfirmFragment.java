@@ -63,7 +63,6 @@ public class MarkerConfirmFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_marker_confirm, container, false);
-        FragmentManager fragmentManager = this.getChildFragmentManager();
 
         //tv = view.findViewById(R.id.markerInfoTv);
         mUserText = view.findViewById(R.id.user_id_text_confirm);
