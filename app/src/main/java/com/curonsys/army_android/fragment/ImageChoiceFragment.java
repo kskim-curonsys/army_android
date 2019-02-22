@@ -170,7 +170,6 @@ public class ImageChoiceFragment extends Fragment {
                     Log.d("showingImg URI", albumURI.toString());
                     //image save
                     mSDManager.imageURI = albumURI;
-                    mSDManager.generatorId = "admin";
                     try {
                         mBuilder = new MaterialDialog.Builder(mContext)
                                 .title("유효성 검사중")
@@ -203,8 +202,6 @@ public class ImageChoiceFragment extends Fragment {
                             }
                         });
 
-//                        imagProcessingTask = new ImageProcessingAsyncTask();
-//                        imagProcessingTask.execute();
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }

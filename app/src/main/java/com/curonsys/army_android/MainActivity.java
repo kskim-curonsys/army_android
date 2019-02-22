@@ -83,6 +83,11 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private static final int PLACE_AUTOCOMPLETE_REQUEST_CODE = 5;
     private static final int REQUEST_PLACE_PICKER = 6;
 
+    protected boolean mUserProfileStatus = false;
+    protected Location mLastLocation = null;
+    protected String mFindPlace = "";
+    protected boolean mLocationUpdateState = false;
+
     private ImageView mProfileImage;
     private TextView mProfileName;
     private TextView mProfileEmail;
@@ -100,10 +105,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private List<Geofence> mGeofenceList = new ArrayList<Geofence>();
     private PendingIntent mGeofencePendingIntent;
 
-    protected boolean mUserProfileStatus = false;
-    protected Location mLastLocation = null;
-    protected String mFindPlace = "";
-    protected boolean mLocationUpdateState = false;
+    private SharedDataManager mSDManager;
 
     public MainActivity() {
     }
@@ -118,6 +120,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         PermissionManager permissionManager = new PermissionManager(this);
         permissionManager.permissionCheck();
+
+        mSDManager = SharedDataManager.getInstance();
 
         mAuth = FirebaseAuth.getInstance();
         mRequestManager = RequestManager.getInstance();
@@ -407,6 +411,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
                 String username = response.getName();
                 mProfileName.setText(username);
+                mSDManager.generatorId = username;
 
                 String imagename = "profile";
                 String imageurl = response.getImageUrl();
