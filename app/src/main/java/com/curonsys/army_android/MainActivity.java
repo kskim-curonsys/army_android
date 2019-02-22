@@ -93,6 +93,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private TextView mProfileEmail;
     private TextView mCurrentLocation;
     private TextView mCurrentAddress;
+    private TextView mCurrentVersion;
     private Switch mLocationSwitch;
 
     private FirebaseAuth mAuth;
@@ -168,6 +169,10 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         mCurrentLocation = (TextView) findViewById(R.id.current_location);
         mCurrentAddress = (TextView) findViewById(R.id.current_address);
+        mCurrentVersion = (TextView) findViewById(R.id.footer_item_1);
+        String versionName = getString(R.string.version_information);
+        versionName += BuildConfig.VERSION_NAME;
+        mCurrentVersion.setText(versionName);
 
         mLocationSwitch = (Switch) findViewById(R.id.switch_location);
         mLocationSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {

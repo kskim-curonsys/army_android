@@ -39,12 +39,10 @@
         </menu>
     </item>
 
-    <item>
-        <menu>
-            <item
-                android:id="@+id/nav_logout"
-                android:icon="@drawable/ic_menu_profile"
-                android:title="@string/side_menu_logout" />
-        </menu>
+    <item android:title="@string/side_menu_group3">
+        <item
+            android:id="@+id/nav_logout"
+            android:icon="@drawable/ic_menu_profile"
+            android:title="@string/side_menu_logout" />
     </item>
 </menu>

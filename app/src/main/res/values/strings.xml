@@ -118,7 +118,18 @@
     <string name="button_store_purchase">Buy</string>
     <string name="button_next_step">Next Step</string>
     <string name="card_input_hint">Enter your phone number</string>
-    <string name="card_input_prefill"></string>
+    <string name="card_input_prefill">" "</string>
     <string name="side_menu_logout">Logout</string>
+    <string name="version_information">"Version: "</string>
+    <string name="side_menu_group3">User</string>
+    <string name="name_card">Name Card</string>
+    <string name="input_phone_number">Enter the phone number on a name card.</string>
+    <string name="hello">Hello.</string>
+    <string name="no_markers_found">No markers found.</string>
+    <string name="input">Input</string>
+    <string name="failed_to_connect_server">Failed to connect to server.</string>
+    <string name="request">Request</string>
+    <string name="scanning_image">Scanning image..</string>
+    <string name="failed">Failed</string>
 
 </resources>

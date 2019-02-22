@@ -106,4 +106,16 @@
     <string name="button_next_step">다음 단계로</string>
     <string name="card_input_hint">( - 생략) 전화번호를 입력하세요.</string>
     <string name="side_menu_logout">로그아웃</string>
+    <string name="version_information">"버전 정보: "</string>
+    <string name="side_menu_group3">사용자</string>
+    <string name="name_card">명함</string>
+    <string name="input_phone_number">명함의 전화번호를 입력하세요.</string>
+    <string name="hello">안녕하세요.</string>
+    <string name="no_markers_found">마커를 찾지 못하였습니다.</string>
+    <string name="input">입력</string>
+    <string name="card_input_prefill">" "</string>
+    <string name="failed_to_connect_server">서버 연결에 실패하였습니다.</string>
+    <string name="request">요청</string>
+    <string name="scanning_image">이미지 스캔중...</string>
+    <string name="failed">실패</string>
 </resources>
