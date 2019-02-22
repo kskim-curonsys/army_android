@@ -141,7 +141,7 @@ public class MarkerUploader {
                     String userid = currentUser.getUid();
                     data.put("user_id", userid);
                     data.put("file", result.getPath());
-                    data.put("rating", (float) mSDManager.markerRating);
+                    data.put("rating", mSDManager.markerRating);
                     data.put("phone", mSDManager.phoneNumber);
                     data.put("content_id", mSDManager.contentId);
                     data.put("content_rotation", mSDManager.contentRotation);
@@ -209,7 +209,7 @@ public class MarkerUploader {
                     String userid = currentUser.getUid();
                     data.put("user_id", userid);
                     data.put("file", result.getPath());
-                    data.put("rating", (float) mSDManager.markerRating);
+                    data.put("rating", mSDManager.markerRating);
                     GeoPoint location = new GeoPoint(mSDManager.currentLatitude, mSDManager.currentLongtitude);
                     data.put("location", location);
                     data.put("content_id", mSDManager.contentId);

@@ -5,10 +5,10 @@
     android:layout_height="match_parent"
     android:orientation="vertical">
 
-
     <LinearLayout
         android:layout_gravity="center"
         android:orientation="horizontal"
+        android:layout_marginTop="20dp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content">
         <Button
@@ -29,7 +29,7 @@
     </LinearLayout>
 
     <ImageView
-        android:layout_marginTop="10dp"
+        android:layout_marginTop="20dp"
         android:layout_gravity="center"
         android:id="@+id/preview_img"
         android:src="@mipmap/ic_launcher"

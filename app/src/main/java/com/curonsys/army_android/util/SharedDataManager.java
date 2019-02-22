@@ -16,7 +16,7 @@ public class SharedDataManager {
 
     //frag1
     public Uri imageURI = null;
-    public double markerRating = 0;
+    public Double markerRating = 0.0;
     public String generatorId = null;
 
     //frag2

@@ -57,12 +57,7 @@ public class MarkerGenerationActivity extends AppCompatActivity implements CallB
     @Override
     public void onCreate(final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        try {
-            getWindow().requestFeature(Window.FEATURE_ACTION_BAR);
-            getSupportActionBar().hide();
-        } catch (NullPointerException e) {
-            e.printStackTrace();
-        }
+
         setContentView(R.layout.activity_marker_generation);
 
         mActivity = this;

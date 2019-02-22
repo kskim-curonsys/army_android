@@ -403,7 +403,6 @@ public class MarkerTestActivity extends ARActivity {
         imageTrackable = new ARImageTrackable("MarkerForAR");
         //에셋에서 이미지 로딩
         //File file = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DCIM), "kudan");
-        /*
         if (path != null) {
             Uri uri = Uri.parse(path);
             imageTrackable.loadFromPath(uri.getPath());
@@ -411,8 +410,7 @@ public class MarkerTestActivity extends ARActivity {
         } else {
             Toast.makeText(getApplicationContext(), "마커를 먼저 등록해주세요.", Toast.LENGTH_LONG).show();
         }
-        */
-        imageTrackable.loadFromAsset("lego.jpg");
+        //imageTrackable.loadFromAsset("lego.jpg");
 
         // Get the single instance of the image tracker.
         ARImageTracker imageTracker;

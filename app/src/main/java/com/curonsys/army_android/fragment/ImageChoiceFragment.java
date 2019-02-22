@@ -4,6 +4,9 @@ import android.app.Activity;
 import android.app.Fragment;
 import android.content.Context;
 import android.content.Intent;
+import android.content.res.AssetManager;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
@@ -27,6 +30,8 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
 
 /**
  * Created by ijin-yeong on 2018. 5. 21..
@@ -68,7 +73,7 @@ public class ImageChoiceFragment extends Fragment {
         mRatingBar = view.findViewById(R.id.ratingbar);
         mShowingImg = view.findViewById(R.id.preview_img);
 
-        mShowingImg.setBackground(getResources().getDrawable(R.drawable.round_fg));
+        setDefaultImage("icon.png");
         mShowingImg.setClipToOutline(true);
 
         mShowingImg.setOnClickListener(new View.OnClickListener() {
@@ -102,6 +107,7 @@ public class ImageChoiceFragment extends Fragment {
                 mCardBtn.setBackgroundColor(getResources().getColor(R.color.common_google_signin_btn_text_light_disabled));
                 mMarkerType = true;
                 ((MarkerGenerationActivity) getActivity()).setMarkerType(mMarkerType);
+                setDefaultImage("icon.png");
             }
         });
 
@@ -112,6 +118,7 @@ public class ImageChoiceFragment extends Fragment {
                 mMarkerBtn.setBackgroundColor(getResources().getColor(R.color.common_google_signin_btn_text_light_disabled));
                 mMarkerType = false;
                 ((MarkerGenerationActivity) getActivity()).setMarkerType(mMarkerType);
+                setDefaultImage("namecard.png");
             }
         });
 
@@ -162,9 +169,6 @@ public class ImageChoiceFragment extends Fragment {
                     mShowingImg.setImageURI(albumURI);
                     Log.d("showingImg URI", albumURI.toString());
                     //image save
-
-                    //이부분 코드에 대해, 마커 등록과 관련된 클래스 정의하여 다시, DBManager 클래스는 실제 내부디비 클래스 이름으로 사용할 것.
-
                     mSDManager.imageURI = albumURI;
                     mSDManager.generatorId = "admin";
                     try {
@@ -216,6 +220,23 @@ public class ImageChoiceFragment extends Fragment {
         mContext = activity;
         if (activity.getClass() == MarkerGenerationActivity.class) {
             mActivity = (MarkerGenerationActivity) activity;
+        }
+    }
+
+    private void setDefaultImage(String assetname) {
+        try {
+            AssetManager am = getResources().getAssets();
+            InputStream is = null;
+            is = am.open(assetname);
+            if (is != null) {
+                Bitmap bm = BitmapFactory.decodeStream(is);
+                mShowingImg.setImageBitmap(bm);
+                is.close();
+            } else {
+                mShowingImg.setBackground(getResources().getDrawable(R.drawable.round_fg));
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
         }
     }
 }
