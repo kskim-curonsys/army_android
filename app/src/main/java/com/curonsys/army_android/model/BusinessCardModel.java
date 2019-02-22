@@ -10,22 +10,22 @@ public class BusinessCardModel {
     private String mMarkerId;
     private String mUserId;
     private String mFile;
-    private float mRating;
+    private Double mRating;
     private String phoneNumber;
     private String mContentId;
     private ArrayList<Float> mContentRotation;
-    private float mContentScale;
+    private Double mContentScale;
     private ArrayList<String> mAdditionalMediaId;
 
     public BusinessCardModel() {
         mMarkerId = "";
         mUserId = "";
         mFile = "";
-        mRating = 0;
+        mRating = 0.0;
         phoneNumber = "";
         mContentId = "";
         mContentRotation = new ArrayList<Float>();
-        mContentScale = 0;
+        mContentScale = 0.0;
         mAdditionalMediaId = new ArrayList<String>();
     }
 
@@ -49,9 +49,9 @@ public class BusinessCardModel {
         }
 
         if (data.containsKey("rating")) {
-            mRating = (float)Float.parseFloat(String.valueOf(data.get("rating")));
+            mRating = Double.parseDouble(String.valueOf(data.get("rating")));
         } else {
-            mRating = 0;
+            mRating = 0.0;
         }
 
         if (data.containsKey("phone")) {
@@ -73,9 +73,9 @@ public class BusinessCardModel {
         }
 
         if (data.containsKey("content_scale")) {
-            mContentScale = Float.parseFloat(String.valueOf(data.get("content_scale")));
+            mContentScale = Double.parseDouble(String.valueOf(data.get("content_scale")));
         } else {
-            mContentScale = 0;
+            mContentScale = 0.0;
         }
 
         if (data.containsKey("additional_media_id")) {
@@ -101,7 +101,7 @@ public class BusinessCardModel {
         return mFile;
     }
 
-    public float getRating() {
+    public Double getRating() {
         return mRating;
     }
 
@@ -114,7 +114,7 @@ public class BusinessCardModel {
         return mContentRotation;
     }
 
-    public float getScale() {
+    public Double getScale() {
         return mContentScale;
     }
 

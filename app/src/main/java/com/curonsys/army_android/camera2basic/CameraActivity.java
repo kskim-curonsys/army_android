@@ -28,6 +28,7 @@ import com.curonsys.army_android.activity.GeneralARActivity;
 
 public class CameraActivity extends AppCompatActivity implements CallBackListener {
     Camera2BasicFragment cameraFrag;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -47,35 +48,36 @@ public class CameraActivity extends AppCompatActivity implements CallBackListene
     public void onDoneBack() {
 
     }
+
     @Override
-    public void onSuccess(String message){
+    public void onSuccess(String message) {
         //not thing..
     }
 
     @Override
     public void onSuccess(String message, boolean isMarker) {
 
-        switch (message){
+        switch (message) {
             case "capture":
-                Log.d("capture","sucess");
+                Log.d("capture", "sucess");
 //                cameraFrag.initLoaction(this);
-                if(isMarker){
+                if (isMarker) {
                     cameraFrag.uploadData(this);
-                }else {
+                } else {
                     cameraFrag.uploadCardData(this);
                 }
 
                 break;
             case "upload":
-                Log.d("upload","sucess");
+                Log.d("upload", "sucess");
 //                Toast.makeText(getApplicationContext(),cameraFrag.getMarkerUrl(),Toast.LENGTH_LONG).show();
 
-                if(isMarker){
-                    cameraFrag.showDialog("마커 정보를 가져오는 중입니다...",this);
-                    cameraFrag.getMarkerModel((CallBackListener)this);
-                }else {
-                    cameraFrag.showDialog("명함 정보를 가져오는 중입니다...",this);
-                    cameraFrag.getCardModel((CallBackListener)this);
+                if (isMarker) {
+                    cameraFrag.showDialog("마커 정보를 가져오는 중입니다...", this);
+                    cameraFrag.getMarkerModel((CallBackListener) this);
+                } else {
+                    cameraFrag.showDialog("명함 정보를 가져오는 중입니다...", this);
+                    cameraFrag.getCardModel((CallBackListener) this);
                 }
 
                 break;
@@ -84,37 +86,38 @@ public class CameraActivity extends AppCompatActivity implements CallBackListene
 //                Log.d("marker","sucess");
                 cameraFrag.materialDialog.dismiss();
                 cameraFrag.getMarker(this);
-                cameraFrag.showDialog("마커를 다운받는 중입니다...",this);
+                cameraFrag.showDialog("마커를 다운받는 중입니다...", this);
                 break;
 
             case "markerImg":
                 cameraFrag.materialDialog.dismiss();
                 cameraFrag.getContentsModel(this);
-                cameraFrag.showDialog("컨텐츠 정보를 가져오는 중입니다...",this);
+                cameraFrag.showDialog("컨텐츠 정보를 가져오는 중입니다...", this);
                 break;
 
             case "contentsModel":
                 cameraFrag.materialDialog.dismiss();
-                Log.e("getContentsModel :","sucess");
-                cameraFrag.showDialog("모델 파일을 가져오는 중입니다...",this);
+                Log.e("getContentsModel :", "sucess");
+                cameraFrag.showDialog("모델 파일을 가져오는 중입니다...", this);
                 cameraFrag.getModelFromStorage(this);
                 break;
 
             case "model":
                 cameraFrag.materialDialog.dismiss();
-                Log.e("getJet :","sucess");
-                cameraFrag.showDialog("텍스쳐를 가져오는 중입니다...",this);
+                Log.e("getJet :", "sucess");
+                cameraFrag.showDialog("텍스쳐를 가져오는 중입니다...", this);
                 cameraFrag.getTextures(this);
                 break;
 
             case "textures":
                 cameraFrag.materialDialog.dismiss();
-                Log.e("getTextures :","sucess");
+                Log.e("getTextures :", "sucess");
                 //Toast.makeText(getApplicationContext(),"컨텐츠를 정상적으로 가져왔습니다",Toast.LENGTH_SHORT).show();
                 cameraFrag.setContentsModel();
                 //Toast.makeText(getApplicationContext(),"dd",Toast.LENGTH_LONG).show();
+
                 Intent intent = new Intent(this, GeneralARActivity.class);
-                intent.putExtra("contents_model",cameraFrag.contentModel_putExtra);
+                intent.putExtra("contents_model", cameraFrag.contentModel_putExtra);
                 startActivity(intent);
                 break;
         }

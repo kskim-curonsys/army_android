@@ -39,7 +39,7 @@ public class SharedDataManager {
     public Boolean is3D = true;
 
     //frag4
-    public float contentScale = 0;
+    public Double contentScale = 0.0;
     public ArrayList<Float> contentRotation = new ArrayList<Float>();
 
     public String phoneNumber = "";

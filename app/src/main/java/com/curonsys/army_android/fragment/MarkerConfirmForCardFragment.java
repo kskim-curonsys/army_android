@@ -56,7 +56,7 @@ public class MarkerConfirmForCardFragment extends Fragment {
     MaterialDialog materialDialog = null;
     TextView userText, ratingText, phoneText, scaleText, textRotateX, textRotateY, textRotateZ;
     ImageView markerPreview;
-    SharedDataManager dbManager = SharedDataManager.getInstance();
+    SharedDataManager mSDManager = SharedDataManager.getInstance();
     int textureCount = 0;
 
     @Override
@@ -77,23 +77,23 @@ public class MarkerConfirmForCardFragment extends Fragment {
         textRotateZ = view.findViewById(R.id.marker_rotatez_confirm_card);
 
 
-        userText.setText(dbManager.generatorId);
-        ratingText.setText(ratingText.getText() + String.valueOf(dbManager.markerRating));
-        phoneText.setText(dbManager.phoneNumber);
-//        Bitmap bitmap = BitmapFactory.decodeFile(dbManager.imageURI.toString());
+        userText.setText(mSDManager.generatorId);
+        ratingText.setText(ratingText.getText() + String.valueOf(mSDManager.markerRating));
+        phoneText.setText(mSDManager.phoneNumber);
+//        Bitmap bitmap = BitmapFactory.decodeFile(mSDManager.imageURI.toString());
 
         markerPreview.setBackground(getResources().getDrawable(R.drawable.round_fg));
         markerPreview.setClipToOutline(true);
 //        markerPreview.setImageBitmap(bitmap);
-        markerPreview.setImageURI(dbManager.imageURI);
+        markerPreview.setImageURI(mSDManager.imageURI);
 
-//        tv.setText(dbManager.generatorId+",\n"
-//                        +dbManager.markerRating+",\n"
-//                        +dbManager.imageURI.toString()+",\n"
-//                        +dbManager.currentLongtitude+",\n"
-//                        +dbManager.currentLatitude+",\n"
-//                        +dbManager.contentId+",\n"
-//                        +dbManager.contentName+",\n");
+//        tv.setText(mSDManager.generatorId+",\n"
+//                        +mSDManager.markerRating+",\n"
+//                        +mSDManager.imageURI.toString()+",\n"
+//                        +mSDManager.currentLongtitude+",\n"
+//                        +mSDManager.currentLatitude+",\n"
+//                        +mSDManager.contentId+",\n"
+//                        +mSDManager.contentName+",\n");
         Button btn = view.findViewById(R.id.markerTestBtn_card);
 
         btn.setOnClickListener(new View.OnClickListener() {
@@ -119,14 +119,14 @@ public class MarkerConfirmForCardFragment extends Fragment {
                         materialDialog.dismiss();
                         Log.e("getContentsModel :", "sucess");
                         showDialog("모델 파일을 가져오는 중입니다...");
-                        getModelFromStorage(dbManager.is3D);
+                        getModelFromStorage(mSDManager.is3D);
 
                         break;
                     case "model":
                         materialDialog.dismiss();
                         showDialog("텍스쳐를 가져오는 중입니다...");
 
-                        if (dbManager.is3D) {
+                        if (mSDManager.is3D) {
                             Log.e("getJet :", "sucess");
                             getTextures();
                         } else {
@@ -160,7 +160,7 @@ public class MarkerConfirmForCardFragment extends Fragment {
     }
 
     private void setContentsModel() {
-        if (dbManager.is3D) {
+        if (mSDManager.is3D) {
             contentModel_putExtra = new ContentModel();
             contentModel_putExtra.setTextures(textures);
             contentModel_putExtra.setModel(modelUrl);
@@ -201,13 +201,13 @@ public class MarkerConfirmForCardFragment extends Fragment {
                 textRotateX.setText(textRotateX.getText() + rotateX);
                 textRotateY.setText(textRotateY.getText() + rotateY);
                 textRotateZ.setText(textRotateZ.getText() + rotateZ);
-                dbManager.contentScale = Float.parseFloat(scale);
+                mSDManager.contentScale = Double.parseDouble(scale);
 
                 ArrayList<Float> rotates = new ArrayList<>();
                 rotates.add(Float.parseFloat(rotateX));
                 rotates.add(Float.parseFloat(rotateY));
                 rotates.add(Float.parseFloat(rotateZ));
-                dbManager.contentRotation = rotates;
+                mSDManager.contentRotation = rotates;
 
                 callBackListener.onDoneBack();
                 break;
@@ -315,7 +315,7 @@ public class MarkerConfirmForCardFragment extends Fragment {
 
 
     public void getContentsModel() {
-        final String contentId = dbManager.contentId;
+        final String contentId = mSDManager.contentId;
         RequestManager requestManager = RequestManager.getInstance();
 
 

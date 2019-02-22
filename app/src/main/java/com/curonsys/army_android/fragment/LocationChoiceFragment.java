@@ -54,13 +54,6 @@ public class LocationChoiceFragment extends Fragment implements OnMapReadyCallba
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_location_choice, container, false);
-        /*FragmentManager fragmentManager = this.getChildFragmentManager();
-
-        MapFragment mMapFragment = (MapFragment)fragmentManager.findFragmentById(R.id.map);
-        mMapFragment.getMapAsync(this);
-        mCallBackListener = (CallBackListener)getActivity();
-        mCallBackListener.onDoneBack();
-        */
 
         mBuilder = new MaterialDialog.Builder(mContext)
                 .title("위치 수신중")
@@ -163,8 +156,9 @@ public class LocationChoiceFragment extends Fragment implements OnMapReadyCallba
         //LatLng seoul = new LatLng(37.541, 126.986);
         //mMap.addMarker(new MarkerOptions().position(seoul).title("Marker in Seoul"));
         //mMap.moveCamera(CameraUpdateFactory.newLatLng(seoul));
-    }
 
+        setLocation();
+    }
 
     public void search_address(String placeName) {
         String str = placeName;
@@ -204,5 +198,21 @@ public class LocationChoiceFragment extends Fragment implements OnMapReadyCallba
             e.printStackTrace();
             Toast.makeText(mContext, "잘못된 입력입니다.", Toast.LENGTH_SHORT).show();
         }
+    }
+
+    private void setLocation() {
+        double latitude = mSDManager.currentLatitude;
+        double longitude = mSDManager.currentLongtitude;
+
+        mMaterialDialog.dismiss();
+
+        LatLng currentLocation = new LatLng(latitude,longitude);
+        MarkerOptions markerOptions = new MarkerOptions();
+        markerOptions.position(currentLocation);
+        markerOptions.title("현재 위치");
+        markerOptions.snippet("ARZone");
+        //mMap.addMarker(markerOptions);
+        mMap.moveCamera(CameraUpdateFactory.newLatLng(currentLocation));
+        mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(currentLocation, 16));
     }
 }

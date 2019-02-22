@@ -197,7 +197,7 @@ public class MarkerConfirmFragment extends Fragment {
                 mTextRotateX.setText(mTextRotateX.getText() + rotateX);
                 mTextRotateY.setText(mTextRotateY.getText() + rotateY);
                 mTextRotateZ.setText(mTextRotateZ.getText() + rotateZ);
-                mSDManager.contentScale = Float.parseFloat(scale);
+                mSDManager.contentScale = Double.parseDouble(scale);
 
                 ArrayList<Float> rotates = new ArrayList<>();
                 rotates.add(Float.parseFloat(rotateX));

@@ -122,16 +122,17 @@ public class Camera2BasicFragment extends Fragment
     private static String marker_url = "";
     private static String marker_id = "";
     private static String card_id = "";
-    private String phone_num ="";
+    private String phone_num = "";
 
     private Activity mContext;
     ContentModel contentModel;
     ArrayList<String> textures = new ArrayList<String>();
     String modelUrl;
-    public int textureCount =0;
+    public int textureCount = 0;
     ContentModel contentModel_putExtra;
     boolean hadMarker = false;
     LottieAnimationView lottie;
+    SharedDataManager mSDManager = SharedDataManager.getInstance();
 
     static {
         ORIENTATIONS.append(Surface.ROTATION_0, 90);
@@ -191,7 +192,7 @@ public class Camera2BasicFragment extends Fragment
     public void onAttach(Activity activity) {
         // TODO Auto-generated method stub
         super.onAttach(activity);
-        mContext=activity;
+        mContext = activity;
         //step 4
 
     }
@@ -201,12 +202,12 @@ public class Camera2BasicFragment extends Fragment
 
         @Override
         public void onSurfaceTextureAvailable(SurfaceTexture texture, int width, int height) {
-            openCamera(width/4, height/4);
+            openCamera(width / 4, height / 4);
         }
 
         @Override
         public void onSurfaceTextureSizeChanged(SurfaceTexture texture, int width, int height) {
-            configureTransform(width/4, height/4);
+            configureTransform(width / 4, height / 4);
         }
 
         @Override
@@ -249,10 +250,8 @@ public class Camera2BasicFragment extends Fragment
      * {@link CameraDevice.StateCallback} is called when {@link CameraDevice} changes its state.
      */
 
-    final Handler handler = new Handler()
-    {
-        public void handleMessage(Message msg)
-        {
+    final Handler handler = new Handler() {
+        public void handleMessage(Message msg) {
             //UI 변경 작업을 코딩하세요.
             lottie.cancelAnimation();
             lottie.setVisibility(View.GONE);
@@ -460,7 +459,7 @@ public class Camera2BasicFragment extends Fragment
      * @return The optimal {@code Size}, or an arbitrary one if none were big enough
      */
     private static Size chooseOptimalSize(Size[] choices, int textureViewWidth,
-            int textureViewHeight, int maxWidth, int maxHeight, Size aspectRatio) {
+                                          int textureViewHeight, int maxWidth, int maxHeight, Size aspectRatio) {
 
         // Collect the supported resolutions that are at least as big as the preview Surface
         List<Size> bigEnough = new ArrayList<>();
@@ -472,7 +471,7 @@ public class Camera2BasicFragment extends Fragment
             if (option.getWidth() <= maxWidth && option.getHeight() <= maxHeight &&
                     option.getHeight() == option.getWidth() * h / w) {
                 if (option.getWidth() >= textureViewWidth &&
-                    option.getHeight() >= textureViewHeight) {
+                        option.getHeight() >= textureViewHeight) {
                     bigEnough.add(option);
                 } else {
                     notBigEnough.add(option);
@@ -500,7 +499,6 @@ public class Camera2BasicFragment extends Fragment
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         //initLoaction(getActivity());
-
         View view = inflater.inflate(R.layout.fragment_camera2_basic, container, false);
 
         Button card_btn = view.findViewById(R.id.scan_card_btn);
@@ -513,7 +511,7 @@ public class Camera2BasicFragment extends Fragment
                         .title("입력")
                         .content("명함의 전화번호를 입력하세요.")
                         .inputType(InputType.TYPE_CLASS_PHONE)
-                        .input(R.string.card_input_hint,R.string.card_input_prefill, new MaterialDialog.InputCallback() {
+                        .input(R.string.card_input_hint, R.string.card_input_prefill, new MaterialDialog.InputCallback() {
                             @Override
                             public void onInput(MaterialDialog dialog, CharSequence input) {
                                 // Do something
@@ -716,8 +714,8 @@ public class Camera2BasicFragment extends Fragment
         }
 
         //camera pixcel operate !!!!!!!!!!!!!!!!!!!!!!!!!!!중요
-        setUpCameraOutputs(width/4, height/4);
-        configureTransform(width/4, height/4);
+        setUpCameraOutputs(width / 4, height / 4);
+        configureTransform(width / 4, height / 4);
         Activity activity = getActivity();
         CameraManager manager = (CameraManager) activity.getSystemService(Context.CAMERA_SERVICE);
         try {
@@ -950,8 +948,6 @@ public class Camera2BasicFragment extends Fragment
                     Log.d(TAG, mFile.toString());
 
 
-
-
                     unlockFocus();
                     capture_path = mFile;
 //                    Log.d("captured",capture_path);
@@ -1027,90 +1023,84 @@ public class Camera2BasicFragment extends Fragment
         }
     }
 
-    public void uploadCardData(Activity activity){
+    public void uploadCardData(Activity activity) {
         RequestManager requestManager = new RequestManager();
-        final SharedDataManager mDBManager = SharedDataManager.getInstance();
-
-        try{
+        try {
             requestManager.getCardIdToDjango(phone_num, new RequestManager.DjangoImageUploadCallback() {
                 @Override
                 public void onCallback(JSONObject response) {
-                    try{
+                    try {
                         marker_url = response.getString("card_url");
                         card_id = response.getString("card_id");
-                        if(marker_url.equals("null") || marker_id.equals("null")){
+                        if (marker_url.equals("null") || marker_id.equals("null")) {
                             showToast("명함을 찾지 못하였습니다...");
-                        }else {
+                        } else {
 
                             //Log.d("contentId_check",contents_id+"111");
-                            callBackListener.onSuccess("upload",false);
+                            callBackListener.onSuccess("upload", false);
                         }
-                    }catch (JSONException e){
+                    } catch (JSONException e) {
                         e.printStackTrace();
                         showToast("명함을 찾지 못하였습니다...");
                     }
 
                 }
             });
-        }catch (JSONException e) {
+        } catch (JSONException e) {
             e.printStackTrace();
-        }catch (NullPointerException e){
+        } catch (NullPointerException e) {
             showToast("서버 연결에 실패하였습니다.");
             e.printStackTrace();
         }
     }
 
     public void uploadData(Activity activity) {
-
         RequestManager requestManager = new RequestManager();
-        final SharedDataManager mDBManager = SharedDataManager.getInstance();
 
-            try{
-                Log.d("request","started");
-                requestManager.uploadImageToDjango(mFile,mDBManager.currentLatitude,mDBManager.currentLongtitude, new RequestManager.DjangoImageUploadCallback() {
-                    @Override
-                    public void onCallback(JSONObject response) {
+        try {
+            Log.d("request", "started");
+            requestManager.uploadImageToDjango(mFile, mSDManager.currentLatitude, mSDManager.currentLongtitude, new RequestManager.DjangoImageUploadCallback() {
+                @Override
+                public void onCallback(JSONObject response) {
 
-                        new Thread()
-                        {
-                            public void run()
-                            {
-                                Message message = handler.obtainMessage();
-                                handler.sendMessage(message);
-                            }
-                        }.start();
-
-                        try{
-                            Log.d("Image upload Result:",response.toString());
-                            marker_url = response.getString("marker_url");
-                            marker_id = response.getString("marker_id");
-                            if(marker_url.equals("null") || marker_id.equals("null")){
-                                showToast("마커를 찾지 못하였습니다...");
-                            }else {
-
-                                //Log.d("contentId_check",contents_id+"111");
-                                callBackListener.onSuccess("upload",true);
-                            }
-                        }catch (JSONException e){
-                            e.printStackTrace();
-                        }catch (NullPointerException e){
-                            showToast("마커를 찾지 못하였습니다...");
+                    new Thread() {
+                        public void run() {
+                            Message message = handler.obtainMessage();
+                            handler.sendMessage(message);
                         }
-                    }
-                });
-            }catch (JSONException e) {
-                e.printStackTrace();
-            }catch (NullPointerException e){
-                showToast("서버 연결에 실패하였습니다.");
-                e.printStackTrace();
-            }
-        }
+                    }.start();
 
-    public String getMarkerUrl(){
+                    try {
+                        Log.d("Image upload Result:", response.toString());
+                        marker_url = response.getString("marker_url");
+                        marker_id = response.getString("marker_id");
+                        if (marker_url.equals("null") || marker_id.equals("null")) {
+                            showToast("마커를 찾지 못하였습니다...");
+                        } else {
+
+                            //Log.d("contentId_check",contents_id+"111");
+                            callBackListener.onSuccess("upload", true);
+                        }
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    } catch (NullPointerException e) {
+                        showToast("마커를 찾지 못하였습니다...");
+                    }
+                }
+            });
+        } catch (JSONException e) {
+            e.printStackTrace();
+        } catch (NullPointerException e) {
+            showToast("서버 연결에 실패하였습니다.");
+            e.printStackTrace();
+        }
+    }
+
+    public String getMarkerUrl() {
         return this.marker_url;
     }
 
-    public void initLoaction(Activity activity){
+    public void initLoaction(Activity activity) {
 //        showDialog("위치를 가져오는 중입니다.");
         lm = (LocationManager) activity.getSystemService(Context.LOCATION_SERVICE);
         FusedLocationProviderClient fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(activity);
@@ -1124,7 +1114,7 @@ public class Camera2BasicFragment extends Fragment
                     100, // 통지사이의 최소 시간간격 (miliSecond)
                     1, // 통지사이의 최소 변경거리 (m)
                     mLocationListener);
-        }catch (SecurityException e){
+        } catch (SecurityException e) {
             e.printStackTrace();
         }
     }
@@ -1132,33 +1122,31 @@ public class Camera2BasicFragment extends Fragment
     private final LocationListener mLocationListener = new LocationListener() {
         public void onLocationChanged(Location location) {
             //if location data is change, listener event alert.
-            SharedDataManager mDBManager = SharedDataManager.getInstance();
-
             double longitude = location.getLongitude(); //경도
             double latitude = location.getLatitude();   //위도
-            Log.d("long",longitude+"");
-            Log.d("lati",latitude+"");
+            Log.d("long", longitude + "");
+            Log.d("lati", latitude + "");
             //        double altitude = location.getAltitude();   //고도//          float accuracy = location.getAccuracy();    //정확도//            String provider = location.getProvider();   //위치제공자
 
-            try{
-                LatLng currentLocation = new LatLng(latitude,longitude);
+            try {
+                LatLng currentLocation = new LatLng(latitude, longitude);
                 MarkerOptions markerOptions = new MarkerOptions();
                 markerOptions.position(currentLocation);
                 //markerOptions.title("현재 위치");
                 //markerOptions.snippet("ARZone");
                 //mMap.addMarker(markerOptions);
                 lm.removeUpdates(mLocationListener);  //  미수신할때는 반드시 자원해체를 해주어야 한다.
-                mDBManager.currentLongtitude = longitude;
-                mDBManager.currentLatitude = latitude;
-                Log.d("latitude",mDBManager.currentLatitude+"");
-                Log.d("longitude",mDBManager.currentLongtitude+"");
+                mSDManager.currentLongtitude = longitude;
+                mSDManager.currentLatitude = latitude;
+                Log.d("latitude", mSDManager.currentLatitude + "");
+                Log.d("longitude", mSDManager.currentLongtitude + "");
 
 
                 //materialDialog.dismiss();
                 //MarkerUploader uploader = new MarkerUploader(getActivity());
                 //uploader.start(false);
 
-            }catch (NullPointerException e){
+            } catch (NullPointerException e) {
                 e.printStackTrace();
             }
         }
@@ -1180,7 +1168,7 @@ public class Camera2BasicFragment extends Fragment
     };
 
 
-    private void getMarkerData(String marker_id){
+    private void getMarkerData(String marker_id) {
         //Todo...
         showToast(marker_id);
     }
@@ -1193,7 +1181,6 @@ public class Camera2BasicFragment extends Fragment
 
 
     }
-
 
 
     /**
@@ -1226,7 +1213,7 @@ public class Camera2BasicFragment extends Fragment
             builder = new MaterialDialog.Builder(activity)
                     .title("요청")
                     .content("이미지 스캔중...")
-                    .progress(true,0);
+                    .progress(true, 0);
             materialDialog = builder.build();
             //materialDialog.show();
 
@@ -1254,7 +1241,6 @@ public class Camera2BasicFragment extends Fragment
                 }
             }
         }
-
 
 
     }
@@ -1304,7 +1290,6 @@ public class Camera2BasicFragment extends Fragment
         }
 
 
-
     }
 
     /**
@@ -1339,50 +1324,50 @@ public class Camera2BasicFragment extends Fragment
         }
     }
 
-    public void showDialog(String msg,Activity activity){
+    public void showDialog(String msg, Activity activity) {
 
         builder = new MaterialDialog.Builder(activity)
                 .title("요청")
                 .content(msg)
-                .progress(true,0);
+                .progress(true, 0);
         materialDialog = builder.build();
         materialDialog.show();
     }
 
-    public void getMarkerModel(final CallBackListener callBackListener){
-        Log.e("marker get","try");
+    public void getMarkerModel(final CallBackListener callBackListener) {
+        Log.e("marker get", "try");
         RequestManager requestManager = RequestManager.getInstance();
         requestManager.requestGetMarkerInfo(marker_id, new RequestManager.MarkerCallback() {
             @Override
             public void onResponse(MarkerModel response) {
                 setContentsInfo(response);
-                callBackListener.onSuccess("getMarkerModel",true);
-                Log.e("marker get","sucess");
+                callBackListener.onSuccess("getMarkerModel", true);
+                Log.e("marker get", "sucess");
             }
         });
     }
-    public void getCardModel(final CallBackListener callBackListener){
-        Log.e("card get","try");
+
+    public void getCardModel(final CallBackListener callBackListener) {
+        Log.e("card get", "try");
         RequestManager requestManager = RequestManager.getInstance();
         requestManager.requestGetCardInfo(card_id, new RequestManager.CardCallback() {
             @Override
             public void onResponse(BusinessCardModel response) {
                 setCardContentsInfo(response);
-                callBackListener.onSuccess("getMarkerModel",false);
-                Log.e("card get","sucess");
+                callBackListener.onSuccess("getMarkerModel", false);
+                Log.e("card get", "sucess");
             }
         });
     }
 
-    public void setCardContentsInfo(BusinessCardModel cardModel){
+    public void setCardContentsInfo(BusinessCardModel cardModel) {
         String contentId = cardModel.getContentId();
         ArrayList<Float> contentRota = cardModel.getContentRotation();
-        float contentScale = cardModel.getScale();
-        String markerUrl =  cardModel.getFile();
-        SharedDataManager mDBManager = SharedDataManager.getInstance();
-        mDBManager.contentId = contentId;
-        mDBManager.contentRotation = contentRota;
-        mDBManager.contentScale = contentScale;
+        Double contentScale = cardModel.getScale();
+        String markerUrl = cardModel.getFile();
+        mSDManager.contentId = contentId;
+        mSDManager.contentRotation = contentRota;
+        mSDManager.contentScale = contentScale;
         marker_url = markerUrl;
 
 //        Log.e("c_id",contentId);
@@ -1392,15 +1377,14 @@ public class Camera2BasicFragment extends Fragment
     }
 
 
-    public void setContentsInfo(MarkerModel markerModel){
+    public void setContentsInfo(MarkerModel markerModel) {
         String contentId = markerModel.getContentId();
         ArrayList<Float> contentRota = markerModel.getContentRotation();
-        float contentScale = markerModel.getScale();
-        String markerUrl =  markerModel.getFile();
-        SharedDataManager mDBManager = SharedDataManager.getInstance();
-        mDBManager.contentId = contentId;
-        mDBManager.contentRotation = contentRota;
-        mDBManager.contentScale = contentScale;
+        Double contentScale = markerModel.getScale();
+        String markerUrl = markerModel.getFile();
+        mSDManager.contentId = contentId;
+        mSDManager.contentRotation = contentRota;
+        mSDManager.contentScale = contentScale;
         marker_url = markerUrl;
 
 //        Log.e("c_id",contentId);
@@ -1409,7 +1393,7 @@ public class Camera2BasicFragment extends Fragment
 //        Log.e("c_rotate",contentRota.toString());
     }
 
-    public void getContentsModel(final CallBackListener callBackListener){
+    public void getContentsModel(final CallBackListener callBackListener) {
         final String contentId = SharedDataManager.getInstance().contentId;
         RequestManager requestManager = RequestManager.getInstance();
 
@@ -1418,31 +1402,31 @@ public class Camera2BasicFragment extends Fragment
             @Override
             public void onResponse(ContentModel response) {
                 contentModel = response;
-                callBackListener.onSuccess("contentsModel",true);
+                callBackListener.onSuccess("contentsModel", true);
             }
         });
     }
 
 
-    public void getTextures(final CallBackListener callBackListener){
-        try{
-            Log.d("markertest",contentModel.toString());
+    public void getTextures(final CallBackListener callBackListener) {
+        try {
+            Log.d("markertest", contentModel.toString());
 
-            for(int i=0;i<contentModel.getTextures().size();i++){
-                Log.d("texture real name",contentModel.getTextures().get(i)+"");
+            for (int i = 0; i < contentModel.getTextures().size(); i++) {
+                Log.d("texture real name", contentModel.getTextures().get(i) + "");
                 String texture_url = contentModel.getTextures().get(i);
-                getTexture(contentModel.getContentName(),texture_url,i,contentModel.getTextures().size(),callBackListener);
+                getTexture(contentModel.getContentName(), texture_url, i, contentModel.getTextures().size(), callBackListener);
             }
-        }catch (NullPointerException e){
+        } catch (NullPointerException e) {
             e.printStackTrace();
         }
     }
 
-    public void getTexture(final String name, final String url, final int request_count, final int last_count,final CallBackListener callBackListener){
+    public void getTexture(final String name, final String url, final int request_count, final int last_count, final CallBackListener callBackListener) {
         try {
             String suffix = url.substring(url.indexOf('.'), url.length());
-            Log.d("texture_request_suffix",suffix);
-            Log.d("texture_request_url",url);
+            Log.d("texture_request_suffix", suffix);
+            Log.d("texture_request_url", url);
             RequestManager mRequestManager = RequestManager.getInstance();
             mRequestManager.requestDownloadFileFromStorage(name, url, suffix, new RequestManager.TransferCallback() {
                 @Override
@@ -1452,9 +1436,9 @@ public class Camera2BasicFragment extends Fragment
                         //imgView.setImageBitmap(downBitmap);
 
                         //String texture_file_name=response.getPath().substring(response.getPath().lastIndexOf("/")+1,response.getPath().length()-4);
-                        String texture_file_name = url.substring(url.lastIndexOf("/")+1,url.length()-4);
-                        Log.d("getTexture_name",texture_file_name);
-                        saveBitmaptoJpeg(downBitmap,name,texture_file_name,false);
+                        String texture_file_name = url.substring(url.lastIndexOf("/") + 1, url.length() - 4);
+                        Log.d("getTexture_name", texture_file_name);
+                        saveBitmaptoJpeg(downBitmap, name, texture_file_name, false);
                     }
                     Log.d(TAG, "onResponse: content download complete ");
                     String texture_url = response.getPath();
@@ -1464,13 +1448,15 @@ public class Camera2BasicFragment extends Fragment
 
                     //very important
                     textureCount++;
-                    if(textureCount == last_count){
-                        callBackListener.onSuccess("textures",true);
+                    if (textureCount == last_count) {
+                        callBackListener.onSuccess("textures", true);
                     }
 
                 }
             });
-        }catch (StringIndexOutOfBoundsException e){e.printStackTrace();}
+        } catch (StringIndexOutOfBoundsException e) {
+            e.printStackTrace();
+        }
     }
 
     public void getMarker(final CallBackListener cameraActivity) {
@@ -1486,15 +1472,15 @@ public class Camera2BasicFragment extends Fragment
                     //imgView.setImageBitmap(downBitmap);
 
                     //String texture_file_name=response.getPath().substring(response.getPath().lastIndexOf("/")+1,response.getPath().length()-4);
-                    String texture_file_name = url.substring(url.lastIndexOf("/")+1,url.length()-4);
-                    Log.d("getTexture_name",texture_file_name);
+                    String texture_file_name = url.substring(url.lastIndexOf("/") + 1, url.length() - 4);
+                    Log.d("getTexture_name", texture_file_name);
 
                     // name to be folder name
-                    saveBitmaptoJpeg(downBitmap,name,texture_file_name,true);
-                    if(hadMarker){
-                        cameraActivity.onSuccess("textures",true);
-                    }else {
-                        cameraActivity.onSuccess("markerImg",true);
+                    saveBitmaptoJpeg(downBitmap, name, texture_file_name, true);
+                    if (hadMarker) {
+                        cameraActivity.onSuccess("textures", true);
+                    } else {
+                        cameraActivity.onSuccess("markerImg", true);
                     }
 
                 }
@@ -1503,71 +1489,70 @@ public class Camera2BasicFragment extends Fragment
     }
 
 
-    public void getModelFromStorage(final CallBackListener callBackListener){
+    public void getModelFromStorage(final CallBackListener callBackListener) {
         String url = contentModel.getModel();
         String suffix = url.substring(url.indexOf('.'), url.length());
         RequestManager mRequestManager = RequestManager.getInstance();
         mRequestManager.requestDownloadFileFromStorage(contentModel.getContentName(), url, suffix, new RequestManager.TransferCallback() {
             @Override
             public void onResponse(TransferModel response) {
-                try{
-                    if (response.getSuffix().compareTo(".jet") == 0)
-                    {
+                try {
+                    if (response.getSuffix().compareTo(".jet") == 0) {
                         //modelUrl = response.getPath();
 
                         //String model_file_name = response.getPath().substring(response.getPath().lastIndexOf("/") + 1, response.getPath().length() - 4);
-    //                    Log.d("model file name:",contentModel.getContentName());
+                        //                    Log.d("model file name:",contentModel.getContentName());
                         String model_file_name = contentModel.getContentName();
                         Log.d("getModel_name", model_file_name);
                         final FileInputStream in = new FileInputStream(response.getPath());
                         saveTemptoJet(in, contentModel.getContentName(), model_file_name);
-                        callBackListener.onSuccess("model",true);
-                    }else if(response.getSuffix().compareTo(".jpg") == 0 || response.getSuffix().compareTo(".png") == 0) {
-                        String model_file_name = contentModel.getContentName();
-                        Log.d("getModel_name", model_file_name);
-                            final FileInputStream in = new FileInputStream(response.getPath());
-                            saveModelFile(in, contentModel.getContentName(), model_file_name, response.getSuffix());
-                        callBackListener.onSuccess("textures",true);
-                    }else if (response.getSuffix().compareTo(".mp4") == 0) {
+                        callBackListener.onSuccess("model", true);
+                    } else if (response.getSuffix().compareTo(".jpg") == 0 || response.getSuffix().compareTo(".png") == 0) {
                         String model_file_name = contentModel.getContentName();
                         Log.d("getModel_name", model_file_name);
                         final FileInputStream in = new FileInputStream(response.getPath());
                         saveModelFile(in, contentModel.getContentName(), model_file_name, response.getSuffix());
-                        callBackListener.onSuccess("textures",true);
+                        callBackListener.onSuccess("textures", true);
+                    } else if (response.getSuffix().compareTo(".mp4") == 0) {
+                        String model_file_name = contentModel.getContentName();
+                        Log.d("getModel_name", model_file_name);
+                        final FileInputStream in = new FileInputStream(response.getPath());
+                        saveModelFile(in, contentModel.getContentName(), model_file_name, response.getSuffix());
+                        callBackListener.onSuccess("textures", true);
                     }
-                }catch(FileNotFoundException e){
+                } catch (FileNotFoundException e) {
                     e.printStackTrace();
                 }
-
 
 
             }
         });
     }
-    public void saveTemptoJet(InputStream in,String folder, String name){
-        String ex_storage = Environment.getExternalStorageDirectory().getAbsolutePath(); // Get Absolute Path in External Sdcard
-        String foler_name = "/kudan/"+folder+"/";
-        String file_name = name+".jet";
-        String string_path = ex_storage+foler_name;
-        File out_file_path=null;
 
-        File check_files = new File(string_path+file_name);
-        if(check_files.exists()==true) {
-            modelUrl = string_path+file_name;
-        }else {
-            try{
+    public void saveTemptoJet(InputStream in, String folder, String name) {
+        String ex_storage = Environment.getExternalStorageDirectory().getAbsolutePath(); // Get Absolute Path in External Sdcard
+        String foler_name = "/kudan/" + folder + "/";
+        String file_name = name + ".jet";
+        String string_path = ex_storage + foler_name;
+        File out_file_path = null;
+
+        File check_files = new File(string_path + file_name);
+        if (check_files.exists() == true) {
+            modelUrl = string_path + file_name;
+        } else {
+            try {
                 out_file_path = new File(string_path);
-                if(!out_file_path.isDirectory()){
+                if (!out_file_path.isDirectory()) {
                     out_file_path.mkdirs();
                 }
 
                 BufferedInputStream bis = new BufferedInputStream(in);
-                FileOutputStream fos = new FileOutputStream(string_path+file_name);
+                FileOutputStream fos = new FileOutputStream(string_path + file_name);
                 BufferedOutputStream bos = new BufferedOutputStream(fos);
                 int data = 0;
 
                 final byte[] buffer = new byte[1024];
-                while ((data = bis.read()) != -1){
+                while ((data = bis.read()) != -1) {
                     bos.write(data);
                 }
 
@@ -1577,52 +1562,52 @@ public class Camera2BasicFragment extends Fragment
                 bos.close();
                 fos.close();
 //            textures.add(string_path+file_name);
-                modelUrl = string_path+file_name;
-                Log.d("model_path",string_path+file_name);
+                modelUrl = string_path + file_name;
+                Log.d("model_path", string_path + file_name);
 
-            }catch(FileNotFoundException exception){
+            } catch (FileNotFoundException exception) {
                 Log.e("FileNotFoundException", exception.getMessage());
-            }catch(IOException exception){
+            } catch (IOException exception) {
                 Log.e("IOException", exception.getMessage());
             }
         }
     }
 
-    public void saveBitmaptoJpeg(Bitmap bitmap, String folder, String name, boolean isMarker){
-        String ex_storage =Environment.getExternalStorageDirectory().getAbsolutePath(); // Get Absolute Path in External Sdcard
-        String foler_name = "/kudan/"+folder+"/";
-        String file_name = name+".jpg";
-        String string_path = ex_storage+foler_name;
+    public void saveBitmaptoJpeg(Bitmap bitmap, String folder, String name, boolean isMarker) {
+        String ex_storage = Environment.getExternalStorageDirectory().getAbsolutePath(); // Get Absolute Path in External Sdcard
+        String foler_name = "/kudan/" + folder + "/";
+        String file_name = name + ".jpg";
+        String string_path = ex_storage + foler_name;
         File file_path;
-        File files = new File(string_path+file_name);
+        File files = new File(string_path + file_name);
         //파일 유무를 확인합니다.
-        if(files.exists()==true) {
-        //파일이 있을시
-            if(isMarker){
-                SharedDataManager.getInstance().imageURI = Uri.fromFile(new File(string_path+file_name));
-            }else {
+        if (files.exists() == true) {
+            //파일이 있을시
+            if (isMarker) {
+                SharedDataManager.getInstance().imageURI = Uri.fromFile(new File(string_path + file_name));
+            } else {
                 textures.add(string_path + file_name);
             }
 
         } else {
-        //파일이 없을시
-            try{
+            //파일이 없을시
+            try {
                 file_path = new File(string_path);
-                if(!file_path.isDirectory()){
+                if (!file_path.isDirectory()) {
                     file_path.mkdirs();
                 }
-                FileOutputStream out = new FileOutputStream(string_path+file_name);
+                FileOutputStream out = new FileOutputStream(string_path + file_name);
                 bitmap.compress(Bitmap.CompressFormat.JPEG, 100, out);
                 out.close();
-                if(isMarker){
-                    SharedDataManager.getInstance().imageURI = Uri.fromFile(new File(string_path+file_name));
-                }else {
+                if (isMarker) {
+                    SharedDataManager.getInstance().imageURI = Uri.fromFile(new File(string_path + file_name));
+                } else {
                     textures.add(string_path + file_name);
                 }
                 //Log.d("textures_path",string_path+file_name);
-            }catch(FileNotFoundException exception){
+            } catch (FileNotFoundException exception) {
                 Log.e("FileNotFoundException", exception.getMessage());
-            }catch(IOException exception){
+            } catch (IOException exception) {
                 Log.e("IOException", exception.getMessage());
             }
         }
@@ -1630,24 +1615,24 @@ public class Camera2BasicFragment extends Fragment
 
     }
 
-    public void saveTemptoMp4(FileInputStream fis,String folder, String name){
+    public void saveTemptoMp4(FileInputStream fis, String folder, String name) {
         String ex_storage = Environment.getExternalStorageDirectory().getAbsolutePath(); // Get Absolute Path in External Sdcard
-        String foler_name = "/kudan/"+folder+"/";
-        String file_name = name+".mp4";
-        String string_path = ex_storage+foler_name;
+        String foler_name = "/kudan/" + folder + "/";
+        String file_name = name + ".mp4";
+        String string_path = ex_storage + foler_name;
         File file_path;
-        try{
+        try {
             file_path = new File(string_path);
-            if(!file_path.isDirectory()){
+            if (!file_path.isDirectory()) {
                 file_path.mkdirs();
             }
 
             BufferedInputStream bis = new BufferedInputStream(fis);
-            FileOutputStream fos = new FileOutputStream(string_path+file_name);
+            FileOutputStream fos = new FileOutputStream(string_path + file_name);
             BufferedOutputStream bos = new BufferedOutputStream(fos);
             int data = 0;
 
-            while ((data = bis.read()) != -1){
+            while ((data = bis.read()) != -1) {
                 bos.write(data);
             }
 
@@ -1655,41 +1640,41 @@ public class Camera2BasicFragment extends Fragment
             fis.close();
             bos.close();
             fos.close();
-            modelUrl = string_path+file_name;
-            Log.d("model_path",string_path+file_name);
+            modelUrl = string_path + file_name;
+            Log.d("model_path", string_path + file_name);
 
-        }catch(FileNotFoundException exception){
+        } catch (FileNotFoundException exception) {
             Log.e("FileNotFoundException", exception.getMessage());
-        }catch(IOException exception){
+        } catch (IOException exception) {
             Log.e("IOException", exception.getMessage());
         }
     }
 
-    public void saveModelFile(FileInputStream fis,String folder, String name,String extension){
+    public void saveModelFile(FileInputStream fis, String folder, String name, String extension) {
         String ex_storage = Environment.getExternalStorageDirectory().getAbsolutePath(); // Get Absolute Path in External Sdcard
-        String foler_name = "/kudan/"+folder+"/";
-        String file_name = name+"."+extension;
-        String string_path = ex_storage+foler_name;
+        String foler_name = "/kudan/" + folder + "/";
+        String file_name = name + "." + extension;
+        String string_path = ex_storage + foler_name;
         File file_path;
 
 
-        File checkFile = new File(string_path+file_name);
+        File checkFile = new File(string_path + file_name);
 
-        if(checkFile.exists()){
-            modelUrl = string_path+file_name;
-        }else {
-            try{
+        if (checkFile.exists()) {
+            modelUrl = string_path + file_name;
+        } else {
+            try {
                 file_path = new File(string_path);
-                if(!file_path.isDirectory()){
+                if (!file_path.isDirectory()) {
                     file_path.mkdirs();
                 }
 
                 BufferedInputStream bis = new BufferedInputStream(fis);
-                FileOutputStream fos = new FileOutputStream(string_path+file_name);
+                FileOutputStream fos = new FileOutputStream(string_path + file_name);
                 BufferedOutputStream bos = new BufferedOutputStream(fos);
                 int data = 0;
 
-                while ((data = bis.read()) != -1){
+                while ((data = bis.read()) != -1) {
                     bos.write(data);
                 }
 
@@ -1697,12 +1682,12 @@ public class Camera2BasicFragment extends Fragment
                 fis.close();
                 bos.close();
                 fos.close();
-                modelUrl = string_path+file_name;
-                Log.d("model_path",string_path+file_name);
+                modelUrl = string_path + file_name;
+                Log.d("model_path", string_path + file_name);
 
-            }catch(FileNotFoundException exception){
+            } catch (FileNotFoundException exception) {
                 Log.e("FileNotFoundException", exception.getMessage());
-            }catch(IOException exception){
+            } catch (IOException exception) {
                 Log.e("IOException", exception.getMessage());
             }
         }

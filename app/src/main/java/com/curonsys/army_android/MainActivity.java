@@ -215,7 +215,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {
         int id = item.getItemId();
-
         if (id == R.id.nav_armaker) {
             goARMaker();
         } else if (id == R.id.nav_arcontents) {
@@ -229,9 +228,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             goFindPlace();
         } else if (id == R.id.nav_instore) {
             //doVibration(2000);
-            //doSignOut();
-            //goARViewer();
             goARCoreTest();
+        } else if (id == R.id.nav_logout) {
+            doSignOut();
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -259,6 +258,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 String info = "Find Place: " + "\n" + place.getName() + "\n" + place.getAddress() +
                         "\n" + place.getLatLng() + "\n" + place.getViewport();
                 mFindPlace = info;
+                mCurrentLocation.setText(info);
             }
         } else {
             super.onActivityResult(requestCode, resultCode, data);

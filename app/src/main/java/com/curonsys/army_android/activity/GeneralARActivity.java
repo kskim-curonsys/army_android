@@ -54,7 +54,7 @@ import eu.kudan.kudan.ARView;
 public class GeneralARActivity extends ARActivity {
 
     ContentModel contentModel;
-    SharedDataManager mDBManager;
+    SharedDataManager mSDManager;
     Vibrator vibrator;
     ARModelNode node3d;
     ARImageNode imageNode;
@@ -80,13 +80,13 @@ public class GeneralARActivity extends ARActivity {
         Log.d("ar_activity","oncreate");
         contentModel = (ContentModel) getIntent().getSerializableExtra("contents_model");
         frame_tv = findViewById(R.id.frame_tv);
-        mDBManager = SharedDataManager.getInstance();
+        mSDManager = SharedDataManager.getInstance();
         vibrator = (Vibrator)getSystemService(Context.VIBRATOR_SERVICE);
 //        Log.d("1",contentModel.getTextures().toString());
 //        Log.d("2",contentModel.getModel());
-//        Log.d("3", mDBManager.imageURI.toString());
-//        Log.d("4",mDBManager.contentRotation.toString());
-//        Log.d("5",mDBManager.contentScale+"");
+//        Log.d("3", mSDManager.imageURI.toString());
+//        Log.d("4",mSDManager.contentRotation.toString());
+//        Log.d("5",mSDManager.contentScale+"");
 
         final Handler handler = new Handler(){
             public void handleMessage(Message msg){
@@ -130,14 +130,11 @@ public class GeneralARActivity extends ARActivity {
         Log.d("setup","called");
 
 
-        String path = mDBManager.imageURI.toString();
+        String path = mSDManager.imageURI.toString();
         //step1, 추적 가능한 이미지를 등록해라. 여기서 해야 할 일은 Trackable 객체 만들기, Tracker 생성
         ARImageTrackable imageTrackable;
         //이름지정
         imageTrackable = new ARImageTrackable("MarkerForAR");
-        //에셋에서 이미지 로딩
-        File file = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DCIM), "kudan");
-        //Log.d("123123", file.getAbsolutePath());
         if (path != null) {
             Uri uri = Uri.parse(path);
             imageTrackable.loadFromPath(uri.getPath());
@@ -155,7 +152,6 @@ public class GeneralARActivity extends ARActivity {
         imageTracker.addTrackable(imageTrackable);
 
         //트래커 객체생성
-
         String extension = contentModel.getModel().substring(contentModel.getModel().lastIndexOf("."));
         switch (extension){
             case ".jet":
@@ -254,7 +250,7 @@ public class GeneralARActivity extends ARActivity {
 
         if(textures.size()<2){
 
-//                arModelImporter.loadFromAsset(dbManager.contentFileName);
+//                arModelImporter.loadFromAsset(mSDManager.contentFileName);
 
             //model info[0]
             node3d = arModelImporter.getNode();
@@ -264,7 +260,7 @@ public class GeneralARActivity extends ARActivity {
 //                node3d.rotateByDegrees(180.0f, 1.0f, 100.0f, 0.0f);
             ARTexture2D texture2D = new ARTexture2D();
             if(textures.size()<2){
-//                    texture2D.loadFromAsset(dbManager.contentTextureFiles[0]);
+//                    texture2D.loadFromAsset(mSDManager.contentTextureFiles[0]);
                 Log.d("textures_path",textures.get(0));
                 texture2D.loadFromPath(textures.get(0));
             }
@@ -281,7 +277,7 @@ public class GeneralARActivity extends ARActivity {
         }
         else if (textures.size()>1){
             //snake, animation
-//                arModelImporter.loadFromAsset(dbManager.contentFileName);
+//                arModelImporter.loadFromAsset(mSDManager.contentFileName);
 
             node3d = arModelImporter.getNode();
             node3d.setName("somthing");
@@ -297,7 +293,7 @@ public class GeneralARActivity extends ARActivity {
                 Log.d("textures's",i+"");
                 Log.d("textures_path",textures.get(i));
                 texture2DS[i] = new ARTexture2D();
-//                    texture2DS[i].loadFromAsset(dbManager.contentTextureFiles[i]);
+//                    texture2DS[i].loadFromAsset(mSDManager.contentTextureFiles[i]);
                 texture2DS[i].loadFromPath(textures.get(i));
                 material[i] = new ARLightMaterial();
                 material[i].setTexture(texture2DS[i]);
@@ -364,10 +360,10 @@ public class GeneralARActivity extends ARActivity {
 
 
     public void initRoateAndScale(ARNode node){
-        node.scaleByUniform(mDBManager.contentScale);
-        setRotate(node,String.valueOf(mDBManager.contentRotation.get(0)),"x");
-        setRotate(node,String.valueOf(mDBManager.contentRotation.get(1)),"y");
-        setRotate(node,String.valueOf(mDBManager.contentRotation.get(2)),"z");
+        node.scaleByUniform(mSDManager.contentScale.floatValue());
+        setRotate(node,String.valueOf(mSDManager.contentRotation.get(0)),"x");
+        setRotate(node,String.valueOf(mSDManager.contentRotation.get(1)),"y");
+        setRotate(node,String.valueOf(mSDManager.contentRotation.get(2)),"z");
     }
 
     public void setRotate(ARNode node, String num, String axis){

@@ -119,5 +119,6 @@
     <string name="button_next_step">Next Step</string>
     <string name="card_input_hint">Enter your phone number</string>
     <string name="card_input_prefill"></string>
+    <string name="side_menu_logout">Logout</string>
 
 </resources>

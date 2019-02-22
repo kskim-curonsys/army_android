@@ -10,28 +10,28 @@ public class MarkerModel {
     private String mMarkerId;
     private String mUserId;
     private String mFile;
-    private float mRating;
+    private Double mRating;
     private GeoPoint mGeoPoint;
     private String mCountryCode;
     private String mLocality;
     private String mThoroughfare;
     private String mContentId;
     private ArrayList<Float> mContentRotation;
-    private float mContentScale;
+    private Double mContentScale;
     private ArrayList<String> mAdditionalMediaId;
 
     public MarkerModel() {
         mMarkerId = "";
         mUserId = "";
         mFile = "";
-        mRating = 0;
+        mRating = 0.0;
         mGeoPoint = new GeoPoint(0, 0);
         mCountryCode = "";
         mLocality = "";
         mThoroughfare = "";
         mContentId = "";
         mContentRotation = new ArrayList<Float>();
-        mContentScale = 0;
+        mContentScale = 0.0;
         mAdditionalMediaId = new ArrayList<String>();
     }
 
@@ -55,9 +55,9 @@ public class MarkerModel {
         }
 
         if (data.containsKey("rating")) {
-            mRating = (float) data.get("rating");
+            mRating = (Double) data.get("rating");
         } else {
-            mRating = 0;
+            mRating = 0.0;
         }
 
         if (data.containsKey("location")) {
@@ -97,9 +97,9 @@ public class MarkerModel {
         }
 
         if (data.containsKey("content_scale")) {
-            mContentScale = (float) data.get("content_scale");
+            mContentScale = (Double) data.get("content_scale");
         } else {
-            mContentScale = 0;
+            mContentScale = 0.0;
         }
 
         if (data.containsKey("additional_media_id")) {
@@ -125,7 +125,7 @@ public class MarkerModel {
         return mFile;
     }
 
-    public float getRating() {
+    public Double getRating() {
         return mRating;
     }
 
@@ -145,7 +145,7 @@ public class MarkerModel {
         return mContentRotation;
     }
 
-    public float getScale() {
+    public Double getScale() {
         return mContentScale;
     }
 

@@ -14,7 +14,6 @@ import android.widget.ImageButton;
 import android.widget.SeekBar;
 import android.widget.Toast;
 
-import com.afollestad.materialdialogs.MaterialDialog;
 import com.curonsys.army_android.R;
 import com.curonsys.army_android.model.ContentModel;
 import com.curonsys.army_android.util.SharedDataManager;
@@ -39,7 +38,7 @@ import eu.kudan.kudan.ARVideoTexture;
 
 
 public class MarkerTestActivity extends ARActivity {
-    SharedDataManager dbManager = SharedDataManager.getInstance();
+    SharedDataManager mSDManager = SharedDataManager.getInstance();
     String path;
     SeekBar scale_seekBar;
     ImageButton uxbtn,dxbtn,uybtn,dybtn,uzbtn,dzbtn;
@@ -261,12 +260,10 @@ public class MarkerTestActivity extends ARActivity {
         });
     }
 
-
-
     @Override
     public void setup() {
-        path = dbManager.imageURI.toString();
-        if(dbManager.is3D){
+        path = mSDManager.imageURI.toString();
+        if(mSDManager.is3D){
             nodeType="3d";
             add3DNode();
             Log.e("this","3d");
@@ -331,7 +328,8 @@ public class MarkerTestActivity extends ARActivity {
 
             @Override
             public void didTrack (ARImageTrackable arImageTrackable){
-
+                if(true) {
+                }
             }
 
             @Override
@@ -387,7 +385,8 @@ public class MarkerTestActivity extends ARActivity {
 
             @Override
             public void didTrack (ARImageTrackable arImageTrackable){
-
+                if(true) {
+                }
             }
 
             @Override
@@ -403,8 +402,8 @@ public class MarkerTestActivity extends ARActivity {
         //이름지정
         imageTrackable = new ARImageTrackable("MarkerForAR");
         //에셋에서 이미지 로딩
-        File file = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DCIM), "kudan");
-        //Log.d("123123", file.getAbsolutePath());
+        //File file = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DCIM), "kudan");
+        /*
         if (path != null) {
             Uri uri = Uri.parse(path);
             imageTrackable.loadFromPath(uri.getPath());
@@ -412,6 +411,8 @@ public class MarkerTestActivity extends ARActivity {
         } else {
             Toast.makeText(getApplicationContext(), "마커를 먼저 등록해주세요.", Toast.LENGTH_LONG).show();
         }
+        */
+        imageTrackable.loadFromAsset("lego.jpg");
 
         // Get the single instance of the image tracker.
         ARImageTracker imageTracker;
@@ -423,11 +424,13 @@ public class MarkerTestActivity extends ARActivity {
 
         ARModelImporter arModelImporter = new ARModelImporter();
         arModelImporter.loadFromPath(contentModel.getModel());
+        //arModelImporter.loadFromAsset("ben.jet");
+
         //model's file name
         textures = contentModel.getTextures();
 
         if(textures.size()<2){
-//          arModelImporter.loadFromAsset(dbManager.contentFileName);
+//          arModelImporter.loadFromAsset(mSDManager.contentFileName);
             //model info[0]
             node3d = arModelImporter.getNode();
             node3d.setName("somthing");
@@ -435,9 +438,10 @@ public class MarkerTestActivity extends ARActivity {
 //          node3d.rotateByDegrees(180.0f, 1.0f, 100.0f, 0.0f);
             ARTexture2D texture2D = new ARTexture2D();
             if(textures.size()<2){
-//              texture2D.loadFromAsset(dbManager.contentTextureFiles[0]);
+//              texture2D.loadFromAsset(mSDManager.contentTextureFiles[0]);
                 Log.d("textures_path",textures.get(0));
                 texture2D.loadFromPath(textures.get(0));
+                //texture2D.loadFromAsset("bigBenTexture.png");
             }
             //model info[1]
             final ARLightMaterial material = new ARLightMaterial();
@@ -452,7 +456,7 @@ public class MarkerTestActivity extends ARActivity {
         }
         else if (textures.size()>1){
             //snake, animation
-//          arModelImporter.loadFromAsset(dbManager.contentFileName);
+//          arModelImporter.loadFromAsset(mSDManager.contentFileName);
             node3d = arModelImporter.getNode();
             node3d.setName("somthing");
 
@@ -466,7 +470,7 @@ public class MarkerTestActivity extends ARActivity {
                 Log.d("textures's",i+"");
                 Log.d("textures_path",textures.get(i));
                 texture2DS[i] = new ARTexture2D();
-//              texture2DS[i].loadFromAsset(dbManager.contentTextureFiles[i]);
+//              texture2DS[i].loadFromAsset(mSDManager.contentTextureFiles[i]);
                 texture2DS[i].loadFromPath(textures.get(i));
                 material[i] = new ARLightMaterial();
                 material[i].setTexture(texture2DS[i]);
@@ -501,7 +505,8 @@ public class MarkerTestActivity extends ARActivity {
 
             @Override
             public void didTrack (ARImageTrackable arImageTrackable){
-
+                if(true){
+                }
             }
 
             @Override
