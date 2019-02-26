@@ -13,7 +13,6 @@ import android.content.CursorLoader;
 import android.content.Loader;
 import android.database.Cursor;
 import android.net.Uri;
-import android.os.AsyncTask;
 
 import android.os.Build;
 import android.os.Bundle;
@@ -49,6 +48,10 @@ import java.util.List;
 import java.util.Map;
 
 import static android.Manifest.permission.READ_CONTACTS;
+import static com.curonsys.army_android.util.Constants.DEFAULT_CONTENTS_ID1;
+import static com.curonsys.army_android.util.Constants.DEFAULT_CONTENTS_ID2;
+import static com.curonsys.army_android.util.Constants.DEFAULT_CONTENTS_ID3;
+import static com.curonsys.army_android.util.Constants.DEFAULT_CONTENTS_ID4;
 
 
 public class SignupActivity extends AppCompatActivity implements LoaderCallbacks<Cursor> {
@@ -61,7 +64,6 @@ public class SignupActivity extends AppCompatActivity implements LoaderCallbacks
     private EditText mNameView;
     private View mProgressView;
     private View mSingUpFormView;
-    private TextView mTitleView;
 
     private FirebaseAuth mAuth;
     private RequestManager mRequestManager;
@@ -73,8 +75,6 @@ public class SignupActivity extends AppCompatActivity implements LoaderCallbacks
 
         setContentView(R.layout.activity_signup);
         setupActionBar();
-
-        mTitleView = findViewById(R.id.signup_title);
 
         mEmailView = (AutoCompleteTextView) findViewById(R.id.signup_email);
         populateAutoComplete();
@@ -297,13 +297,18 @@ public class SignupActivity extends AppCompatActivity implements LoaderCallbacks
         GeoPoint currentLocation = new GeoPoint(mSharedDataManager.currentLatitude, mSharedDataManager.currentLongtitude);
         locations.add(currentLocation);
         values.put("locations", locations);
+        ArrayList<String> contents = new ArrayList<String>();
+        contents.add(DEFAULT_CONTENTS_ID1);
+        contents.add(DEFAULT_CONTENTS_ID2);
+        contents.add(DEFAULT_CONTENTS_ID3);
+        contents.add(DEFAULT_CONTENTS_ID4);
+        values.put("contents", contents);
 
         UserModel model = new UserModel(values);
         mRequestManager.requestSetUserInfo(model, new RequestManager.SuccessCallback() {
             @Override
             public void onResponse(boolean success) {
                 if (success) {
-                    // finish activity
                     goFinish();
                 } else {
                     // delete auth user ?
