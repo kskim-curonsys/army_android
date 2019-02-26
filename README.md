@@ -1,5 +1,5 @@
 moved from android_java (https://github.com/kskim-curonsys/android_java)
 
-Áõ°­Çö½Ç ¸ŞÀÌÄ¿
+ì¦ê°•í˜„ì‹¤ ë©”ì´ì»¤
 https://play.google.com/store/apps/details?id=com.curonsys.army_android
 
