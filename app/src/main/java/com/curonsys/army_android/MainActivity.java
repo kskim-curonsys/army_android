@@ -180,8 +180,10 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 if (isChecked) {
                     startLocationUpdate();
+                    startMonitorGeofences();
                 } else {
                     stopLocationUpdate();
+                    stopMonitorGeofences();
                 }
             }
         });
@@ -519,7 +521,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             mLastLocation = location;
 
             startFetchAddressIntentService();
-            startMonitorGeofences();
         }
 
         public void onProviderDisabled(String provider) {
@@ -552,7 +553,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             mLocationManager.removeUpdates(mLocationListener);
             mLocationUpdateState = false;
         }
-        stopMonitorGeofences();
     }
 
     private GeofencingRequest getGeofencingRequest() {

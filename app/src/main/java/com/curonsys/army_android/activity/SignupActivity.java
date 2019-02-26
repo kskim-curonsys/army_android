@@ -311,7 +311,7 @@ public class SignupActivity extends AppCompatActivity implements LoaderCallbacks
                 if (success) {
                     goFinish();
                 } else {
-                    // delete auth user ?
+                    // delete user ?
                 }
             }
         });
@@ -323,7 +323,6 @@ public class SignupActivity extends AppCompatActivity implements LoaderCallbacks
 
     private boolean isEmailValid(String email) {
         return Patterns.EMAIL_ADDRESS.matcher(email).matches();
-        //return email.contains("@");
     }
 
     private boolean isPasswordValid(String password) {

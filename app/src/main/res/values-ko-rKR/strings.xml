@@ -106,7 +106,7 @@
     <string name="button_next_step">다음 단계로</string>
     <string name="card_input_hint">( - 생략) 전화번호를 입력하세요.</string>
     <string name="side_menu_logout">로그아웃</string>
-    <string name="version_information">"버전 정보: "</string>
+    <string name="version_information">"버전: "</string>
     <string name="side_menu_group3">사용자</string>
     <string name="name_card">명함</string>
     <string name="input_phone_number">명함의 전화번호를 입력하세요.</string>
