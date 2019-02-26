@@ -1,4 +1,5 @@
-for test google play store
+moved from android_java (https://github.com/kskim-curonsys/android_java)
 
-https://play.google.com/apps/testing/com.curonsys.army_android
+증강현실 메이커
+https://play.google.com/store/apps/details?id=com.curonsys.army_android
 
