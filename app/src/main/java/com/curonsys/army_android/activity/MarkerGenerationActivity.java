@@ -9,7 +9,6 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.MotionEvent;
 import android.view.View;
-import android.view.Window;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
@@ -104,7 +103,7 @@ public class MarkerGenerationActivity extends AppCompatActivity implements CallB
                             CardFragment frag = (CardFragment) fragmentManager.findFragmentById(R.id.fragment_simple);
                             String phoneNum = frag.getPhoneNumber();
                             if (phoneNum.equals("")) {
-                                Toast.makeText(getApplicationContext(), "입력한 데이터를 확인해주세요.", Toast.LENGTH_SHORT).show();
+                                Toast.makeText(getApplicationContext(), getString(R.string.check_your_data), Toast.LENGTH_SHORT).show();
                                 onDoneBack();
                             } else {
                                 mSDManager.phoneNumber = phoneNum;

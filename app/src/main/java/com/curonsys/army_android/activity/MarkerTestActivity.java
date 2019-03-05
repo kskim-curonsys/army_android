@@ -293,7 +293,7 @@ public class MarkerTestActivity extends ARActivity {
             imageTrackable.loadFromPath(uri.getPath());
             Log.d("marker_path",uri.getPath());
         } else {
-            Toast.makeText(getApplicationContext(), "마커를 먼저 등록해주세요.", Toast.LENGTH_LONG).show();
+            Toast.makeText(getApplicationContext(), getString(R.string.register_marker_first), Toast.LENGTH_LONG).show();
         }
 
         // Get the single instance of the image tracker.
@@ -352,7 +352,7 @@ public class MarkerTestActivity extends ARActivity {
             imageTrackable.loadFromPath(uri.getPath());
             Log.d("marker_path",uri.getPath());
         } else {
-            Toast.makeText(getApplicationContext(), "마커를 먼저 등록해주세요.", Toast.LENGTH_LONG).show();
+            Toast.makeText(getApplicationContext(), getString(R.string.register_marker_first), Toast.LENGTH_LONG).show();
         }
 
         // Get the single instance of the image tracker.
@@ -408,7 +408,7 @@ public class MarkerTestActivity extends ARActivity {
             imageTrackable.loadFromPath(uri.getPath());
             Log.d("marker_path",uri.getPath());
         } else {
-            Toast.makeText(getApplicationContext(), "마커를 먼저 등록해주세요.", Toast.LENGTH_LONG).show();
+            Toast.makeText(getApplicationContext(), getString(R.string.register_marker_first), Toast.LENGTH_LONG).show();
         }
         //imageTrackable.loadFromAsset("lego.jpg");
 

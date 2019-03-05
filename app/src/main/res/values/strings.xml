@@ -131,5 +131,7 @@
     <string name="request">Request</string>
     <string name="scanning_image">Scanning image..</string>
     <string name="failed">Failed</string>
+    <string name="check_your_data">Please check the data you entered.</string>
+    <string name="register_marker_first">Please register marker first.</string>
 
 </resources>

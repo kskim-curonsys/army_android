@@ -1,56 +1,27 @@
 package com.curonsys.army_android.util;
 
 import android.app.Activity;
-import android.app.PendingIntent;
-import android.content.Context;
-import android.content.Intent;
 import android.database.Cursor;
-import android.location.Location;
-import android.location.LocationManager;
-import android.os.Bundle;
-import android.os.Handler;
-import android.os.ResultReceiver;
 import android.provider.OpenableColumns;
-import android.support.annotation.NonNull;
 import android.util.Log;
 import android.widget.Toast;
 
 import com.afollestad.materialdialogs.MaterialDialog;
-import com.curonsys.army_android.activity.MarkerGenerationActivity;
-import com.curonsys.army_android.util.RequestManager;
 import com.curonsys.army_android.model.BusinessCardModel;
 import com.curonsys.army_android.model.MarkerModel;
 import com.curonsys.army_android.model.TransferModel;
-import com.curonsys.army_android.service.FetchAddressIntentService;
-import com.curonsys.army_android.service.GeofenceTransitionsIntentService;
-import com.google.android.gms.location.FusedLocationProviderClient;
-import com.google.android.gms.location.Geofence;
-import com.google.android.gms.location.GeofencingClient;
-import com.google.android.gms.location.GeofencingRequest;
-import com.google.android.gms.location.LocationServices;
-import com.google.android.gms.maps.model.LatLng;
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.firebase.analytics.FirebaseAnalytics;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.GeoPoint;
-import com.google.firebase.storage.FirebaseStorage;
-import com.google.firebase.storage.StorageReference;
 
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
-
-import static com.curonsys.army_android.util.Constants.STORAGE_BASE_URL;
 
 /**
  * Created by ijin-yeong on 2018. 11. 19..
  */
 
 public class MarkerUploader {
-
     private static final String TAG = "MarkerUploader";
 
     private Activity mContext;
@@ -58,31 +29,15 @@ public class MarkerUploader {
     private RequestManager mRequestManager;
 
     private FirebaseAuth mAuth;
-    private FirebaseStorage mStorage;
-    private StorageReference mStorageRef;
-    private FirebaseAnalytics mAnalytics;
 
-    private ArrayList<String> myDataset;
-    MaterialDialog materialDialog = null;
-    MaterialDialog.Builder builder = null;
+    MaterialDialog mMaterialDialog = null;
+    MaterialDialog.Builder mBuilder = null;
 
     public MarkerUploader(Activity activity){
-        this.mContext = activity;
-        this.mRequestManager = RequestManager.getInstance();
-        this.mSDManager = SharedDataManager.getInstance();
-
-        try{
-            mAuth = FirebaseAuth.getInstance();
-            mStorage = FirebaseStorage.getInstance(STORAGE_BASE_URL);
-            mAnalytics = FirebaseAnalytics.getInstance(mContext);
-
-            myDataset = new ArrayList<String>();
-            String str = "Location Tracking..";
-            myDataset.add(str);
-        }catch (NullPointerException e){
-            e.printStackTrace();
-            Log.d("null","markerUploader function");
-        }
+        mContext = activity;
+        mRequestManager = RequestManager.getInstance();
+        mSDManager = SharedDataManager.getInstance();
+        mAuth = FirebaseAuth.getInstance();
     }
     public void start(){
         showDialog("잠시만 기다려주세요.\n마커를 등록중입니다...");
@@ -235,10 +190,8 @@ public class MarkerUploader {
         mRequestManager.requestSetMarkerInfo(marker, new RequestManager.SuccessCallback() {
             @Override
             public void onResponse(boolean success) {
-                materialDialog.dismiss();
-                Toast.makeText(mContext,
-                        "마커를 성공적으로 등록하였습니다.",
-                        Toast.LENGTH_LONG).show();
+                mMaterialDialog.dismiss();
+                Toast.makeText(mContext, "마커를 성공적으로 등록하였습니다.", Toast.LENGTH_LONG).show();
                 mContext.finish();
             }
         });
@@ -249,21 +202,19 @@ public class MarkerUploader {
         mRequestManager.requestSetCardInfo(card, new RequestManager.SuccessCallback() {
             @Override
             public void onResponse(boolean success) {
-                materialDialog.dismiss();
-                Toast.makeText(mContext,
-                        "마커를 성공적으로 등록하였습니다.",
-                        Toast.LENGTH_LONG).show();
+                mMaterialDialog.dismiss();
+                Toast.makeText(mContext, "마커를 성공적으로 등록하였습니다.", Toast.LENGTH_LONG).show();
                 mContext.finish();
             }
         });
     }
 
     public void showDialog(String msg){
-        builder = new MaterialDialog.Builder(mContext)
+        mBuilder = new MaterialDialog.Builder(mContext)
                 .title("등록")
                 .content(msg)
                 .progress(true,0);
-        materialDialog = builder.build();
-        materialDialog.show();
+        mMaterialDialog = mBuilder.build();
+        mMaterialDialog.show();
     }
 }

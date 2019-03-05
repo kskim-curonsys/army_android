@@ -138,7 +138,6 @@ public class MarkerConfirmFragment extends Fragment {
                         setContentsModel();
                         break;
                 }
-
             }
 
             @Override
@@ -164,7 +163,6 @@ public class MarkerConfirmFragment extends Fragment {
             mTestContentModel = new ContentModel();
             mTestContentModel.setModel(mModelUrl);
         }
-
     }
 
     @Override
@@ -178,7 +176,6 @@ public class MarkerConfirmFragment extends Fragment {
         super.onAttach(activity);
         mContext = activity;
         //step 4
-
     }
 
     @Override
@@ -227,17 +224,16 @@ public class MarkerConfirmFragment extends Fragment {
             BufferedOutputStream bos = new BufferedOutputStream(fos);
             int data = 0;
 
-//            final byte[] buffer = new byte[1024];
+//          final byte[] buffer = new byte[1024];
             while ((data = bis.read()) != -1) {
                 bos.write(data);
             }
 
-//            BufferedInputStream bIS = new BufferedInputStream(in);
+//          BufferedInputStream bIS = new BufferedInputStream(in);
             bis.close();
             fis.close();
             bos.close();
             fos.close();
-
             Log.d("model_path", string_path + file_name);
 
         } catch (FileNotFoundException exception) {
@@ -298,7 +294,6 @@ public class MarkerConfirmFragment extends Fragment {
             fis.close();
             bos.close();
             fos.close();
-
             Log.d("model_path", string_path + file_name);
 
         } catch (FileNotFoundException exception) {
@@ -321,7 +316,6 @@ public class MarkerConfirmFragment extends Fragment {
             }
         });
     }
-
 
     public void getTextures() {
         try {
@@ -412,8 +406,8 @@ public class MarkerConfirmFragment extends Fragment {
                         // name to be folder name
                         mModelUrl = saveBitmaptoJpeg(downBitmap, mContentModel.getContentId(), texture_file_name);
                         mCallBackListener.onSuccess("model");
-                    } else if (response.getSuffix().compareTo(".mp4") == 0) {
 
+                    } else if (response.getSuffix().compareTo(".mp4") == 0) {
                         String model_file_name = mContentModel.getContentId();
                         Log.d("getModel_name", model_file_name);
                         try {
@@ -422,7 +416,6 @@ public class MarkerConfirmFragment extends Fragment {
                         } catch (FileNotFoundException e) {
                             e.printStackTrace();
                         }
-
                         mCallBackListener.onSuccess("model");
                     }
                 }

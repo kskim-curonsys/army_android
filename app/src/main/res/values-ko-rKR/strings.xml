@@ -118,4 +118,6 @@
     <string name="request">요청</string>
     <string name="scanning_image">이미지 스캔중...</string>
     <string name="failed">실패</string>
+    <string name="check_your_data">입력한 데이터를 확인해주세요.</string>
+    <string name="register_marker_first">마커를 먼저 등록해주세요.</string>
 </resources>
